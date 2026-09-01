@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "ገዛ",
+    "entries": "መዝገባት",
+    "debts": "ዕዳታት",
+    "reports": "ጸብጻባት",
+    "settings": "ቅጥዕታት"
+  },
+  "auth": {
+    "loginTitle": "እቶ",
+    "registerTitle": "ሕሳብ ፍጠር",
+    "phoneNumberPlaceholder": "ቁጽሪ ተሌፎን",
+    "passwordPlaceholder": "መሕለፊ ቃል",
+    "passwordMinPlaceholder": "መሕለፊ ቃል (ውሑዱ 8 ፊደላት)",
+    "shopNamePlaceholder": "ስም ድኳን (ኣማራጺ)",
+    "loginButton": "እቶ",
+    "loginButtonLoading": "ኣብ ምእታው...",
+    "registerButton": "ሕሳብ ፍጠር",
+    "registerButtonLoading": "ሕሳብ ኣብ ምፍጣር...",
+    "noAccountPrompt": "ሕሳብ የብልካን ድዩ?",
+    "haveAccountPrompt": "ሕሳብ ኣለካ ድዩ?",
+    "registerLink": "ተመዝገብ",
+    "loginLink": "እቶ",
+    "errorPhoneRequired": "ቅኑዕ ቁጽሪ ተሌፎን ኣእቱ",
+    "errorPasswordRequired": "መሕለፊ ቃል የድሊ እዩ",
+    "errorPasswordMin": "መሕለፊ ቃል ውሑዱ 8 ፊደላት ክኸውን ኣለዎ",
+    "errorLoginFailed": "ቁጽሪ ተሌፎን ወይ መሕለፊ ቃል ግጉይ እዩ",
+    "errorRegisterFailed": "እዚ ቁጽሪ ተሌፎን ቅድሚ ሕጂ ተመዝጊቡ እዩ",
+    "logOut": "ውጻእ"
+  },
+  "common": {
+    "comingSoon": "ኣብ ቀረባ እዋን ክመጽእ እዩ።",
+    "loading": "ኣብ ምጽዓን...",
+    "save": "ኣቐምጥ",
+    "cancel": "ስረዝ",
+    "tryAgain": "ደጊምካ ፈትን"
+  },
+  "pages": {
+    "home": "ቤት",
+    "entries": "መዝገባት",
+    "debts": "ዕዳታት",
+    "customerDetail": "ዝርዝር ዓሚል",
+    "customerIdLabel": "መለለዪ ዓሚል:",
+    "reports": "ጸብጻባት",
+    "settings": "ቅጥዕታት",
+    "moreSettingsComingSoon": "ተወሳኺ ቅጥዕታት ኣብ ቀረባ እዋን ክመጽእ እዩ።"
+  },
+  "settings": {
+    "language": "ቋንቋ",
+    "darkMode": "ጸሊም ትርኢት",
+    "notifications": "ናይ መዓልታዊ መዘኻኸሪ ምልክታ",
+    "shopName": "ስም ድኳን",
+    "changePassword": "መሕለፊ ቃል ቀይር",
+    "manageCategories": "ምድባት ወጻኢታት ኣመሓድር"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "እታ ገጽ ኣይተረኽበትን",
+    "goHome": "ናብ ገዛ ተመለስ"
+  },
+  "errorBoundary": {
+    "title": "ገለ ጌጋ ተፈጢሩ።",
+    "message": "በጃኹም ገጽ እንደገና ኣሐድስዎ።",
+    "goHome": "ናብ ገዛ ኺድ"
+  }
+}

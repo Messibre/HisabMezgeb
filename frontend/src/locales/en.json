@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "Home",
+    "entries": "Entries",
+    "debts": "Debts",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "auth": {
+    "loginTitle": "Log In",
+    "registerTitle": "Create Account",
+    "phoneNumberPlaceholder": "Phone Number",
+    "passwordPlaceholder": "Password",
+    "passwordMinPlaceholder": "Password (min 8 characters)",
+    "shopNamePlaceholder": "Shop or Business Name (optional)",
+    "loginButton": "Log In",
+    "loginButtonLoading": "Logging in...",
+    "registerButton": "Create Account",
+    "registerButtonLoading": "Creating Account...",
+    "noAccountPrompt": "Don't have an account?",
+    "haveAccountPrompt": "Already have an account?",
+    "registerLink": "Register",
+    "loginLink": "Log In",
+    "errorPhoneRequired": "Enter a valid phone number",
+    "errorPasswordRequired": "Password is required",
+    "errorPasswordMin": "Password must be at least 8 characters",
+    "errorLoginFailed": "Incorrect phone number or password",
+    "errorRegisterFailed": "This phone number is already registered",
+    "logOut": "Log Out"
+  },
+  "common": {
+    "comingSoon": "Coming soon.",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "tryAgain": "Try Again"
+  },
+  "pages": {
+    "home": "Home",
+    "entries": "Entries",
+    "debts": "Debts",
+    "customerDetail": "Customer Detail",
+    "customerIdLabel": "Customer ID:",
+    "reports": "Reports",
+    "settings": "Settings",
+    "moreSettingsComingSoon": "More settings coming soon."
+  },
+  "settings": {
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "notifications": "Daily Reminder Notification",
+    "shopName": "Shop Name",
+    "changePassword": "Change Password",
+    "manageCategories": "Manage Expense Categories"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Page not found",
+    "goHome": "Go home"
+  },
+  "errorBoundary": {
+    "title": "Something went wrong.",
+    "message": "Please try refreshing the page.",
+    "goHome": "Go to Home"
+  }
+}

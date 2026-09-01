@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "ቤት",
+    "entries": "ምዝገባዎች",
+    "debts": "ዕዳዎች",
+    "reports": "ሪፖርቶች",
+    "settings": "ቅንብሮች"
+  },
+  "auth": {
+    "loginTitle": "ግባ",
+    "registerTitle": "መለያ ፍጠር",
+    "phoneNumberPlaceholder": "የስልክ ቁጥር",
+    "passwordPlaceholder": "የይለፍ ቃል",
+    "passwordMinPlaceholder": "የይለፍ ቃል (ቢያንስ 8 ፊደላት)",
+    "shopNamePlaceholder": "የሱቅ ስም (አማራጭ)",
+    "loginButton": "ግባ",
+    "loginButtonLoading": "በመግባት ላይ...",
+    "registerButton": "መለያ ፍጠር",
+    "registerButtonLoading": "መለያ በመፍጠር ላይ...",
+    "noAccountPrompt": "መለያ የለዎትም?",
+    "haveAccountPrompt": "መለያ አለዎት?",
+    "registerLink": "ተመዝገብ",
+    "loginLink": "ግባ",
+    "errorPhoneRequired": "ትክክለኛ የስልክ ቁጥር ያስገቡ",
+    "errorPasswordRequired": "የይለፍ ቃል ያስፈልጋል",
+    "errorPasswordMin": "የይለፍ ቃል ቢያንስ 8 ፊደላት መሆን አለበት",
+    "errorLoginFailed": "የስልክ ቁጥር ወይም የይለፍ ቃል ትክክል አይደለም",
+    "errorRegisterFailed": "ይህ የስልክ ቁጥር አስቀድሞ ተመዝግቧል",
+    "logOut": "ውጣ"
+  },
+  "common": {
+    "comingSoon": "በቅርቡ ይመጣል።",
+    "loading": "በመጫን ላይ...",
+    "save": "አስቀምጥ",
+    "cancel": "ይቅር",
+    "tryAgain": "እንደገና ሞክር"
+  },
+  "pages": {
+    "home": "ቤት",
+    "entries": "ምዝገባዎች",
+    "debts": "ዕዳዎች",
+    "customerDetail": "የደንበኛ ዝርዝር",
+    "customerIdLabel": "የደንበኛ መታወቂያ:",
+    "reports": "ሪፖርቶች",
+    "settings": "ቅንብሮች",
+    "moreSettingsComingSoon": "ተጨማሪ ቅንብሮች በቅርቡ ይመጣሉ።"
+  },
+  "settings": {
+    "language": "ቋንቋ",
+    "darkMode": "ጨለማ ገጽታ",
+    "notifications": "የዕለታዊ ማስታወሻ ማሳወቂያ",
+    "shopName": "የሱቅ ስም",
+    "changePassword": "የይለፍ ቃል ይቀይሩ",
+    "manageCategories": "የወጪ ምድቦችን ያስተዳድሩ"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "ገጹ አልተገኘም",
+    "goHome": "ወደ ቤት ይመለሱ"
+  },
+  "errorBoundary": {
+    "title": "የሆነ ስህተት ተፈጥሯል።",
+    "message": "እባክዎ ገጹን እንደገና ያድሱ።",
+    "goHome": "ወደ ቤት ሂድ"
+  }
+}
