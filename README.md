@@ -268,7 +268,6 @@ here seems unexplained:
 7. Folder & File Structure
 8. Function-Level Specification
 9. Test Plan & Test Files
-10. Google Stitch UI prototyping prompts
 
 ---
 
