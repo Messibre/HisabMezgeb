@@ -4,4 +4,185 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  
+}
+
+
+model Account {
+  id            String         @id @default(uuid())
+  phoneNumber   String         @unique
+  password      String         
+  shopName      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  settings      AppSettings?
+  incomes       DailyIncome[]
+  expenses      DailyExpense[]
+  categories    ExpenseCategory[]
+  fundings      FundingEntry[]
+  debtCustomers DebtCustomer[]
+  debtBorrowRecords DebtBorrowRecord[]   
+  debtPayments      DebtPayment[]  
+  refreshTokens RefreshToken[]
+
+  @@map("accounts")
+}
+
+model AppSettings {
+  id                  String   @id @default(uuid())
+  accountId           String   @unique
+  account             Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  language            String   @default("en")   // en | am | ti
+  notificationsEnabled Boolean @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("app_settings")
+}
+
+
+model DailyIncome {
+  id         String   @id @default(uuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  date       DateTime // stored as date (YYYY-MM-DD)
+  amount     Decimal  @db.Decimal(10, 2)
+  note       String?
+  deletedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([accountId, date])
+  @@index([accountId, date])
+  @@map("daily_incomes")
+}
+
+
+model ExpenseCategory {
+  id         String   @id @default(uuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name       String
+  group      String   // "business" | "personal"
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  expenses   DailyExpense[]
+
+  @@unique([accountId, name])
+  @@index([accountId, isActive])
+  @@map("expense_categories")
+}
+
+model DailyExpense {
+  id         String   @id @default(uuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  date       DateTime
+  amount     Decimal  @db.Decimal(10, 2)
+  note       String?
+  deletedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([accountId, date, categoryId])
+  @@index([accountId, date])
+  @@index([accountId, categoryId])
+  @@map("daily_expenses")
+}
+
+
+model FundingEntry {
+  id         String   @id @default(uuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  type       String   // "salary_injection" | "borrowed_in" | "borrowed_repaid"
+  amount     Decimal  @db.Decimal(10, 2)
+  date       DateTime
+  note       String?
+  deletedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([accountId, date])
+  @@map("funding_entries")
+}
+
+
+model DebtCustomer {
+  id         String   @id @default(uuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name       String
+  note       String?
+  deletedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  borrows    DebtBorrowRecord[]
+  payments   DebtPayment[]
+
+  @@index([accountId, name])
+  @@map("debt_customers")
+}
+
+
+model DebtBorrowRecord {
+  id               String   @id @default(uuid())
+  customerId       String
+  customer         DebtCustomer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  accountId        String
+  account          Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  itemsDescription String
+  amount           Decimal  @db.Decimal(10, 2)
+  date             DateTime
+  note             String?
+  deletedAt        DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([customerId, date])
+  @@index([accountId])
+  @@map("debt_borrow_records")
+}
+
+
+model DebtPayment {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   DebtCustomer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amount     Decimal  @db.Decimal(10, 2)
+  date       DateTime
+  note       String?
+  deletedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([customerId, date])
+  @@index([accountId])
+  @@map("debt_payments")
+}
+
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  accountId  String
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  token      String  
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([accountId])
+  @@index([expiresAt])
+  @@index([token])
+  @@map("refresh_tokens")
 }

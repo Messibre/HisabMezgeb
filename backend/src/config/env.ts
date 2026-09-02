@@ -7,13 +7,11 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.string().default('3000'),
   DATABASE_URL: z.string(),
-  JWT_SECRET: z.string(),
-  JWT_EXPIRES_IN: z.string().default('7d'),
+  JWT_ACCESS_SECRET: z.string(),
+  JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
+  JWT_REFRESH_SECRET: z.string(),
+  JWT_REFRESH_EXPIRES_IN: z.string().default('30d'),
   BCRYPT_SALT_ROUNDS: z.string().default('10'),
-  // Used for CORS. Note: the Capacitor mobile build won't send a normal
-  // browser Origin header the way a website does — test CORS behavior
-  // specifically against the packaged app once Capacitor is wired up,
-  // don't assume this setting alone covers it.
   CLIENT_URL: z.string().default('*'),
 });
 

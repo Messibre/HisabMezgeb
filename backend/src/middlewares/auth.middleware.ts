@@ -1,19 +1,18 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/index.js';
-import { verifyToken } from '../utils/jwt.js';
+import { verifyAccessToken } from '../utils/jwt.js';
 import ApiError from '../utils/ApiError.js';
 import { HTTP_STATUS } from '../constants/index.js';
 
 const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies?.access_token;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!token) {
       throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'No token provided');
     }
 
-    const token = authHeader.split(' ')[1];
-    const payload = verifyToken(token) as { accountId: string };
+    const payload = verifyAccessToken(token) as { accountId: string };
 
     req.accountId = payload.accountId;
     next();
