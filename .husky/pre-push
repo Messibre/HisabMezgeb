@@ -1,10 +1,41 @@
 #!/bin/sh
+
 git fetch origin main --quiet
 
-if git rev-parse --verify origin/main >/dev/null 2>&1; then
-  npx vitest run --changed origin/main
-else
-  echo "origin/main not found — running full test suite once."
-  cd backend
-  npm run test
+# ── Determine if origin/main exists ──
+if ! git rev-parse --verify origin/main >/dev/null 2>&1; then
+  echo "origin/main not found — running full test suite for both packages."
+  cd backend && npm run test -- --run
+  cd ../frontend && npm run test -- --run
+  exit $?
 fi
+
+# ── Get changed files relative to origin/main ──
+CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+
+# ── Helper: check if any file in a directory changed ──
+has_changes() {
+  echo "$CHANGED_FILES" | grep -q "^$1/"
+}
+
+# ── Run tests for packages that have changes ──
+EXIT_CODE=0
+
+if has_changes "backend"; then
+  echo "📦 Running backend tests (changed files detected)..."
+  cd backend && npm run test -- --run || EXIT_CODE=$?
+  cd ..
+fi
+
+if has_changes "frontend"; then
+  echo "📦 Running frontend tests (changed files detected)..."
+  cd frontend && npm run test -- --run || EXIT_CODE=$?
+  cd ..
+fi
+
+# ── If no changes in either package, skip tests ──
+if [ $EXIT_CODE -eq 0 ] && [ -z "$(echo "$CHANGED_FILES" | grep -E '^(backend|frontend)/')" ]; then
+  echo "✅ No changes in backend/ or frontend/ — skipping tests."
+fi
+
+exit $EXIT_CODE
