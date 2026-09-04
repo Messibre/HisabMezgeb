@@ -126,13 +126,14 @@ export const registerAccount = async (phoneNumber: string, password: string, sho
       { timeout: 15000, maxWait: 10000 },
     );
   } catch (error: unknown) {
-    logger.error({ error }, 'Registration transaction failed');
-
-    if (isUniqueConstraintError(error)) {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      (error as any).code === 'P2002'
+    ) {
       throw new ApiError(HTTP_STATUS.CONFLICT, 'This phone number is already registered');
     }
-    // Log unexpected errors but don't expose details
-    logger.error({ error }, 'Registration failed with unexpected error');
     throw error;
   }
 

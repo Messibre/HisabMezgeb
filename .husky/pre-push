@@ -22,20 +22,20 @@ has_changes() {
 EXIT_CODE=0
 
 if has_changes "backend"; then
-  echo "📦 Running backend tests (changed files detected)..."
+  echo "Running backend tests (changed files detected)..."
   cd backend && npm run test -- --run || EXIT_CODE=$?
   cd ..
 fi
 
 if has_changes "frontend"; then
-  echo "📦 Running frontend tests (changed files detected)..."
+  echo "Running frontend tests (changed files detected)..."
   cd frontend && npm run test -- --run || EXIT_CODE=$?
   cd ..
 fi
 
 # ── If no changes in either package, skip tests ──
 if [ $EXIT_CODE -eq 0 ] && [ -z "$(echo "$CHANGED_FILES" | grep -E '^(backend|frontend)/')" ]; then
-  echo "✅ No changes in backend/ or frontend/ — skipping tests."
+  echo "No changes in backend/ or frontend/ — skipping tests."
 fi
 
 exit $EXIT_CODE
