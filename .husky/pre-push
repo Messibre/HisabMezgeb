@@ -5,5 +5,6 @@ if git rev-parse --verify origin/main >/dev/null 2>&1; then
   npx vitest run --changed origin/main
 else
   echo "origin/main not found — running full test suite once."
+  cd backend
   npm run test
 fi
