@@ -12,22 +12,7 @@ import {
   verifyRefreshToken,
 } from '../utils/jwt.js';
 import logger from '../utils/logger.js';
-
-type SafeAccount = {
-  id: string;
-  phoneNumber: string;
-  shopName: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-const SAFE_ACCOUNT_SELECT = {
-  id: true,
-  phoneNumber: true,
-  shopName: true,
-  createdAt: true,
-  updatedAt: true,
-} as const;
+import { SAFE_ACCOUNT_SELECT, SafeAccount } from '../types/index.js';
 
 type AccountWithSafeFields = Prisma.AccountGetPayload<{
   select: typeof SAFE_ACCOUNT_SELECT;
