@@ -12,22 +12,7 @@ import {
   verifyRefreshToken,
 } from '../utils/jwt.js';
 import logger from '../utils/logger.js';
-
-type SafeAccount = {
-  id: string;
-  phoneNumber: string;
-  shopName: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-const SAFE_ACCOUNT_SELECT = {
-  id: true,
-  phoneNumber: true,
-  shopName: true,
-  createdAt: true,
-  updatedAt: true,
-} as const;
+import { SAFE_ACCOUNT_SELECT, SafeAccount } from '../types/index.js';
 
 type AccountWithSafeFields = Prisma.AccountGetPayload<{
   select: typeof SAFE_ACCOUNT_SELECT;
@@ -85,16 +70,6 @@ async function issueAndStoreRefreshToken(
   return { refreshToken, hashedRefreshToken, expiresAt };
 }
 
-async function revokeAllRefreshTokens(accountId: string): Promise<void> {
-  await prisma.refreshToken.updateMany({
-    where: {
-      accountId,
-      revokedAt: null,
-    },
-    data: { revokedAt: new Date() },
-  });
-}
-
 function isUniqueConstraintError(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 }
@@ -148,7 +123,7 @@ export const registerAccount = async (phoneNumber: string, password: string, sho
 
         return newAccount;
       },
-      { timeout: 15000 },
+      { timeout: 15000, maxWait: 10000 },
     );
   } catch (error: unknown) {
     logger.error({ error }, 'Registration transaction failed');
@@ -195,9 +170,6 @@ export const loginAccount = async (phoneNumber: string, password: string) => {
   }
 
   const accountId = account.id;
-
-  await revokeAllRefreshTokens(accountId);
-
   const accessToken = generateAccessToken({ accountId });
   const { refreshToken } = await issueAndStoreRefreshToken(accountId);
 
