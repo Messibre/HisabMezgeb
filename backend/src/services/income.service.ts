@@ -2,7 +2,21 @@ import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
 import { HTTP_STATUS } from '../constants/index.js';
 
-export const listIncome = async (accountId: string, from: Date, to: Date) => {
+export type SafeIncome = {
+  id: string;
+  accountId: string;
+  date: Date;
+  amount: number;
+  note: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export const listIncome = async (
+  accountId: string,
+  from: Date,
+  to: Date,
+): Promise<SafeIncome[]> => {
   throw new Error('not implemented');
 };
 
@@ -11,7 +25,7 @@ export const createIncome = async (
   date: Date,
   amount: number,
   note?: string,
-) => {
+): Promise<SafeIncome> => {
   throw new Error('not implemented');
 };
 
@@ -22,10 +36,10 @@ export const updateIncome = async (
     amount?: number;
     note?: string;
   },
-) => {
+): Promise<SafeIncome> => {
   throw new Error('not implemented');
 };
 
-export const softDeleteIncome = async (accountId: string, incomeId: string) => {
+export const softDeleteIncome = async (accountId: string, incomeId: string): Promise<void> => {
   throw new Error('not implemented');
 };
