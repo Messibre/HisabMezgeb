@@ -14,7 +14,7 @@ vi.mock('../../src/services/debtBorrowRecord.service.js', () => ({
   softDeleteBorrowRecord: vi.fn(),
 }));
 
-describe.skip('DebtBorrowRecord Controller', () => {
+describe('DebtBorrowRecord Controller', () => {
   let req: Partial<Request> & { accountId?: string };
   let res: Partial<Response>;
   let next: NextFunction;

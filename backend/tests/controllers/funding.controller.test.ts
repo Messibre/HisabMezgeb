@@ -18,7 +18,7 @@ vi.mock('../../src/services/funding.service.js', () => ({
   calculateOutstanding: vi.fn(),
 }));
 
-describe.skip('Funding Controller', () => {
+describe('Funding Controller', () => {
   let req: Partial<Request> & { accountId?: string; query?: Record<string, string> };
   let res: Partial<Response>;
   let next: NextFunction;

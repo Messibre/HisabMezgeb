@@ -16,7 +16,7 @@ vi.mock('../../src/services/reports.service.js', () => ({
   generateCsvExport: vi.fn(),
 }));
 
-describe.skip('Reports Controller', () => {
+describe('Reports Controller', () => {
   let req: Partial<Request> & { accountId?: string; query?: Record<string, string> };
   let res: Partial<Response>;
   let next: NextFunction;
