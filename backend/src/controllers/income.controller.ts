@@ -11,17 +11,45 @@ import {
 } from '../services/income.service.js';
 
 export const listIncomeHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
-  throw new Error('not implemented');
+  const accountId = req.accountId!;
+  const { from, to } = req.query as { from: string; to: string };
+
+  const entries = await listIncome(accountId, new Date(from), new Date(to));
+
+  res
+    .status(HTTP_STATUS.OK)
+    .json(new SuccessResponse(HTTP_STATUS.OK, 'Income entries fetched', entries));
 });
 
 export const createIncomeHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
-  throw new Error('not implemented');
+  const accountId = req.accountId!;
+  const { date, amount, note } = req.body;
+
+  const entry = await createIncome(accountId, new Date(date), amount, note);
+
+  res
+    .status(HTTP_STATUS.CREATED)
+    .json(new SuccessResponse(HTTP_STATUS.CREATED, 'Income recorded', entry));
 });
 
 export const updateIncomeHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
-  throw new Error('not implemented');
+  const accountId = req.accountId!;
+  const { id } = req.params;
+  const { amount, note } = req.body;
+
+  // ✅ Cast id to string – it's a single value in our route
+  const entry = await updateIncome(accountId, id as string, { amount, note });
+
+  res.status(HTTP_STATUS.OK).json(new SuccessResponse(HTTP_STATUS.OK, 'Income updated', entry));
 });
 
 export const deleteIncomeHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
-  throw new Error('not implemented');
+  const accountId = req.accountId!;
+  const { id } = req.params;
+
+  await softDeleteIncome(accountId, id as string);
+
+  res
+    .status(HTTP_STATUS.OK)
+    .json(new SuccessResponse(HTTP_STATUS.OK, 'Income entry deleted', null));
 });

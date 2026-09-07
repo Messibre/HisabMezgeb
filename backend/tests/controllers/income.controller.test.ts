@@ -16,7 +16,7 @@ vi.mock('../../src/services/income.service.js', () => ({
   softDeleteIncome: vi.fn(),
 }));
 
-describe.skip('Income Controller', () => {
+describe('Income Controller', () => {
   let req: Partial<Request> & { accountId?: string; query?: Record<string, string> };
   let res: Partial<Response>;
   let next: NextFunction;

@@ -12,7 +12,7 @@ vi.mock('../../src/services/settings.service.js', () => ({
   updateSettings: vi.fn(),
 }));
 
-describe.skip('Settings Controller', () => {
+describe('Settings Controller', () => {
   let req: Partial<Request> & { accountId?: string };
   let res: Partial<Response>;
   let next: NextFunction;

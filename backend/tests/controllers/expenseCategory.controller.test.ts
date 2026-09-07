@@ -14,7 +14,7 @@ vi.mock('../../src/services/expenseCategory.service.js', () => ({
   updateCategory: vi.fn(),
 }));
 
-describe.skip('ExpenseCategory Controller', () => {
+describe('ExpenseCategory Controller', () => {
   let req: Partial<Request> & { accountId?: string };
   let res: Partial<Response>;
   let next: NextFunction;

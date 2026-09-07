@@ -16,7 +16,7 @@ vi.mock('../../src/services/expense.service.js', () => ({
   softDeleteExpense: vi.fn(),
 }));
 
-describe.skip('Expense Controller', () => {
+describe('Expense Controller', () => {
   let req: Partial<Request> & { accountId?: string; query?: Record<string, string> };
   let res: Partial<Response>;
   let next: NextFunction;
