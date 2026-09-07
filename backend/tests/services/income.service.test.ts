@@ -47,7 +47,7 @@ const mockFindFirst = prisma.dailyIncome.findFirst as unknown as Mock<
 const mockCreate = prisma.dailyIncome.create as unknown as Mock<typeof prisma.dailyIncome.create>;
 const mockUpdate = prisma.dailyIncome.update as unknown as Mock<typeof prisma.dailyIncome.update>;
 
-describe.skip('Income Service', () => {
+describe('Income Service', () => {
   const accountId = 'acc-123';
   const incomeId = 'inc-456';
   const mockDate = new Date('2026-06-01');

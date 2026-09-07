@@ -13,7 +13,15 @@ export type ExpenseCategory = {
 };
 
 export const listCategories = async (accountId: string): Promise<ExpenseCategory[]> => {
-  throw new Error('not implemented');
+  const categories = await prisma.expenseCategory.findMany({
+    where: {
+      accountId,
+      isActive: true,
+    },
+    orderBy: { name: 'asc' },
+  });
+
+  return categories as ExpenseCategory[];
 };
 
 export const createCategory = async (
@@ -23,7 +31,29 @@ export const createCategory = async (
     group: 'business' | 'personal';
   },
 ): Promise<ExpenseCategory> => {
-  throw new Error('not implemented');
+  const existing = await prisma.expenseCategory.findUnique({
+    where: {
+      accountId_name: {
+        accountId,
+        name: data.name,
+      },
+    },
+  });
+
+  if (existing) {
+    throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists');
+  }
+
+  const created = await prisma.expenseCategory.create({
+    data: {
+      accountId,
+      name: data.name,
+      group: data.group,
+      isActive: true,
+    },
+  });
+
+  return created as ExpenseCategory;
 };
 
 export const updateCategory = async (
@@ -34,5 +64,50 @@ export const updateCategory = async (
     isActive?: boolean;
   },
 ): Promise<ExpenseCategory> => {
-  throw new Error('not implemented');
+  const existing = await prisma.expenseCategory.findUnique({
+    where: {
+      id: categoryId,
+      accountId,
+    },
+  });
+
+  if (!existing) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found');
+  }
+
+  // If updating name, check for duplicate (excluding the current category)
+  if (data.name !== undefined && data.name !== existing.name) {
+    const duplicate = await prisma.expenseCategory.findUnique({
+      where: {
+        accountId_name: {
+          accountId,
+          name: data.name,
+        },
+      },
+    });
+
+    // ✅ CRITICAL: Only throw if a DIFFERENT category already has this name
+    if (duplicate && duplicate.id !== categoryId) {
+      throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists');
+    }
+  }
+
+  const updateData: { name?: string; isActive?: boolean } = {};
+  if (data.name !== undefined) {
+    updateData.name = data.name;
+  }
+  if (data.isActive !== undefined) {
+    updateData.isActive = data.isActive;
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    return existing as ExpenseCategory;
+  }
+
+  const updated = await prisma.expenseCategory.update({
+    where: { id: categoryId },
+    data: updateData,
+  });
+
+  return updated as ExpenseCategory;
 };
