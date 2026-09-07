@@ -1,47 +1,45 @@
 import axios from 'axios';
 import { env } from '@/config/env';
 import type { ApiResponse } from '@/types';
+import { useAuthStore } from '@/store/auth.store';
 
 const api = axios.create({
   baseURL: env.VITE_API_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 10000,
+  withCredentials: true,
 });
 
-// Request interceptor — attach JWT token to every request
-api.interceptors.request.use((config) => {
-  const authStorage = localStorage.getItem('auth-storage');
-  if (authStorage) {
-    try {
-      const { state } = JSON.parse(authStorage);
-      if (state?.token) {
-        config.headers.Authorization = `Bearer ${state.token}`;
-      }
-    } catch {
-      // malformed storage, skip attaching token
-    }
-  }
-  return config;
-});
-
-// Response interceptor — unwrap the backend's SuccessResponse envelope,
-// and handle 401 globally
 api.interceptors.response.use(
   (response) => {
-    // Backend always responds with { statusCode, success, message, data }.
-    // Unwrap here once so every caller can keep doing `res.data` and get
-    // the actual payload, not the envelope.
     const body = response.data as ApiResponse<unknown>;
     if (body && typeof body === 'object' && 'data' in body) {
       response.data = body.data;
     }
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If it's a 401 and we haven't tried refreshing yet
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await api.post('/auth/refresh', {}, { withCredentials: true });
+        return api(originalRequest);
+      } catch (refreshError) {
+        useAuthStore.getState().clearUser();
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+
     if (error.response?.status === 401) {
-      localStorage.removeItem('auth-storage');
+      useAuthStore.getState().clearUser();
       window.location.href = '/login';
     }
+
     return Promise.reject(error);
   }
 );

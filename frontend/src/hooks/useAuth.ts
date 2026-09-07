@@ -5,25 +5,30 @@ import { ROUTES } from '@/constants';
 import type { LoginCredentials, RegisterPayload, Account } from '@/types';
 
 export function useAuth() {
-  const { token, user, setAuth, clearAuth } = useAuthStore();
+  const { user, setUser, clearUser } = useAuthStore();
   const navigate = useNavigate();
 
   const login = async (credentials: LoginCredentials) => {
-    const { data } = await api.post<{ token: string } & Account>('/auth/login', credentials);
-    setAuth(data.token, data);
+    const { data } = await api.post<Account>('/auth/login', credentials);
+    setUser(data);
     navigate(ROUTES.HOME);
   };
 
   const register = async (payload: RegisterPayload) => {
-    const { data } = await api.post<{ token: string } & Account>('/auth/register', payload);
-    setAuth(data.token, data);
+    const { data } = await api.post<Account>('/auth/register', payload);
+    setUser(data);
     navigate(ROUTES.HOME);
   };
 
-  const logout = () => {
-    clearAuth();
+  const logout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch {
+      // ignore —  clear user regardless
+    }
+    clearUser();
     navigate(ROUTES.LOGIN);
   };
 
-  return { user, token, isAuthenticated: !!token, login, register, logout };
+  return { user, isAuthenticated: !!user, login, register, logout };
 }
