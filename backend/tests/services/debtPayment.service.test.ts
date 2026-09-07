@@ -63,7 +63,7 @@ const mockCalculateBalance = debtCustomerService.calculateCustomerBalance as unk
   typeof debtCustomerService.calculateCustomerBalance
 >;
 
-describe.skip('DebtPayment Service', () => {
+describe('DebtPayment Service', () => {
   const accountId = 'acc-123';
   const customerId = 'cust-456';
   const paymentId = 'payment-789';
@@ -195,8 +195,6 @@ describe.skip('DebtPayment Service', () => {
 
       // CRITICAL: Assert that income.create was NEVER called
       expect(mockIncomeCreate).not.toHaveBeenCalled();
-      // Also ensure no other income-related operations happen
-      // We only check that the income create was not called
     });
 
     it('should propagate database errors', async () => {
@@ -262,10 +260,17 @@ describe.skip('DebtPayment Service', () => {
 
     it('should throw 400 if updated amount exceeds current balance', async () => {
       mockPaymentFindFirst.mockResolvedValue(mockPayment);
-      // Current balance is 300, but we're trying to update payment to 500
-      mockCalculateBalance.mockResolvedValue(300);
 
-      await expect(updatePayment(accountId, paymentId, { amount: 500 })).rejects.toThrow(ApiError);
+      mockCalculateBalance.mockResolvedValue(0);
+      const mockPaymentUpdated = { ...mockPayment, amount: new Decimal(300) };
+      mockPaymentFindFirst.mockResolvedValue(mockPaymentUpdated);
+      mockCalculateBalance.mockResolvedValue(0);
+
+      const mockPaymentForTest = { ...mockPayment, amount: new Decimal(300) };
+      mockPaymentFindFirst.mockResolvedValue(mockPaymentForTest);
+      mockCalculateBalance.mockResolvedValue(0); // Balance after existing 300 payment
+
+      // Try to update to 500
       await expect(updatePayment(accountId, paymentId, { amount: 500 })).rejects.toMatchObject({
         statusCode: 400,
         message: 'Payment cannot exceed the amount owed',

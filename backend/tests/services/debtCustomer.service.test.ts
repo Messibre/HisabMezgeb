@@ -117,7 +117,7 @@ function createAggregateResult(sumAmount: number | null): AggregateResult {
   };
 }
 
-describe.skip('DebtCustomer Service', () => {
+describe('DebtCustomer Service', () => {
   const accountId = 'acc-123';
   const customerId = 'cust-456';
 
@@ -345,7 +345,11 @@ describe.skip('DebtCustomer Service', () => {
           note: 'Phone: 0911223344',
         },
       });
-      expect(result).toEqual(mockCustomerWithBalance);
+      // ✅ Fixed: New customer balance is 0, not 700
+      expect(result).toEqual({
+        ...mockCustomerWithBalance,
+        balance: 0, // Override balance to 0
+      });
     });
 
     it('should create customer without note', async () => {
