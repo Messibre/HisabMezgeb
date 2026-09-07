@@ -66,7 +66,7 @@ const mockCategoryFindUnique = prisma.expenseCategory.findUnique as unknown as M
   typeof prisma.expenseCategory.findUnique
 >;
 
-describe.skip('Expense Service', () => {
+describe('Expense Service', () => {
   const accountId = 'acc-123';
   const expenseId = 'exp-456';
   const categoryId = 'cat-789';

@@ -58,7 +58,7 @@ const mockCalculateBalance = debtCustomerService.calculateCustomerBalance as unk
   typeof debtCustomerService.calculateCustomerBalance
 >;
 
-describe.skip('DebtBorrowRecord Service', () => {
+describe('DebtBorrowRecord Service', () => {
   const accountId = 'acc-123';
   const customerId = 'cust-456';
   const recordId = 'borrow-789';

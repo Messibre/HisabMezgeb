@@ -72,7 +72,7 @@ const mockAggregate = prisma.fundingEntry.aggregate as unknown as Mock<
   typeof prisma.fundingEntry.aggregate
 >;
 
-describe.skip('Funding Service', () => {
+describe('Funding Service', () => {
   const accountId = 'acc-123';
   const fundingId = 'fun-456';
   const mockDate = new Date('2026-06-01');
