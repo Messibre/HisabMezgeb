@@ -27,7 +27,7 @@ type MockAppSettings = {
 const mockFindUnique = vi.mocked(prisma.appSettings.findUnique);
 const mockUpdate = vi.mocked(prisma.appSettings.update);
 
-describe.skip('Settings Service', () => {
+describe('Settings Service', () => {
   const accountId = 'acc-123';
 
   const mockExistingSettings: MockAppSettings = {

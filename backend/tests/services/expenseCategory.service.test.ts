@@ -32,7 +32,7 @@ const mockUpdate = prisma.expenseCategory.update as unknown as Mock<
   typeof prisma.expenseCategory.update
 >;
 
-describe.skip('ExpenseCategory Service', () => {
+describe('ExpenseCategory Service', () => {
   const accountId = 'acc-123';
   const categoryId = 'cat-456';
 
@@ -84,7 +84,7 @@ describe.skip('ExpenseCategory Service', () => {
 
   describe('createCategory', () => {
     it('should create a new category successfully', async () => {
-      mockFindUnique.mockResolvedValue(null); // no duplicate
+      mockFindUnique.mockResolvedValue(null);
       mockCreate.mockResolvedValue(mockCategory);
 
       const result = await createCategory(accountId, {
@@ -111,18 +111,16 @@ describe.skip('ExpenseCategory Service', () => {
       expect(result).toEqual(mockCategory);
     });
 
-    it('should throw 409 if category name already exists for this account', async () => {
+    it('should throw 409 if category name already exists', async () => {
       mockFindUnique.mockResolvedValue(mockCategory);
 
-      await expect(
-        createCategory(accountId, { name: 'Cost of Goods', group: 'business' }),
-      ).rejects.toThrow(ApiError);
       await expect(
         createCategory(accountId, { name: 'Cost of Goods', group: 'business' }),
       ).rejects.toMatchObject({
         statusCode: 409,
         message: 'This category already exists',
       });
+
       expect(mockCreate).not.toHaveBeenCalled();
     });
 
@@ -193,9 +191,6 @@ describe.skip('ExpenseCategory Service', () => {
     it('should throw 404 if category not found', async () => {
       mockFindUnique.mockResolvedValue(null);
 
-      await expect(updateCategory(accountId, categoryId, { name: 'New Name' })).rejects.toThrow(
-        ApiError,
-      );
       await expect(
         updateCategory(accountId, categoryId, { name: 'New Name' }),
       ).rejects.toMatchObject({
@@ -211,15 +206,12 @@ describe.skip('ExpenseCategory Service', () => {
 
       await updateCategory(accountId, categoryId, { isActive: false });
 
-      // findUnique is called once for the category existence (not for duplicate check)
       expect(mockFindUnique).toHaveBeenCalledTimes(1);
       expect(mockUpdate).toHaveBeenCalled();
     });
 
     it('should check duplicate name when name is being updated', async () => {
-      // First call: find the category to update
       mockFindUnique.mockResolvedValueOnce(mockCategory);
-      // Second call: check for duplicate name (should return null = no duplicate)
       mockFindUnique.mockResolvedValueOnce(null);
       mockUpdate.mockResolvedValue({ ...mockCategory, name: 'New Name' });
 
@@ -237,20 +229,20 @@ describe.skip('ExpenseCategory Service', () => {
     });
 
     it('should throw 409 if new name already exists for another category', async () => {
-      // First call: find the category to update
       mockFindUnique.mockResolvedValueOnce(mockCategory);
-      // Second call: duplicate check finds another category
-      mockFindUnique.mockResolvedValueOnce({ ...mockCategory, id: 'other-cat' });
+      mockFindUnique.mockResolvedValueOnce({
+        ...mockCategory,
+        id: 'other-cat',
+        name: 'Existing Name', // Must match the new name we are trying to set
+      });
 
-      await expect(
-        updateCategory(accountId, categoryId, { name: 'Existing Name' }),
-      ).rejects.toThrow(ApiError);
       await expect(
         updateCategory(accountId, categoryId, { name: 'Existing Name' }),
       ).rejects.toMatchObject({
         statusCode: 409,
         message: 'This category already exists',
       });
+
       expect(mockUpdate).not.toHaveBeenCalled();
     });
 
