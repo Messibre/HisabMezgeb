@@ -12,36 +12,33 @@ export function useOfflineQueue() {
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
-  // Enqueue a request (optimistically saved locally)
-  const enqueue = useCallback(
-    async (
-      endpoint: string,
-      method: 'POST' | 'PATCH' | 'DELETE',
-      payload: any
-    ): Promise<QueueItem> => {
-      const item = await addToQueue(endpoint, method, payload);
-      // If we are online, trigger a sync immediately
-      if (isOnline && !isSyncing) {
-        // We don't await, let it run in background
-        void syncPendingEntries().then(() => {
-          // After sync, update pending count
-          updatePendingCount();
-        });
-      }
-      // Update pending count
-      await updatePendingCount();
-      return item;
-    },
-    [isOnline, isSyncing]
-  );
-
-  // Update pending count
+  // Update pending count – declare first
   const updatePendingCount = useCallback(async () => {
     const pending = await getPendingItems();
     setPendingCount(pending.length);
   }, []);
 
-  // Trigger sync manually (e.g., on online event)
+  // Enqueue a request
+  const enqueue = useCallback(
+    async (
+      endpoint: string,
+      method: 'POST' | 'PATCH' | 'DELETE',
+      payload: Record<string, unknown>
+    ): Promise<QueueItem> => {
+      const item = await addToQueue(endpoint, method, payload);
+      if (isOnline && !isSyncing) {
+        // Trigger sync in background
+        void syncPendingEntries().then(() => {
+          void updatePendingCount();
+        });
+      }
+      await updatePendingCount();
+      return item;
+    },
+    [isOnline, isSyncing, updatePendingCount]
+  );
+
+  // Trigger sync manually
   const syncNow = useCallback(async () => {
     if (isSyncing) return;
     setIsSyncing(true);
@@ -58,17 +55,23 @@ export function useOfflineQueue() {
   // Auto-sync when online changes
   useEffect(() => {
     if (isOnline) {
-      void syncNow();
+      const doSync = async () => {
+        await syncNow();
+      };
+      void doSync();
     }
   }, [isOnline, syncNow]);
 
-  // Initial pending count on mount
+  // Initial pending count and sync on mount
   useEffect(() => {
-    updatePendingCount();
-    // Also sync on mount if online
-    if (isOnline) {
-      void syncNow();
-    }
+    const init = async () => {
+      await updatePendingCount();
+      if (isOnline) {
+        await syncNow();
+      }
+    };
+    void init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run only once on mount
   }, []);
 
   return { enqueue, pendingCount, syncNow, isSyncing };
