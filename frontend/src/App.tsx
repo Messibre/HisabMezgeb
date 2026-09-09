@@ -4,6 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import router from '@/routes';
 import { useSyncHtmlLang } from '@/hooks/useSyncHtmlLang';
+import { OfflineBanner } from '@/components/common/OfflineBanner';
 
 function App() {
   useSyncHtmlLang();
@@ -11,6 +12,7 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
+        <OfflineBanner />
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ErrorBoundary>
