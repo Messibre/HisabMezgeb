@@ -33,7 +33,8 @@
     "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "offlineBanner": "Offline — changes will sync automatically"
   },
   "pages": {
     "home": "Home",
