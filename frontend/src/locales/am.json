@@ -33,7 +33,8 @@
     "loading": "በመጫን ላይ...",
     "save": "አስቀምጥ",
     "cancel": "ይቅር",
-    "tryAgain": "እንደገና ሞክር"
+    "tryAgain": "እንደገና ሞክር",
+    "offlineBanner": "offline"
   },
   "pages": {
     "home": "ቤት",

@@ -33,7 +33,8 @@
     "loading": "ኣብ ምጽዓን...",
     "save": "ኣቐምጥ",
     "cancel": "ስረዝ",
-    "tryAgain": "ደጊምካ ፈትን"
+    "tryAgain": "ደጊምካ ፈትን",
+    "offlineBanner": "Offline"
   },
   "pages": {
     "home": "ቤት",
