@@ -15,8 +15,8 @@ Started: 2026-10-26 11:15
 | M1 | done | 95b1047 | lint: exit 0, build: exit 0, test: exit 0 (5 passed) | Theme tokens, dark palette, offline fonts |
 | M2 | done | fe0f502 | lint: exit 0, build: exit 0, test: exit 0 (10 passed) | Cookie-based session with single-flight refresh |
 | M3 | done | 77220f7 | lint: exit 0, build: exit 0, test: exit 0 (20 passed) | money and date helpers with week starting on Monday |
-| M4 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (24 passed) | AppHeader, BottomTabLayout, AuthShell |
-| M5 | not started | | | Form components |
+| M4 | done | 04b1ed4 | lint: exit 0, build: exit 0, test: exit 0 (24 passed) | AppHeader, BottomTabLayout, AuthShell |
+| M5 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (29 passed) | Form components (FormField, PillInput, PasswordInput, AmountInput, SegmentedControl) |
 | M6 | not started | | | Display and state components |
 | M7 | not started | | | BottomSheet, ConfirmDialog, toasts |
 | M8 | not started | | | Register page |

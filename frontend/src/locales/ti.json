@@ -29,10 +29,14 @@
     "errorRateLimited": "ፈተነታት በዚሑ። በጃኹም ቁሩብ ደቓይቕ ተጸበዩ።",
     "errorNetwork": "ናይ ኢንተርኔት ርክብ የለን። ኢንተርኔትኩም ኣረጋጊጽኩም ደጊምኩም ፈትኑ።",
     "errorGeneric": "ጌጋ ኣጋጢሙ። በጃኹም ደጊምኩም ፈትኑ።",
+    "showPassword": "መሕለፊ ቃል ኣርኢ",
+    "hidePassword": "መሕለፊ ቃል ሕባእ",
     "logOut": "ውጻእ"
   },
   "common": {
     "currency": "ብር",
+    "amount": "መጠን",
+    "optional": "(ኣማራጺ)",
     "today": "ሎሚ",
     "yesterday": "ትማሊ",
     "comingSoon": "ኣብ ቀረባ እዋን ክመጽእ እዩ።",

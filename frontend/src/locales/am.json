@@ -29,10 +29,14 @@
     "errorRateLimited": "ሙከራዎች በዝተዋል። እባክዎ ጥቂት ደቂቃዎች ይጠብቁ።",
     "errorNetwork": "የኢንተርኔት ግንኙነት የለም። ኢንተርኔትዎን አረጋግጠው እንደገና ይሞክሩ።",
     "errorGeneric": "ስህተት ተከስቷል። እባክዎ እንደገና ይሞክሩ።",
+    "showPassword": "የይለፍ ቃል አሳይ",
+    "hidePassword": "የይለፍ ቃል ደብቅ",
     "logOut": "ውጣ"
   },
   "common": {
     "currency": "ብር",
+    "amount": "መጠን",
+    "optional": "(አማራጭ)",
     "today": "ዛሬ",
     "yesterday": "ትናንት",
     "comingSoon": "በቅርቡ ይመጣል።",

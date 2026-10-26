@@ -29,10 +29,14 @@
     "errorRateLimited": "Too many tries. Please wait a few minutes.",
     "errorNetwork": "No connection. Check your internet and try again.",
     "errorGeneric": "An error occurred. Please try again.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "logOut": "Log Out"
   },
   "common": {
     "currency": "ETB",
+    "amount": "Amount",
+    "optional": "(optional)",
     "today": "Today",
     "yesterday": "Yesterday",
     "comingSoon": "Coming soon.",
