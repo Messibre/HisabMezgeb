@@ -26,6 +26,9 @@
     "errorPasswordMin": "Password must be at least 8 characters",
     "errorLoginFailed": "Incorrect phone number or password",
     "errorRegisterFailed": "This phone number is already registered",
+    "errorRateLimited": "Too many tries. Please wait a few minutes.",
+    "errorNetwork": "No connection. Check your internet and try again.",
+    "errorGeneric": "An error occurred. Please try again.",
     "logOut": "Log Out"
   },
   "common": {

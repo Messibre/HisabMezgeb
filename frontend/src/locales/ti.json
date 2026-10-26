@@ -26,6 +26,9 @@
     "errorPasswordMin": "መሕለፊ ቃል ውሑዱ 8 ፊደላት ክኸውን ኣለዎ",
     "errorLoginFailed": "ቁጽሪ ተሌፎን ወይ መሕለፊ ቃል ግጉይ እዩ",
     "errorRegisterFailed": "እዚ ቁጽሪ ተሌፎን ቅድሚ ሕጂ ተመዝጊቡ እዩ",
+    "errorRateLimited": "ፈተነታት በዚሑ። በጃኹም ቁሩብ ደቓይቕ ተጸበዩ።",
+    "errorNetwork": "ናይ ኢንተርኔት ርክብ የለን። ኢንተርኔትኩም ኣረጋጊጽኩም ደጊምኩም ፈትኑ።",
+    "errorGeneric": "ጌጋ ኣጋጢሙ። በጃኹም ደጊምኩም ፈትኑ።",
     "logOut": "ውጻእ"
   },
   "common": {

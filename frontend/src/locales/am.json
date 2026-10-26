@@ -26,6 +26,9 @@
     "errorPasswordMin": "የይለፍ ቃል ቢያንስ 8 ፊደላት መሆን አለበት",
     "errorLoginFailed": "የስልክ ቁጥር ወይም የይለፍ ቃል ትክክል አይደለም",
     "errorRegisterFailed": "ይህ የስልክ ቁጥር አስቀድሞ ተመዝግቧል",
+    "errorRateLimited": "ሙከራዎች በዝተዋል። እባክዎ ጥቂት ደቂቃዎች ይጠብቁ።",
+    "errorNetwork": "የኢንተርኔት ግንኙነት የለም። ኢንተርኔትዎን አረጋግጠው እንደገና ይሞክሩ።",
+    "errorGeneric": "ስህተት ተከስቷል። እባክዎ እንደገና ይሞክሩ።",
     "logOut": "ውጣ"
   },
   "common": {
