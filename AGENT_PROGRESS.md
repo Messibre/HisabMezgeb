@@ -24,14 +24,15 @@ Started: 2026-10-26 11:15
 | M10 | done | 56871ef | lint: exit 0, build: exit 0, test: exit 0 (63 passed) | HomePage with greeting, today's income status, week snapshot stat cards |
 | M11 | done | dedf70a | lint: exit 0, build: exit 0, test: exit 0 (72 passed) | EntriesPage with tab switching, AmountInput hero card, category/funding chips, duplicate detection, recent entries and edit sheet |
 | M12 | done | dc06919 | lint: exit 0, build: exit 0, test: exit 0 (78 passed) | DebtsListPage with search, total owed, sorted customer cards with Ge'ez initials, and FAB new customer sheet |
-| M13 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (85 passed) | DebtCustomerDetailPage with balance card, borrow and payment sheets, customer ledger history, and full/part payment logic |
-| M14 | not started | | | Final verification |
+| M13 | done | 54e0651 | lint: exit 0, build: exit 0, test: exit 0 (85 passed) | DebtCustomerDetailPage with balance card, borrow and payment sheets, customer ledger history, and full/part payment logic |
+| M14 | done | 7040684 | lint: exit 0, build: exit 0, test: exit 0 (85 passed), i18n parity: exit 0 | Final verification passed with zero skips, zero hex colors in tsx, zero toISOString calls, zero auth tokens in storage |
 
 ## NEEDS TRANSLATION (keys with English placeholder in am/ti)
--
+- (None - all keys have complete Amharic and Tigrigna translations with 100% parity across en.json, am.json, and ti.json)
 
 ## DECISIONS TAKEN (defaults used)
 - Configured `pool: 'threads'` and `watch: false` in `frontend/vitest.config.ts` so `npm test` runs deterministically and terminates in non-interactive Windows environment.
+- Configured `isolate: true` in `frontend/vitest.config.ts` to prevent mocked API responses in test suites (e.g. `customerLedger.test.tsx`) from leaking into subsequent test suites.
 - M1 Dark Palette and Contrast Ratios:
   | Token | Dark Value | Role | Contrast on #111411 (Background) | Contrast on #191c19 (Card) |
   |---|---|---|---|---|
@@ -54,15 +55,18 @@ Started: 2026-10-26 11:15
   | --nav-active-bg | #1a3517 | Bottom nav active tab | - | - |
   | --nav-active-fg | #d2e8cc | Active icon & label | 11.3:1 (on #1a3517: 7.2:1) | - |
 - Replaced `@fontsource-variable/geist` with `@fontsource-variable/quicksand` and `@fontsource-variable/noto-sans-ethiopic` for complete offline typography. Removed Google Fonts CDN from index.html.
+- Used Ethiopian phone validator pattern `^(\+251\s?9\d{8}|09\d{8})$` supporting both international and local formats.
+- Set amount input regex to `^\d{1,8}(\.\d{1,2})?$` across all entry types and debt borrow/payment sheets.
+- Preserved single-flight refresh mechanism and zero token exposure in JS storage.
 
 ## NOT VERIFIED (needs real backend, browser, or device)
--
+- Real backend cookie transmission (Set-Cookie / HttpOnly cookie exchange with live backend API service).
+- Real device touch gesture inertia on Vaul BottomSheet under iOS Safari / Android WebView.
+- Visual inspection on physical mobile device screens at 390px viewport width (visual check: NOT DONE on physical device; verified via comprehensive DOM assertions and headless testing).
 
 ## SUGGESTIONS (outside scope, not done)
--
+- Add Service Worker / PWA caching manifests for asset caching and full offline-first transaction synchronization with Dexie/IndexedDB once offline sync queue is integrated with the mutation endpoints.
+- Enhance report export formatting (e.g. PDF/Excel summary generation) in a future milestone.
 
 ## BLOCKER (only if the run stopped)
-- Milestone:
-- What happened:
-- What I tried:
-- What I need from Meseret:
+- None. All milestones M0 through M14 executed, tested, and verified successfully without stopping.
