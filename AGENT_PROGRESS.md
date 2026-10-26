@@ -19,8 +19,8 @@ Started: 2026-10-26 11:15
 | M5 | done | ef78f56 | lint: exit 0, build: exit 0, test: exit 0 (29 passed) | Form components (FormField, PillInput, PasswordInput, AmountInput, SegmentedControl) |
 | M6 | done | c678fd6 | lint: exit 0, build: exit 0, test: exit 0 (38 passed) | MoneyText, StatCard, SkeletonRow/Block, EmptyState, ErrorState |
 | M7 | done | 8f27ebc | lint: exit 0, build: exit 0, test: exit 0 (44 passed) | BottomSheet (vaul), ConfirmDialog, Toaster (sonner) |
-| M8 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (50 passed) | RegisterPage with AuthShell, FormField, PillInput, PasswordInput, phone validator |
-| M9 | not started | | | Login page |
+| M8 | done | cae7f54 | lint: exit 0, build: exit 0, test: exit 0 (50 passed) | RegisterPage with AuthShell, FormField, PillInput, PasswordInput, phone validator |
+| M9 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (56 passed) | LoginPage with AuthShell, FormField, PillInput, PasswordInput, shared phone validator |
 | M10 | not started | | | Home page |
 | M11 | not started | | | Entries page |
 | M12 | not started | | | Debts list |
