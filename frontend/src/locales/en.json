@@ -81,5 +81,18 @@
     "title": "Something went wrong.",
     "message": "Please try refreshing the page.",
     "goHome": "Go to Home"
+  },
+  "home": {
+    "greetingWithShop": "Selam, {{name}}",
+    "greetingDefault": "Selam",
+    "greetingSubtitle": "Let's update your records for today.",
+    "todayIncomeNotEntered": "Today's income is not entered yet.",
+    "addTodayIncome": "+ Add Today's Income",
+    "todayIncome": "Today's income",
+    "edit": "Edit",
+    "thisWeekSnapshot": "Week Snapshot",
+    "thisWeeksIncome": "This Week's Income",
+    "shopExpenses": "Shop Expenses",
+    "customerDebts": "Customer Debts"
   }
 }

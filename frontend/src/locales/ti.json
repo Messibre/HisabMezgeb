@@ -81,5 +81,18 @@
     "title": "ገለ ጌጋ ተፈጢሩ።",
     "message": "በጃኹም ገጽ እንደገና ኣሐድስዎ።",
     "goHome": "ናብ ገዛ ኺድ"
+  },
+  "home": {
+    "greetingWithShop": "ሰላም፣ {{name}}",
+    "greetingDefault": "ሰላም",
+    "greetingSubtitle": "ናይ ሎሚ መዝገብካ ነዘምን።",
+    "todayIncomeNotEntered": "ናይ ሎሚ ኣታዊ ገና ኣይተመዝገበን።",
+    "addTodayIncome": "+ ናይ ሎሚ ኣታዊ መዝግብ",
+    "todayIncome": "ናይ ሎሚ ኣታዊ",
+    "edit": "ኣመዓራሪ",
+    "thisWeekSnapshot": "ናይዚ ሰሙን ሓፈሻዊ ርእይቶ",
+    "thisWeeksIncome": "ናይዚ ሰሙን ኣታዊ",
+    "shopExpenses": "ናይ ዱካን ወጻኢታት",
+    "customerDebts": "ዕዳ ዓማዊል"
   }
 }

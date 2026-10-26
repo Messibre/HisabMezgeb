@@ -81,5 +81,18 @@
     "title": "የሆነ ስህተት ተፈጥሯል።",
     "message": "እባክዎ ገጹን እንደገና ያድሱ።",
     "goHome": "ወደ ቤት ሂድ"
+  },
+  "home": {
+    "greetingWithShop": "ሰላም፣ {{name}}",
+    "greetingDefault": "ሰላም",
+    "greetingSubtitle": "የዛሬውን የሂሳብ መዝገብዎን እናዘምን።",
+    "todayIncomeNotEntered": "የዛሬ ገቢ እስካሁን አልተመዘገበም።",
+    "addTodayIncome": "+ የዛሬውን ገቢ መዝግብ",
+    "todayIncome": "የዛሬ ገቢ",
+    "edit": "አስተካክል",
+    "thisWeekSnapshot": "የሳምንቱ አጠቃላይ እይታ",
+    "thisWeeksIncome": "የዚህ ሳምንት ገቢ",
+    "shopExpenses": "የሱቅ ወጪዎች",
+    "customerDebts": "የደንበኞች ዕዳ"
   }
 }

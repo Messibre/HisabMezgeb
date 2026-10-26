@@ -20,8 +20,8 @@ Started: 2026-10-26 11:15
 | M6 | done | c678fd6 | lint: exit 0, build: exit 0, test: exit 0 (38 passed) | MoneyText, StatCard, SkeletonRow/Block, EmptyState, ErrorState |
 | M7 | done | 8f27ebc | lint: exit 0, build: exit 0, test: exit 0 (44 passed) | BottomSheet (vaul), ConfirmDialog, Toaster (sonner) |
 | M8 | done | cae7f54 | lint: exit 0, build: exit 0, test: exit 0 (50 passed) | RegisterPage with AuthShell, FormField, PillInput, PasswordInput, phone validator |
-| M9 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (56 passed) | LoginPage with AuthShell, FormField, PillInput, PasswordInput, shared phone validator |
-| M10 | not started | | | Home page |
+| M9 | done | ab80df8 | lint: exit 0, build: exit 0, test: exit 0 (56 passed) | LoginPage with AuthShell, FormField, PillInput, PasswordInput, shared phone validator |
+| M10 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (63 passed) | HomePage with greeting, today's income status, week snapshot stat cards |
 | M11 | not started | | | Entries page |
 | M12 | not started | | | Debts list |
 | M13 | not started | | | Debt customer ledger |
