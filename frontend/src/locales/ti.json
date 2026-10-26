@@ -32,6 +32,9 @@
     "logOut": "ውጻእ"
   },
   "common": {
+    "currency": "ብር",
+    "today": "ሎሚ",
+    "yesterday": "ትማሊ",
     "comingSoon": "ኣብ ቀረባ እዋን ክመጽእ እዩ።",
     "loading": "ኣብ ምጽዓን...",
     "save": "ኣቐምጥ",

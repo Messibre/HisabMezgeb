@@ -32,6 +32,9 @@
     "logOut": "Log Out"
   },
   "common": {
+    "currency": "ETB",
+    "today": "Today",
+    "yesterday": "Yesterday",
     "comingSoon": "Coming soon.",
     "loading": "Loading...",
     "save": "Save",

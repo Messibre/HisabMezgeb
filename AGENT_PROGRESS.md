@@ -13,8 +13,8 @@ Started: 2026-10-26 11:15
 |---|---|---|---|---|
 | M0 | done | e38c85b | lint: exit 0, build: exit 0, test: exit 0 | Baseline recorded |
 | M1 | done | 95b1047 | lint: exit 0, build: exit 0, test: exit 0 (5 passed) | Theme tokens, dark palette, offline fonts |
-| M2 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (10 passed) | Cookie-based session with single-flight refresh |
-| M3 | not started | | | money.ts and date.ts |
+| M2 | done | fe0f502 | lint: exit 0, build: exit 0, test: exit 0 (10 passed) | Cookie-based session with single-flight refresh |
+| M3 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (20 passed) | money and date helpers with week starting on Monday |
 | M4 | not started | | | AppHeader, BottomTabLayout, AuthShell |
 | M5 | not started | | | Form components |
 | M6 | not started | | | Display and state components |

@@ -32,6 +32,9 @@
     "logOut": "ውጣ"
   },
   "common": {
+    "currency": "ብር",
+    "today": "ዛሬ",
+    "yesterday": "ትናንት",
     "comingSoon": "በቅርቡ ይመጣል።",
     "loading": "በመጫን ላይ...",
     "save": "አስቀምጥ",
