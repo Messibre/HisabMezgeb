@@ -1,12 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Home, ClipboardList, Wallet, BarChart3, Settings } from 'lucide-react';
+import { Home, Receipt, Users, BarChart3, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/constants';
 
 const TABS = [
   { to: ROUTES.HOME, icon: Home, labelKey: 'nav.home' },
-  { to: ROUTES.ENTRIES, icon: ClipboardList, labelKey: 'nav.entries' },
-  { to: ROUTES.DEBTS, icon: Wallet, labelKey: 'nav.debts' },
+  { to: ROUTES.ENTRIES, icon: Receipt, labelKey: 'nav.entries' },
+  { to: ROUTES.DEBTS, icon: Users, labelKey: 'nav.debts' },
   { to: ROUTES.REPORTS, icon: BarChart3, labelKey: 'nav.reports' },
   { to: ROUTES.SETTINGS, icon: Settings, labelKey: 'nav.settings' },
 ] as const;
@@ -15,26 +15,39 @@ export default function BottomTabLayout() {
   const { t } = useTranslation();
 
   return (
-    <div className="relative mx-auto flex min-h-screen w-full max-w-[600px] flex-col bg-background">
-      <main className="flex-1 pb-24">
+    <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
+      <main className="flex-1 pb-[calc(76px+env(safe-area-inset-bottom,0px)+16px)]">
         <Outlet />
       </main>
 
-      <nav className="fixed bottom-0 left-1/2 z-50 flex h-[76px] w-full max-w-[600px] -translate-x-1/2 items-center justify-around rounded-t-lg bg-surface-container-lowest px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <nav
+        aria-label="Bottom Navigation"
+        className="fixed bottom-0 left-1/2 z-50 flex h-[calc(76px+env(safe-area-inset-bottom,0px))] w-full max-w-md -translate-x-1/2 items-center justify-around border-t border-border/40 bg-card/95 px-2 pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-4px_20px_rgba(0,0,0,0.05)] backdrop-blur"
+      >
         {TABS.map(({ to, icon: Icon, labelKey }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex min-h-[48px] min-w-[64px] flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 transition-all duration-200 ${
+              `flex flex-1 min-w-0 min-h-[48px] flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 isActive
-                  ? 'bg-secondary-container text-on-secondary-container'
-                  : 'text-outline hover:bg-surface-container-low'
+                  ? 'bg-secondary-container text-on-secondary-container font-semibold'
+                  : 'text-outline hover:text-foreground hover:bg-muted/50'
               }`
             }
           >
-            <Icon className="h-6 w-6" />
-            <span className="text-[12px] font-semibold leading-tight">{t(labelKey)}</span>
+            {({ isActive }) => (
+              <>
+                <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+                <span
+                  className={`w-full truncate text-center text-[11px] leading-tight ${
+                    isActive ? 'font-semibold' : 'font-normal'
+                  }`}
+                >
+                  {t(labelKey)}
+                </span>
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
