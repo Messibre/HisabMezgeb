@@ -74,3 +74,96 @@ export const useCreatePayment = () => {
     },
   });
 };
+
+export const useUpdateBorrowRecord = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      recordId,
+      payload,
+    }: {
+      customerId: string;
+      recordId: string;
+      payload: { amount?: number; itemsDescription?: string; note?: string };
+    }) => {
+      const { data } = await api.patch<BorrowRecord>(`/debt-borrow-records/${recordId}`, payload);
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.DEBT_CUSTOMER_DETAIL, variables.customerId],
+      });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DEBT_CUSTOMERS] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REPORT_SUMMARY] });
+    },
+  });
+};
+
+export const useDeleteBorrowRecord = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ recordId }: { customerId: string; recordId: string }) => {
+      await api.delete(`/debt-borrow-records/${recordId}`);
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.DEBT_CUSTOMER_DETAIL, variables.customerId],
+      });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DEBT_CUSTOMERS] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REPORT_SUMMARY] });
+    },
+  });
+};
+
+export const useUpdatePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      paymentId,
+      payload,
+    }: {
+      customerId: string;
+      paymentId: string;
+      payload: { amount?: number; note?: string };
+    }) => {
+      const { data } = await api.patch(`/debt-payments/${paymentId}`, payload);
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.DEBT_CUSTOMER_DETAIL, variables.customerId],
+      });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DEBT_CUSTOMERS] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REPORT_SUMMARY] });
+    },
+  });
+};
+
+export const useDeletePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ paymentId }: { customerId: string; paymentId: string }) => {
+      await api.delete(`/debt-payments/${paymentId}`);
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.DEBT_CUSTOMER_DETAIL, variables.customerId],
+      });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DEBT_CUSTOMERS] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REPORT_SUMMARY] });
+    },
+  });
+};
+
+export const useDeleteDebtCustomer = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (customerId: string) => {
+      await api.delete(`/debt-customers/${customerId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DEBT_CUSTOMERS] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REPORT_SUMMARY] });
+    },
+  });
+};

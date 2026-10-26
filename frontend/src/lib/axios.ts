@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { env } from '@/config/env';
-import type { ApiResponse } from '@/types';
+import type { ApiResponse, Account } from '@/types';
 import { useAuthStore } from '@/store/auth.store';
+import { queryClient } from '@/lib/queryClient';
 
 const api = axios.create({
   baseURL: env.VITE_API_URL,
@@ -9,6 +10,70 @@ const api = axios.create({
   timeout: 10000,
   withCredentials: true,
 });
+
+let refreshPromise: Promise<Account> | null = null;
+
+export function resetRefreshPromise() {
+  refreshPromise = null;
+}
+
+export async function executeRefresh(): Promise<Account> {
+  if (!refreshPromise) {
+    refreshPromise = api
+      .post<Account>('/auth/refresh', {}, { withCredentials: true })
+      .then((res) => {
+        const account = res.data;
+        useAuthStore.getState().setAccount(account);
+        return account;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
+}
+
+export async function handleResponseError(error: AxiosError) {
+  const originalRequest = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
+
+  // A network error (no response at all) must NEVER log the user out and must NEVER trigger a refresh
+  if (!error.response) {
+    return Promise.reject(error);
+  }
+
+  const status = error.response.status;
+  const url = originalRequest?.url || '';
+
+  const isAuthRoute =
+    url.includes('/auth/login') ||
+    url.includes('/auth/register') ||
+    url.includes('/auth/refresh');
+
+  if (status === 401) {
+    if (isAuthRoute) {
+      if (url.includes('/auth/refresh')) {
+        useAuthStore.getState().clearSession();
+        queryClient.clear();
+      }
+      return Promise.reject(error);
+    }
+
+    if (originalRequest && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await executeRefresh();
+        return api(originalRequest);
+      } catch (refreshErr) {
+        useAuthStore.getState().clearSession();
+        queryClient.clear();
+        return Promise.reject(refreshErr);
+      }
+    }
+  }
+
+  return Promise.reject(error);
+}
 
 api.interceptors.response.use(
   (response) => {
@@ -18,30 +83,7 @@ api.interceptors.response.use(
     }
     return response;
   },
-  async (error) => {
-    const originalRequest = error.config;
-
-    // If it's a 401 and we haven't tried refreshing yet
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        await api.post('/auth/refresh', {}, { withCredentials: true });
-        return api(originalRequest);
-      } catch (refreshError) {
-        useAuthStore.getState().clearUser();
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-
-    if (error.response?.status === 401) {
-      useAuthStore.getState().clearUser();
-      window.location.href = '/login';
-    }
-
-    return Promise.reject(error);
-  }
+  handleResponseError
 );
 
 export default api;

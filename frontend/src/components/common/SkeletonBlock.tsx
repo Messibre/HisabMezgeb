@@ -7,3 +7,5 @@ export function SkeletonBlock({ className = '' }: SkeletonBlockProps) {
     <div className={`animate-pulse rounded-md bg-surface-dim ${className}`} aria-hidden="true" />
   );
 }
+
+export default SkeletonBlock;
