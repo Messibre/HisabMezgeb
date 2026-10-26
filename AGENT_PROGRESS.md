@@ -11,8 +11,8 @@ Started: 2026-10-26 11:15
 ## Milestones
 | # | Status (done / blocked / not started) | Commit hash | Commands run (real results) | Notes |
 |---|---|---|---|---|
-| M0 | done | pending | lint: exit 0, build: exit 0, test: exit 0 | Baseline recorded |
-| M1 | not started | | | Theme tokens, dark palette, fonts |
+| M0 | done | e38c85b | lint: exit 0, build: exit 0, test: exit 0 | Baseline recorded |
+| M1 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (5 passed) | Theme tokens, dark palette, offline fonts |
 | M2 | not started | | | Cookie-based auth |
 | M3 | not started | | | money.ts and date.ts |
 | M4 | not started | | | AppHeader, BottomTabLayout, AuthShell |
@@ -32,6 +32,28 @@ Started: 2026-10-26 11:15
 
 ## DECISIONS TAKEN (defaults used)
 - Configured `pool: 'threads'` and `watch: false` in `frontend/vitest.config.ts` so `npm test` runs deterministically and terminates in non-interactive Windows environment.
+- M1 Dark Palette and Contrast Ratios:
+  | Token | Dark Value | Role | Contrast on #111411 (Background) | Contrast on #191c19 (Card) |
+  |---|---|---|---|---|
+  | --background | #111411 | Page background | - | - |
+  | --surface | #111411 | Surface background | - | - |
+  | --card | #191c19 | Elevated card | 1.15:1 | - |
+  | --foreground | #e1e3e0 | Normal text | 13.5:1 | 11.7:1 |
+  | --on-surface-variant | #c0c9c2 | Secondary text | 9.5:1 | 8.2:1 |
+  | --outline | #8a938c | Borders & chips | 5.3:1 | 4.6:1 |
+  | --outline-variant | #404943 | Subdued borders | 2.0:1 | 1.7:1 |
+  | --primary | #9ed495 | Primary actions | 10.3:1 | 8.9:1 |
+  | --primary-container | #1a3517 | Active pill / container | 1.6:1 | 1.4:1 |
+  | --on-primary-container | #d2e8cc | Text on container | 11.3:1 (on container: 7.2:1) | - |
+  | --money-in | #52dc90 | Cash in (large/bold) | 10.4:1 | 9.0:1 |
+  | --money-in-strong | #76e8a6 | Cash in (small text) | 12.8:1 | 11.1:1 |
+  | --money-out | #ff8c73 | Cash out (large/bold) | 8.8:1 | 7.6:1 |
+  | --money-out-strong | #ffab99 | Cash out (small text) | 10.8:1 | 9.4:1 |
+  | --money-neutral | #ffba73 | Neutral cash (large) | 9.8:1 | 8.5:1 |
+  | --money-neutral-strong | #ffd199 | Neutral cash (small) | 12.2:1 | 10.6:1 |
+  | --nav-active-bg | #1a3517 | Bottom nav active tab | - | - |
+  | --nav-active-fg | #d2e8cc | Active icon & label | 11.3:1 (on #1a3517: 7.2:1) | - |
+- Replaced `@fontsource-variable/geist` with `@fontsource-variable/quicksand` and `@fontsource-variable/noto-sans-ethiopic` for complete offline typography. Removed Google Fonts CDN from index.html.
 
 ## NOT VERIFIED (needs real backend, browser, or device)
 -

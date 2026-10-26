@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import '@fontsource-variable/geist';
+@import '@fontsource-variable/quicksand';
+@import '@fontsource-variable/noto-sans-ethiopic';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -16,50 +17,32 @@
     @apply font-sans;
   }
   /*
-   * Geist (the bundled font) only covers Latin script. Amharic and
-   * Tigrigna use Ge'ez script, so fall back to a Ge'ez-capable font for
-   * those languages — html[lang] is kept in sync with i18n by
-   * useSyncHtmlLang (see src/hooks/useSyncHtmlLang.ts). Noto Sans Ethiopic
-   * is widely available on Android/iOS as a system font; system-ui/sans-serif
-   * cover devices where it isn't.
-   *
-   * Quicksand is the primary brand font (see DESIGN.md) — it's bundled
-   * via Google Fonts in index.html. The Ge'ez fallback still takes priority
-   * for am/ti because Quicksand has no Ethiopic glyphs.
+   * Quicksand is the primary brand font. Ge'ez script (Amharic/Tigrigna)
+   * is not in Quicksand, so Noto Sans Ethiopic takes precedence for am/ti.
+   * Both are self-hosted via @fontsource-variable for complete offline support.
    */
   html[lang='am'],
   html[lang='ti'] {
-    font-family: 'Noto Sans Ethiopic', 'Quicksand', system-ui, sans-serif;
+    font-family: 'Noto Sans Ethiopic Variable', 'Noto Sans Ethiopic', 'Quicksand Variable', 'Quicksand', system-ui, sans-serif;
   }
 }
 
 @theme inline {
   /* Typography */
   --font-heading: var(--font-sans);
-  --font-sans: 'Quicksand', 'Geist Variable', system-ui, sans-serif;
+  --font-sans: 'Quicksand Variable', 'Quicksand', 'Noto Sans Ethiopic Variable', 'Noto Sans Ethiopic', system-ui, sans-serif;
 
-  /* Sidebar (shadcn defaults, kept as-is) */
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
+  /* Layout dimensions */
+  --header-height: 64px;
+  --bottom-nav-height: calc(76px + env(safe-area-inset-bottom, 0px));
+  --touch-target: 48px;
 
-  /* Charts (shadcn defaults) */
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-
-  /* Core semantic tokens */
+  /* Core semantic colors mapped to shadcn */
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -75,11 +58,21 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  /* Design-system tokens (from DESIGN.md) */
+  /* New semantic tokens: Money, Navigation, Danger */
+  --color-money-in: var(--money-in);
+  --color-money-in-strong: var(--money-in-strong);
+  --color-money-out: var(--money-out);
+  --color-money-out-strong: var(--money-out-strong);
+  --color-money-neutral: var(--money-neutral);
+  --color-money-neutral-strong: var(--money-neutral-strong);
+  --color-nav-active-bg: var(--nav-active-bg);
+  --color-nav-active-fg: var(--nav-active-fg);
+  --color-danger: var(--danger);
+  --color-danger-container: var(--danger-container);
+  --color-on-danger-container: var(--on-danger-container);
+
+  /* Stitch Design-system surface tokens */
   --color-surface: var(--surface);
-  --color-surface-bright: var(--surface-bright);
-  --color-surface-dim: var(--surface-dim);
-  --color-surface-variant: var(--surface-variant);
   --color-surface-container-lowest: var(--surface-container-lowest);
   --color-surface-container-low: var(--surface-container-low);
   --color-surface-container: var(--surface-container);
@@ -89,157 +82,177 @@
   --color-on-surface-variant: var(--on-surface-variant);
   --color-outline: var(--outline);
   --color-outline-variant: var(--outline-variant);
+  --color-outline-strong: var(--outline-strong);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
   --color-primary-container: var(--primary-container);
   --color-on-primary-container: var(--on-primary-container);
   --color-secondary-container: var(--secondary-container);
   --color-on-secondary-container: var(--on-secondary-container);
-  --color-error: var(--error);
-  --color-error-container: var(--error-container);
-  --color-on-error-container: var(--on-error-container);
   --color-on-primary: var(--on-primary);
   --color-on-secondary: var(--on-secondary);
 
-  /* Radii (from DESIGN.md) */
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  /* Radii */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
 }
 
 :root {
-  /* ── shadcn baseline (light) ── */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* ── Stitch Design Tokens (Light Mode) ── */
+  /* Primary */
+  --primary: #2e5a27;
+  --primary-hover: #24471f;
+  --primary-active: #1a3517;
+  --primary-container: #d2e8cc;
+  --on-primary: #ffffff;
+  --on-primary-container: #0b1f07;
+  --primary-foreground: #ffffff;
 
-  /* ── Hisab Mezgeb design tokens (light) ── */
-  /* Surfaces */
+  /* Secondary */
+  --secondary: #52dc90;
+  --secondary-container: #a3f7bf;
+  --on-secondary-container: #00210c;
+  --secondary-foreground: #00210c;
+
+  /* Money semantic tokens */
+  --money-in: #1b8a44;
+  --money-in-strong: #146934;
+  --money-out: #c8441b;
+  --money-out-strong: #9e3210;
+  --money-neutral: #b46d23;
+  --money-neutral-strong: #8a5014;
+
+  /* Navigation active tokens */
+  --nav-active-bg: #a3f7bf;
+  --nav-active-fg: #00210c;
+
+  /* Danger / Destructive */
+  --danger: #ba1a1a;
+  --danger-container: #ffdad6;
+  --on-danger-container: #410002;
+  --destructive: #ba1a1a;
+  --destructive-foreground: #ffffff;
+
+  /* Surfaces & Background */
+  --background: #f9f9f8;
+  --foreground: #191c19;
   --surface: #f9f9f8;
-  --surface-bright: #ffffff;
-  --surface-dim: #d9dad9;
-  --surface-variant: #e1e3e2;
+  --card: #ffffff;
+  --card-foreground: #191c19;
+  --popover: #ffffff;
+  --popover-foreground: #191c19;
   --surface-container-lowest: #ffffff;
   --surface-container-low: #f3f4f3;
-  --surface-container: #edeeed;
-  --surface-container-high: #e7e8e7;
-  --surface-container-highest: #e1e3e2;
+  --surface-container: #eceeec;
+  --surface-container-high: #e6e8e6;
+  --surface-container-highest: #e0e2e0;
 
-  /* Text & outlines */
-  --on-surface: #191c1c;
-  --on-surface-variant: #42493e;
-  --outline: #72796d;
-  --outline-variant: #c2c9bb;
+  /* Text & Outlines */
+  --on-surface: #191c19;
+  --on-surface-variant: #404943;
+  --outline: #717973;
+  --outline-variant: #c0c9c2;
+  --outline-strong: #404943;
 
-  /* Brand */
-  --primary: #164212;
-  --primary-container: #2e5a27;
-  --on-primary: #ffffff;
-  --on-primary-container: #9ed090;
+  /* shadcn base mappings */
+  --muted: #f3f4f3;
+  --muted-foreground: #404943;
+  --accent: #f3f4f3;
+  --accent-foreground: #191c19;
+  --border: #c0c9c2;
+  --input: #c0c9c2;
+  --ring: #2e5a27;
 
-  --secondary: #006d44;
-  --secondary-container: #8ff4bb;
-  --on-secondary: #ffffff;
-  --on-secondary-container: #007147;
+  /* Radii */
+  --radius: 16px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
 
-  /* Semantic — errors */
-  --error: #ba1a1a;
-  --error-container: #ffdad6;
-  --on-error-container: #93000a;
+  /* Layout sizes */
+  --header-height: 64px;
+  --bottom-nav-height: calc(76px + env(safe-area-inset-bottom, 0px));
+  --touch-target: 48px;
+
+  /* Shadows */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-floating: 0 4px 20px rgba(46, 90, 39, 0.25);
+  --shadow-navbar: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .dark {
-  /* ── shadcn baseline (dark) ── */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* ── Dark Mode Palette ── */
+  /* Surfaces & Background */
+  --background: #111411;
+  --foreground: #e1e3e0;
+  --surface: #111411;
+  --card: #191c19;
+  --card-foreground: #e1e3e0;
+  --popover: #191c19;
+  --popover-foreground: #e1e3e0;
+  --surface-container-lowest: #0c0f0d;
+  --surface-container-low: #191c19;
+  --surface-container: #1d211d;
+  --surface-container-high: #272b27;
+  --surface-container-highest: #323632;
 
-  /* ── Hisab Mezgeb design tokens (dark) ── */
-  /* Deep charcoal background, elevated surfaces in slightly lighter grays */
-  --surface: #121212;
-  --surface-bright: #1e1e1e;
-  --surface-dim: #0d0d0d;
-  --surface-variant: #2a2a2a;
-  --surface-container-lowest: #0d0d0d;
-  --surface-container-low: #1a1a1a;
-  --surface-container: #1e1e1e;
-  --surface-container-high: #252525;
-  --surface-container-highest: #2e2e2e;
+  /* Text & Outlines */
+  --on-surface: #e1e3e0;
+  --on-surface-variant: #c0c9c2;
+  --outline: #8a938c;
+  --outline-variant: #404943;
+  --outline-strong: #e1e3e0;
 
-  --on-surface: #f0f1f0;
-  --on-surface-variant: #c2c9bb;
-  --outline: #8a938a;
-  --outline-variant: #42493e;
+  /* Primary */
+  --primary: #9ed495;
+  --primary-hover: #b4e4ab;
+  --primary-active: #cbf5c2;
+  --primary-container: #1a3517;
+  --on-primary: #0b1f07;
+  --on-primary-container: #d2e8cc;
+  --primary-foreground: #0b1f07;
 
-  /* Brand — slightly brightened so it stays legible on dark backgrounds */
-  --primary: #a1d493;
-  --primary-container: #2e5a27;
-  --on-primary: #003301;
-  --on-primary-container: #bdf0ad;
+  /* Secondary */
+  --secondary: #52dc90;
+  --secondary-container: #003919;
+  --on-secondary-container: #a3f7bf;
+  --secondary-foreground: #00210c;
 
-  --secondary: #76daa3;
-  --secondary-container: #005232;
-  --on-secondary: #003919;
-  --on-secondary-container: #92f7be;
+  /* Money semantic tokens (brightened for contrast on dark) */
+  --money-in: #52dc90;
+  --money-in-strong: #76e8a6;
+  --money-out: #ff8c73;
+  --money-out-strong: #ffab99;
+  --money-neutral: #ffba73;
+  --money-neutral-strong: #ffd199;
 
-  --error: #ffb4ab;
-  --error-container: #93000a;
-  --on-error-container: #ffdad6;
+  /* Navigation active tokens */
+  --nav-active-bg: #1a3517;
+  --nav-active-fg: #d2e8cc;
+
+  /* Danger / Destructive */
+  --danger: #ffb4ab;
+  --danger-container: #93000a;
+  --on-danger-container: #ffdad6;
+  --destructive: #ffb4ab;
+  --destructive-foreground: #410002;
+
+  /* shadcn base mappings */
+  --muted: #1d211d;
+  --muted-foreground: #c0c9c2;
+  --accent: #1d211d;
+  --accent-foreground: #e1e3e0;
+  --border: #404943;
+  --input: #404943;
+  --ring: #9ed495;
+
+  /* Shadows */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-floating: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-navbar: 0 -4px 20px rgba(0, 0, 0, 0.4);
 }
