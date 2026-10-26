@@ -14,7 +14,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.ts',
-    pool: 'threads',
+    pool: 'forks',
     watch: false,
     isolate: true,
     maxWorkers: 1, // Limit to one worker
