@@ -20,6 +20,8 @@ import router from './routes/index.js';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use((req, res, next) => {
   req.id = randomUUID();
   res.setHeader('X-Request-Id', req.id);
