@@ -4,3 +4,10 @@ dist/
 *.log
 .vscode
 tasks.md
+
+# Database backups & encryption artifacts
+backups/
+*.dump
+*.age
+*.sha256
+
