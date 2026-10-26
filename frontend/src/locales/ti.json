@@ -136,5 +136,22 @@
     "errorCategoryRequired": "በጃኹም ምድብ ምረጹ",
     "errorFundingTypeRequired": "በጃኹም ዓይነት ደገፍ ምረጹ",
     "errorFutureDate": "ናይ መጻኢ ዕለት ክኸውን ኣይኽእልን"
+  },
+  "debts": {
+    "totalOwed": "ጠቕላላ ዝድለ",
+    "searchPlaceholder": "ዓሚል ብስም ድለ",
+    "clearSearch": "ድለይት ኣጽርይ",
+    "settled": "ተኸፊሉ",
+    "noCustomers": "ገና ዝኾነ ዓማዊል የለን። ንምውሳኽ + ጠውቕ።",
+    "noCustomerFound": "ን “{{text}}” ዝተረኽበ ዓሚል የለን",
+    "addCustomerNamed": "“{{text}}” ወስኽ",
+    "newCustomer": "ሓድሽ ዓሚል",
+    "customerName": "ስም ዓሚል",
+    "namePlaceholder": "ስም ዓሚል የእቱ",
+    "noteLabel": "መተሓሳሰቢ",
+    "notePlaceholder": "ንኣብነት ተሌፎን ወይ ቦታ (ኣማራጺ)",
+    "saveCustomer": "ዓሚል መዝግብ",
+    "addCustomerAria": "ዓሚል ወስኽ",
+    "nameRequired": "ስም ዓሚል የድሊ"
   }
 }

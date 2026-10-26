@@ -136,5 +136,22 @@
     "errorCategoryRequired": "እባክዎ ምድብ ይምረጡ",
     "errorFundingTypeRequired": "እባክዎ የድጋፍ አይነት ይምረጡ",
     "errorFutureDate": "የወደፊት ቀን መሆን አይችልም"
+  },
+  "debts": {
+    "totalOwed": "ጠቅላላ የሚፈለግ",
+    "searchPlaceholder": "ደንበኛ በስም ይፈልጉ",
+    "clearSearch": "ፍለጋ አጽዳ",
+    "settled": "ተከፍሏል",
+    "noCustomers": "እስካሁን ምንም ደንበኞች የሉም። ለመጨመር + ን ይጫኑ።",
+    "noCustomerFound": "ለ “{{text}}” የተገኘ ደንበኛ የለም",
+    "addCustomerNamed": "“{{text}}” ጨምር",
+    "newCustomer": "አዲስ ደንበኛ",
+    "customerName": "የደንበኛ ስም",
+    "namePlaceholder": "የደንበኛ ስም ያስገቡ",
+    "noteLabel": "ማስታወሻ",
+    "notePlaceholder": "ለምሳሌ ስልክ ወይም ቦታ (አማራጭ)",
+    "saveCustomer": "ደንበኛ መዝግብ",
+    "addCustomerAria": "ደንበኛ ጨምር",
+    "nameRequired": "የደንበኛ ስም ያስፈልጋል"
   }
 }

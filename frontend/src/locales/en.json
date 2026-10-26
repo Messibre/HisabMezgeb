@@ -136,5 +136,22 @@
     "errorCategoryRequired": "Please select a category",
     "errorFundingTypeRequired": "Please select a funding type",
     "errorFutureDate": "Date cannot be in the future"
+  },
+  "debts": {
+    "totalOwed": "Total Owed",
+    "searchPlaceholder": "Search customer by name",
+    "clearSearch": "Clear search",
+    "settled": "Settled",
+    "noCustomers": "No customers yet. Tap + to add one.",
+    "noCustomerFound": "No customer found for “{{text}}”",
+    "addCustomerNamed": "Add “{{text}}”",
+    "newCustomer": "New Customer",
+    "customerName": "Customer Name",
+    "namePlaceholder": "Enter customer name",
+    "noteLabel": "Note",
+    "notePlaceholder": "e.g. phone or place (optional)",
+    "saveCustomer": "Save Customer",
+    "addCustomerAria": "Add customer",
+    "nameRequired": "Customer name is required"
   }
 }
