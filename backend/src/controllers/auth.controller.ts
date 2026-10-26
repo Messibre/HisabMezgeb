@@ -15,14 +15,17 @@ import {
 const getCookieOptions = (): {
   httpOnly: boolean;
   secure: boolean;
-  sameSite: 'lax';
+  sameSite: 'none' | 'lax';
   path: string;
-} => ({
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
-  path: '/api/v1',
-});
+} => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? ('none' as const) : ('lax' as const),
+    path: '/api/v1',
+  };
+};
 
 const setAuthCookies = (res: Response, accessToken: string, refreshToken: string) => {
   const options = getCookieOptions();
