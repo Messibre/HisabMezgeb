@@ -16,7 +16,7 @@ export default defineConfig({
     setupFiles: './tests/setup.ts',
     pool: 'threads',
     watch: false,
-    isolate: false, // Disable isolation to speed up startup
+    isolate: true,
     maxWorkers: 1, // Limit to one worker
     testTimeout: 30000,
     hookTimeout: 30000,

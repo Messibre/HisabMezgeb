@@ -23,8 +23,8 @@ Started: 2026-10-26 11:15
 | M9 | done | ab80df8 | lint: exit 0, build: exit 0, test: exit 0 (56 passed) | LoginPage with AuthShell, FormField, PillInput, PasswordInput, shared phone validator |
 | M10 | done | 56871ef | lint: exit 0, build: exit 0, test: exit 0 (63 passed) | HomePage with greeting, today's income status, week snapshot stat cards |
 | M11 | done | dedf70a | lint: exit 0, build: exit 0, test: exit 0 (72 passed) | EntriesPage with tab switching, AmountInput hero card, category/funding chips, duplicate detection, recent entries and edit sheet |
-| M12 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (78 passed) | DebtsListPage with search, total owed, sorted customer cards with Ge'ez initials, and FAB new customer sheet |
-| M13 | not started | | | Debt customer ledger |
+| M12 | done | dc06919 | lint: exit 0, build: exit 0, test: exit 0 (78 passed) | DebtsListPage with search, total owed, sorted customer cards with Ge'ez initials, and FAB new customer sheet |
+| M13 | done | pending | lint: exit 0, build: exit 0, test: exit 0 (85 passed) | DebtCustomerDetailPage with balance card, borrow and payment sheets, customer ledger history, and full/part payment logic |
 | M14 | not started | | | Final verification |
 
 ## NEEDS TRANSLATION (keys with English placeholder in am/ti)
