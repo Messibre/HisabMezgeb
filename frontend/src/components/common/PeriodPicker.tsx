@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 export type PeriodType = 'today' | 'week' | 'month' | 'custom';
 
 interface PeriodPickerProps {
@@ -5,17 +7,18 @@ interface PeriodPickerProps {
   onChange: (value: PeriodType) => void;
 }
 
-const OPTIONS: { value: PeriodType; label: string }[] = [
-  { value: 'today', label: 'Today' },
-  { value: 'week', label: 'This Week' },
-  { value: 'month', label: 'This Month' },
-  { value: 'custom', label: 'Custom' },
-];
-
 export function PeriodPicker({ value, onChange }: PeriodPickerProps) {
+  const { t } = useTranslation();
+
+  const options: { value: PeriodType; label: string }[] = [
+    { value: 'today', label: t('reports.today', 'Today') },
+    { value: 'week', label: t('reports.thisWeek', 'This Week') },
+    { value: 'month', label: t('reports.thisMonth', 'This Month') },
+    { value: 'custom', label: t('reports.custom', 'Custom') },
+  ];
   return (
     <div className="no-scrollbar -mx-6 flex gap-3 overflow-x-auto px-6 pb-2">
-      {OPTIONS.map((opt) => {
+      {options.map((opt) => {
         const isActive = value === opt.value;
         return (
           <button
