@@ -7,7 +7,7 @@ import { queryClient } from '@/lib/queryClient';
 const api = axios.create({
   baseURL: env.VITE_API_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 10000,
+  timeout: 15000, // 15 seconds timeout gives 'timeout' error kind
   withCredentials: true,
 });
 
@@ -65,6 +65,8 @@ export async function handleResponseError(error: AxiosError) {
         await executeRefresh();
         return api(originalRequest);
       } catch (refreshErr) {
+        // Session expired: Clear auth session, but do NOT wipe unsynced offline entries.
+        // When the offline queue exists, it must survive a logout caused by an expired session.
         useAuthStore.getState().clearSession();
         queryClient.clear();
         return Promise.reject(refreshErr);

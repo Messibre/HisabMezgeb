@@ -18,6 +18,7 @@ import SkeletonBlock from '@/components/common/SkeletonBlock';
 import EmptyState from '@/components/common/EmptyState';
 import ErrorState from '@/components/common/ErrorState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { toUserError } from '@/lib/errors';
 import {
   useDebtCustomerDetail,
   useDeleteDebtCustomer,
@@ -72,12 +73,11 @@ export default function DebtCustomerDetailPage() {
     }
   };
 
-  // Check for 404 status
-  const is404 =
-    isError &&
-    (error as { response?: { status?: number } })?.response?.status === 404;
+  // User error transformation
+  const userError = isError ? toUserError(error) : null;
+  const isNotFound = userError?.kind === 'notFound';
 
-  if (is404) {
+  if (isNotFound) {
     return (
       <div className="min-h-screen bg-background">
         <AppHeader
@@ -88,6 +88,10 @@ export default function DebtCustomerDetailPage() {
           <EmptyState
             icon={<AlertTriangle className="w-8 h-8 text-destructive" />}
             title={t('debts.customerNotFound', 'Customer not found')}
+            description={t(
+              'debts.customerNotFoundDesc',
+              'This customer may have been deleted or the link is incorrect.'
+            )}
             actionLabel={t('debts.backToDebts', 'Back to Debts')}
             onAction={() => navigate('/debts')}
           />
@@ -105,7 +109,8 @@ export default function DebtCustomerDetailPage() {
         />
         <main className="max-w-md mx-auto p-4">
           <ErrorState
-            message={t('common.error', 'Failed to load customer details')}
+            message={t(userError?.messageKey || 'errors.server.message')}
+            requestId={userError?.requestId}
             onRetry={() => refetch()}
           />
         </main>

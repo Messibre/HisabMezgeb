@@ -74,13 +74,90 @@
   },
   "notFound": {
     "title": "404",
-    "message": "ገጹ አልተገኘም",
-    "goHome": "ወደ ቤት ይመለሱ"
+    "documentTitle": "ገጹ አልተገኘም - ሂሳብ መዝገብ",
+    "heading": "ገጹ አልተገኘም",
+    "message": "የፈለጉትን ገጽ ማግኘት አልቻልንም።",
+    "goHome": "ወደ መነሻ ገጽ",
+    "goLogin": "ወደ መግቢያ ገጽ",
+    "goBack": "ተመለስ"
   },
   "errorBoundary": {
     "title": "የሆነ ስህተት ተፈጥሯል።",
     "message": "እባክዎ ገጹን እንደገና ያድሱ።",
     "goHome": "ወደ ቤት ሂድ"
+  },
+  "errors": {
+    "reference": "ማጣቀሻ",
+    "notSaved": "ይህ አልተቀመጠም። እባክዎ እንደገና ይሞክሩ።",
+    "offlineQueueSaved": "ኢንተርኔት የለም። መስራትዎን መቀጠል ይችላሉ፣ መስመር ላይ ሲመለሱ በራሱ ይላካል።",
+    "offlineNoQueue": "ኢንተርኔት የለም። እባክዎ መስመር ላይ ሲሆኑ እንደገና ይሞክሩ።",
+    "offline": {
+      "title": "የኢንተርኔት ግንኙነት የለም",
+      "message": "እባክዎ ግንኙነትዎን ያረጋግጡና እንደገና ይሞክሩ።"
+    },
+    "timeout": {
+      "title": "የጊዜ ገደብ አልፏል",
+      "message": "አገልጋዩ ምላሽ ለመስጠት ረጅም ጊዜ ወስዷል። እባክዎ እንደገና ይሞክሩ።"
+    },
+    "session": {
+      "title": "የቆይታ ጊዜ አልቋል",
+      "message": "እባክዎ እንደገና ይግቡ።"
+    },
+    "validation": {
+      "title": "መረጃዎን ያረጋግጡ",
+      "message": "እባክዎ የተጠቆሙትን ክፍሎች አስተካክለው እንደገና ይሞክሩ።"
+    },
+    "invalidCredentials": {
+      "title": "መግባት አልተሳካም",
+      "message": "ትክክል ያልሆነ ስልክ ቁጥር ወይም የይለፍ ቃል። እባክዎ እንደገና ይሞክሩ።"
+    },
+    "phoneRegistered": {
+      "title": "ስልኩ ቀድሞ ተመዝግቧል",
+      "message": "ይህ ስልክ ቁጥር ቀድሞ ተመዝግቧል። ለመግባት ይሞክሩ።"
+    },
+    "duplicateIncome": {
+      "title": "ቀድሞ ተመዝግቧል",
+      "message": "የዚህ ቀን ገቢ ቀድሞ ተመዝግቧል።"
+    },
+    "duplicateExpense": {
+      "title": "ቀድሞ ተመዝግቧል",
+      "message": "ተመሳሳይ የወጪ መዝገብ ቀድሞ ተመዝግቧል።"
+    },
+    "duplicateCategory": {
+      "title": "ምድቡ ቀድሞ አለ",
+      "message": "በዚህ ስም የተመዘገበ ምድብ ቀድሞ አለ።"
+    },
+    "paymentExceedsBalance": {
+      "title": "የክፍያው መጠን ከእዳው ይበልጣል",
+      "message": "ክፍያው ካለው ያልተከፈለ እዳ መብለጥ አይችልም።"
+    },
+    "categoryNotFound": {
+      "title": "ምድቡ አልተገኘም",
+      "message": "ይህ ምድብ ሊገኝ አልቻለም።"
+    },
+    "customerNotFound": {
+      "title": "ደንበኛው አልተገኘም",
+      "message": "ይህ ደንበኛ ሊገኝ አልቻለም።"
+    },
+    "recordNotFound": {
+      "title": "መዝገቡ አልተገኘም",
+      "message": "የተፈለገው መረጃ ሊገኝ አልቻለም።"
+    },
+    "rateLimited": {
+      "title": "ሙከራዎች በዝተዋል",
+      "message": "ሙከራዎች በዝተዋል። እባክዎ ጥቂት ቆይተው እንደገና ይሞክሩ።"
+    },
+    "server": {
+      "title": "የአገልጋይ ስህተት",
+      "message": "በእኛ በኩል ችግር ተፈጥሯል። እባክዎ ከጥቂት ጊዜ በኋላ እንደገና ይሞክሩ።"
+    },
+    "unknown": {
+      "title": "የሆነ ስህተት ተፈጥሯል",
+      "message": "ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።"
+    },
+    "unhandled": {
+      "message": "ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።"
+    }
   },
   "home": {
     "greetingWithShop": "ሰላም፣ {{name}}",
@@ -163,6 +240,7 @@
     "paid": "የተከፈለው",
     "noActivity": "ለዚህ ደንበኛ እስካሁን ምንም አይነት እንቅስቃሴ የለም።",
     "customerNotFound": "ደንበኛው አልተገኘም",
+    "customerNotFoundDesc": "ይህ ደንበኛ ተሰርዞ ሊሆን ይችላል ወይም ሊንኩ የተሳሳተ ነው።",
     "backToDebts": "ወደ እዳዎች ዝርዝር ተመለስ",
     "editCustomer": "ደንበኛ አስተካክል",
     "deleteCustomer": "ደንበኛ ሰርዝ",

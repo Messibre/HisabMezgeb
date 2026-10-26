@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 export type BorrowRecord = {
   id: string;
@@ -58,7 +58,7 @@ export const createBorrowRecord = async (
   });
 
   if (!customer) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
   const data: {
@@ -102,7 +102,7 @@ export const updateBorrowRecord = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Borrow record not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Borrow record not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   const updateData: {
@@ -145,7 +145,7 @@ export const softDeleteBorrowRecord = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Borrow record not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Borrow record not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   await prisma.debtBorrowRecord.update({

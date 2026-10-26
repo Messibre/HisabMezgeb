@@ -33,10 +33,24 @@ export class ErrorResponse<E = any> implements IApiResponse {
   success: boolean = false; // Always false
   message: string;
   errors: E; // Clean semantic naming for client parsing!
+  code?: string;
+  requestId?: string;
 
-  constructor(statusCode: number, message: string, errors: E) {
+  constructor(
+    statusCode: number,
+    message: string,
+    errors: E,
+    code?: string,
+    requestId?: string
+  ) {
     this.statusCode = statusCode;
     this.message = message;
     this.errors = errors;
+    if (code !== undefined) {
+      this.code = code;
+    }
+    if (requestId !== undefined) {
+      this.requestId = requestId;
+    }
   }
 }

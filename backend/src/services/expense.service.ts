@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 // ── Return Types ──
 
@@ -123,7 +123,7 @@ export const createExpense = async (
   });
 
   if (!category) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found', [], ERROR_CODES.CATEGORY_NOT_FOUND);
   }
 
   // 2. Check if an active entry already exists for this date + category
@@ -140,6 +140,8 @@ export const createExpense = async (
     throw new ApiError(
       HTTP_STATUS.CONFLICT,
       'Expense already recorded for this category and date — update it instead',
+      [],
+      ERROR_CODES.DUPLICATE_EXPENSE_ENTRY,
     );
   }
 
@@ -174,7 +176,7 @@ export const updateExpense = async (
   },
 ): Promise<ExpenseResponse> => {
   if (data.amount !== undefined && data.amount < 0) {
-    throw new ApiError(HTTP_STATUS.BAD_REQUEST, 'Amount must be 0 or greater');
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, 'Amount must be 0 or greater', [], ERROR_CODES.VALIDATION_FAILED);
   }
   const existing = await prisma.dailyExpense.findFirst({
     where: {
@@ -185,7 +187,7 @@ export const updateExpense = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Expense entry not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Expense entry not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   const updateData: { amount?: Prisma.Decimal; note?: string | null } = {};
@@ -218,7 +220,7 @@ export const softDeleteExpense = async (accountId: string, expenseId: string): P
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Expense entry not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Expense entry not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   await prisma.dailyExpense.update({

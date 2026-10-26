@@ -6,6 +6,8 @@ import BottomTabLayout from '@/components/layouts/BottomTabLayout';
 import AuthLayout from '@/components/layouts/AuthLayout';
 import { ROUTES } from '@/constants';
 
+import RouteErrorElement from '@/components/common/RouteErrorElement';
+
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const HomePage = lazy(() => import('@/pages/home/HomePage'));
@@ -32,37 +34,45 @@ const withSuspense = (element: React.ReactNode) => (
 
 const router = createBrowserRouter([
   {
-    element: <PublicRoute />,
+    errorElement: <RouteErrorElement />,
     children: [
       {
-        element: <AuthLayout />,
+        element: <PublicRoute />,
         children: [
-          { path: ROUTES.LOGIN, element: withSuspense(<LoginPage />) },
-          { path: ROUTES.REGISTER, element: withSuspense(<RegisterPage />) },
-        ],
-      },
-    ],
-  },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        element: <BottomTabLayout />,
-        children: [
-          { path: ROUTES.HOME, element: withSuspense(<HomePage />) },
-          { path: ROUTES.ENTRIES, element: withSuspense(<EntriesPage />) },
-          { path: ROUTES.DEBTS, element: withSuspense(<DebtsListPage />) },
           {
-            path: ROUTES.DEBT_CUSTOMER_DETAIL,
-            element: withSuspense(<DebtCustomerDetailPage />),
+            element: <AuthLayout />,
+            errorElement: <RouteErrorElement />,
+            children: [
+              { path: ROUTES.LOGIN, element: withSuspense(<LoginPage />) },
+              { path: ROUTES.REGISTER, element: withSuspense(<RegisterPage />) },
+            ],
           },
-          { path: ROUTES.REPORTS, element: withSuspense(<ReportsPage />) },
-          { path: ROUTES.SETTINGS, element: withSuspense(<SettingsPage />) },
         ],
       },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            element: <BottomTabLayout />,
+            errorElement: <RouteErrorElement />,
+            children: [
+              { path: ROUTES.HOME, element: withSuspense(<HomePage />) },
+              { path: ROUTES.ENTRIES, element: withSuspense(<EntriesPage />) },
+              { path: ROUTES.DEBTS, element: withSuspense(<DebtsListPage />) },
+              {
+                path: ROUTES.DEBT_CUSTOMER_DETAIL,
+                element: withSuspense(<DebtCustomerDetailPage />),
+              },
+              { path: ROUTES.REPORTS, element: withSuspense(<ReportsPage />) },
+              { path: ROUTES.SETTINGS, element: withSuspense(<SettingsPage />) },
+              { path: '*', element: withSuspense(<NotFoundPage insideLayout={true} />) },
+            ],
+          },
+        ],
+      },
+      { path: '*', element: withSuspense(<NotFoundPage insideLayout={false} />) },
     ],
   },
-  { path: '*', element: withSuspense(<NotFoundPage />) },
 ]);
 
 export default router;
