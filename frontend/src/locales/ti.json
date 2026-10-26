@@ -31,7 +31,15 @@
     "errorGeneric": "ጌጋ ኣጋጢሙ። በጃኹም ደጊምኩም ፈትኑ።",
     "showPassword": "መሕለፊ ቃል ኣርኢ",
     "hidePassword": "መሕለፊ ቃል ሕባእ",
-    "logOut": "ውጻእ"
+    "logOut": "ውጻእ",
+    "registerSubtitle": "ዲጂታል መዝገብካ ፍጠር",
+    "loginSubtitle": "ናብ ዲጂታል መዝገብካ እቶ",
+    "phoneNumberLabel": "ቁጽሪ ስልኪ",
+    "passwordLabel": "መሕለፊ ቃል",
+    "passwordHelperMin": "እንተወሓደ 8 ፊደላት/ቁጽርታት",
+    "shopNameLabel": "ስም ዱካን ወይ ንግዲ",
+    "shopNamePlaceholderExample": "ንኣብነት ኣበበ ኪዮስክ",
+    "phoneNumberPlaceholderExample": "09XX XXX XXX"
   },
   "common": {
     "currency": "ብር",

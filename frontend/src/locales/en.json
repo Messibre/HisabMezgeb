@@ -31,7 +31,15 @@
     "errorGeneric": "An error occurred. Please try again.",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
-    "logOut": "Log Out"
+    "logOut": "Log Out",
+    "registerSubtitle": "Create your digital ledger",
+    "loginSubtitle": "Sign in to your digital ledger",
+    "phoneNumberLabel": "Phone Number",
+    "passwordLabel": "Password",
+    "passwordHelperMin": "Minimum 8 characters",
+    "shopNameLabel": "Shop or Business Name",
+    "shopNamePlaceholderExample": "e.g. Abebe Kiosk",
+    "phoneNumberPlaceholderExample": "09XX XXX XXX"
   },
   "common": {
     "currency": "ETB",

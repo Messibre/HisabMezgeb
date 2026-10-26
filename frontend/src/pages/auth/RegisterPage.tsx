@@ -1,96 +1,157 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Phone, Store, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import AuthShell from '@/components/common/AuthShell';
+import FormField from '@/components/common/FormField';
+import PillInput from '@/components/common/PillInput';
+import PasswordInput from '@/components/common/PasswordInput';
+import { createPhoneSchema } from '@/lib/validation';
+import { getAuthErrorMessage } from '@/lib/authErrors';
 import { ROUTES } from '@/constants';
 
 export default function RegisterPage() {
   const { t } = useTranslation();
   const { register: registerAccount } = useAuth();
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const registerSchema = z.object({
-    phoneNumber: z.string().min(9, t('auth.errorPhoneRequired')),
-    password: z.string().min(8, t('auth.errorPasswordMin')),
+    phoneNumber: createPhoneSchema(t('auth.errorPhoneRequired', 'Enter a valid phone number')),
+    password: z.string().min(8, t('auth.errorPasswordMin', 'Password must be at least 8 characters')),
     shopName: z.string().optional(),
   });
+
   type RegisterFormValues = z.infer<typeof registerSchema>;
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
     setError,
+    formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
+    mode: 'onTouched',
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
+    setServerError(null);
+    const payload = {
+      phoneNumber: data.phoneNumber.trim(),
+      password: data.password,
+      ...(data.shopName && data.shopName.trim() ? { shopName: data.shopName.trim() } : {}),
+    };
+
     try {
-      await registerAccount(data);
-    } catch {
-      setError('root', {
-        message: t('auth.errorRegisterFailed'),
-      });
+      await registerAccount(payload);
+    } catch (err: unknown) {
+      const errorObj = err as { response?: { status?: number; data?: { message?: string } } };
+      const status = errorObj.response?.status;
+
+      if (status === 409) {
+        setError('phoneNumber', {
+          message: t('auth.errorRegisterFailed', 'This phone number is already registered'),
+        });
+      } else {
+        const errKey = getAuthErrorMessage(err, 'register');
+        setServerError(t(errKey, 'An error occurred. Please try again.'));
+      }
     }
   };
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        <h1 className="text-lg font-semibold mb-4 text-foreground">{t('auth.registerTitle')}</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div>
-            <input
-              type="tel"
-              inputMode="tel"
-              placeholder={t('auth.phoneNumberPlaceholder')}
-              className="w-full rounded-md border border-input px-3 py-3 text-base bg-background"
-              {...register('phoneNumber')}
-            />
-            {errors.phoneNumber && (
-              <p className="text-destructive text-xs mt-1">{errors.phoneNumber.message}</p>
-            )}
+    <AuthShell subtitle={t('auth.registerSubtitle', 'Create your digital ledger')}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left">
+        <FormField
+          id="register-phone"
+          label={t('auth.phoneNumberLabel', 'Phone Number')}
+          error={errors.phoneNumber?.message}
+        >
+          <PillInput
+            id="register-phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder={t('auth.phoneNumberPlaceholderExample', '09XX XXX XXX')}
+            leadingIcon={<Phone className="h-5 w-5 text-on-surface-variant" aria-hidden="true" />}
+            hasError={Boolean(errors.phoneNumber)}
+            {...register('phoneNumber')}
+          />
+        </FormField>
+
+        <FormField
+          id="register-password"
+          label={t('auth.passwordLabel', 'Password')}
+          helperText={t('auth.passwordHelperMin', 'Minimum 8 characters')}
+          error={errors.password?.message}
+        >
+          <PasswordInput
+            id="register-password"
+            autoComplete="new-password"
+            placeholder={t('auth.passwordHelperMin', 'Minimum 8 characters')}
+            hasError={Boolean(errors.password)}
+            {...register('password')}
+          />
+        </FormField>
+
+        <FormField
+          id="register-shop"
+          label={t('auth.shopNameLabel', 'Shop or Business Name')}
+          optional
+          error={errors.shopName?.message}
+        >
+          <PillInput
+            id="register-shop"
+            type="text"
+            autoComplete="organization"
+            placeholder={t('auth.shopNamePlaceholderExample', 'e.g. Abebe Kiosk')}
+            leadingIcon={<Store className="h-5 w-5 text-on-surface-variant" aria-hidden="true" />}
+            hasError={Boolean(errors.shopName)}
+            {...register('shopName')}
+          />
+        </FormField>
+
+        {serverError && (
+          <div
+            role="alert"
+            className="p-3 text-center text-sm font-medium rounded-xl bg-[var(--money-out)]/10 text-[var(--money-out)] border border-[var(--money-out)]/20"
+          >
+            {serverError}
           </div>
+        )}
 
-          <div>
-            <input
-              type="password"
-              placeholder={t('auth.passwordMinPlaceholder')}
-              className="w-full rounded-md border border-input px-3 py-3 text-base bg-background"
-              {...register('password')}
-            />
-            {errors.password && (
-              <p className="text-destructive text-xs mt-1">{errors.password.message}</p>
-            )}
-          </div>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          aria-busy={isSubmitting}
+          className="flex h-[52px] w-full items-center justify-center rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-[0.99] disabled:opacity-50"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+              <span>{t('auth.registerButtonLoading', 'Creating Account…')}</span>
+            </>
+          ) : (
+            <>
+              <span>{t('auth.registerButton', 'Create Account')}</span>
+              <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
+            </>
+          )}
+        </button>
 
-          <div>
-            <input
-              type="text"
-              placeholder={t('auth.shopNamePlaceholder')}
-              className="w-full rounded-md border border-input px-3 py-3 text-base bg-background"
-              {...register('shopName')}
-            />
-          </div>
-
-          {errors.root && <p className="text-destructive text-xs">{errors.root.message}</p>}
-
-          <Button type="submit" disabled={isSubmitting} className="h-12 text-base">
-            {isSubmitting ? t('auth.registerButtonLoading') : t('auth.registerButton')}
-          </Button>
-        </form>
-
-        <p className="text-sm text-muted-foreground mt-4 text-center">
-          {t('auth.haveAccountPrompt')}{' '}
-          <Link to={ROUTES.LOGIN} className="text-foreground underline">
-            {t('auth.loginLink')}
+        <div className="pt-2 text-center text-sm text-on-surface-variant">
+          <span>{t('auth.haveAccountPrompt', 'Already have an account?')} </span>
+          <Link
+            to={ROUTES.LOGIN}
+            className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+          >
+            {t('auth.loginLink', 'Log In')}
           </Link>
-        </p>
-      </CardContent>
-    </Card>
+        </div>
+      </form>
+    </AuthShell>
   );
 }
