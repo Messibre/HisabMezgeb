@@ -164,7 +164,7 @@ export default function ReportsPage() {
             {/* Summary Metrics Cards */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
-                {t('reports.title', 'Overview')}
+                {t('reports.overview', 'Overview')}
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 <StatCard

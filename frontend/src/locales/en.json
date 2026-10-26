@@ -184,6 +184,7 @@
   },
   "reports": {
     "title": "Reports",
+    "overview": "Overview",
     "subtitle": "Overview of your shop's performance",
     "today": "Today",
     "thisWeek": "This Week",

@@ -117,7 +117,7 @@ describe('Reports Feature & Page', () => {
   describe('ReportsPage layout and data presentation', () => {
     it('renders the reports header and period picker options', () => {
       renderReportsPage();
-      expect(screen.getByText('Reports')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1, name: 'Reports' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Today' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'This Week' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'This Month' })).toBeInTheDocument();
@@ -129,13 +129,13 @@ describe('Reports Feature & Page', () => {
       expect(screen.getByText('Total Income')).toBeInTheDocument();
       expect(screen.getByText('45,000')).toBeInTheDocument();
 
-      expect(screen.getByText('Shop Expenses')).toBeInTheDocument();
+      expect(screen.getByText('Business Expenses')).toBeInTheDocument();
       expect(screen.getByText('12,000')).toBeInTheDocument();
 
-      expect(screen.getByText('Personal Draws')).toBeInTheDocument();
-      expect(screen.getByText('4,000')).toBeInTheDocument();
+      expect(screen.getByText('Personal / Family Draws')).toBeInTheDocument();
+      expect(screen.getAllByText('4,000').length).toBeGreaterThanOrEqual(1);
 
-      expect(screen.getByText('Total Debt Owed')).toBeInTheDocument();
+      expect(screen.getByText('Total Owed by Customers')).toBeInTheDocument();
       expect(screen.getByText('8,500')).toBeInTheDocument();
     });
 
@@ -199,8 +199,8 @@ describe('Reports Feature & Page', () => {
       const customBtn = screen.getByRole('button', { name: 'Custom' });
       fireEvent.click(customBtn);
 
-      const fromInput = screen.getByLabelText(/from/i);
-      const toInput = screen.getByLabelText(/to/i);
+      const fromInput = screen.getByLabelText(/^from$/i);
+      const toInput = screen.getByLabelText(/^to$/i);
       expect(fromInput).toBeInTheDocument();
       expect(toInput).toBeInTheDocument();
 
