@@ -18,8 +18,14 @@ export const useEntryHistory = <T extends EntryType>(type: T, from: string, to: 
     funding: '/funding',
   };
 
+  const queryKeyMap = {
+    income: QUERY_KEYS.INCOME,
+    expense: QUERY_KEYS.EXPENSES,
+    funding: QUERY_KEYS.FUNDING,
+  } as const;
+
   return useQuery({
-    queryKey: [QUERY_KEYS[type.toUpperCase() as keyof typeof QUERY_KEYS], from, to],
+    queryKey: [queryKeyMap[type], from, to],
     queryFn: async () => {
       const { data } = await api.get<EntryMap[T]>(`${endpointMap[type]}?from=${from}&to=${to}`);
       return data;

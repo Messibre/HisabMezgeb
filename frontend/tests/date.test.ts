@@ -5,6 +5,8 @@ import {
   toApiDate,
   formatDate,
   startOfWeek,
+  startOfMonth,
+  endOfMonth,
   isFutureDate,
 } from '@/lib/date';
 
@@ -63,5 +65,13 @@ describe('date.ts helpers', () => {
 
     expect(isFutureDate('2020-01-01')).toBe(false);
     expect(isFutureDate('2099-01-01')).toBe(true);
+  });
+
+  it('startOfMonth and endOfMonth calculate month boundaries correctly', () => {
+    expect(startOfMonth('2026-10-26')).toBe('2026-10-01');
+    expect(endOfMonth('2026-10-26')).toBe('2026-10-31');
+    // Leap year February
+    expect(startOfMonth('2024-02-15')).toBe('2024-02-01');
+    expect(endOfMonth('2024-02-15')).toBe('2024-02-29');
   });
 });

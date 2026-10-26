@@ -50,6 +50,18 @@ export function endOfWeek(date?: Date | string): string {
   return toApiDate(sunday);
 }
 
+export function startOfMonth(date?: Date | string): string {
+  const d = date ? parseLocalDate(date) : parseLocalDate(todayLocal());
+  const firstDay = new Date(d.getFullYear(), d.getMonth(), 1);
+  return toApiDate(firstDay);
+}
+
+export function endOfMonth(date?: Date | string): string {
+  const d = date ? parseLocalDate(date) : parseLocalDate(todayLocal());
+  const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+  return toApiDate(lastDay);
+}
+
 export function formatDate(date: Date | string, lang?: string): string {
   const apiDate = toApiDate(date);
   const today = todayLocal();
