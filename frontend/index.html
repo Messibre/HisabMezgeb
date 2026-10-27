@@ -2,11 +2,47 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Hisab Mezgeb - Simple Money & Debt Tracker</title>
+    <meta
+      name="description"
+      content="Simple money and debt tracker for small businesses. Track daily income, expenses, and customer credit ledgers with ease."
+    />
+    <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f9f8" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111411" />
-    <title>Hisab Mezgeb</title>
+
+    <!-- Icons & Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+
+    <!-- Open Graph (Static HTML for crawlers: WhatsApp, Telegram, Facebook) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hisab Mezgeb" />
+    <meta property="og:title" content="Hisab Mezgeb - Simple Money & Debt Tracker" />
+    <meta
+      property="og:description"
+      content="Simple money and debt tracker for small businesses. Track daily income, expenses, and customer credit ledgers with ease."
+    />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.png" />
+    <meta property="og:image:alt" content="Hisab Mezgeb - Simple Money & Debt Tracker" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hisab Mezgeb - Simple Money & Debt Tracker" />
+    <meta
+      name="twitter:description"
+      content="Simple money and debt tracker for small businesses. Track daily income, expenses, and customer credit ledgers with ease."
+    />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.png" />
     <!--
       Prevent flash of unstyled theme on initial load.
       NOTE: If a Content-Security-Policy (CSP) is added later, this script needs a hash or nonce.
@@ -22,7 +58,8 @@
               mode = parsed.state.mode;
             }
           }
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var isDark = mode === 'dark' || (mode === 'system' && prefersDark);
           if (isDark) {
             document.documentElement.classList.add('dark');

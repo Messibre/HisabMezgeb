@@ -32,12 +32,14 @@ import { EntryListCard, type EntryItem } from './components/EntryListCard';
 import { EditEntrySheet } from './components/EditEntrySheet';
 import { CustomRangeSheet } from './components/CustomRangeSheet';
 import type { IncomeEntry, ExpenseWithCategory, FundingEntry } from '@/types/api';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 type TabType = 'income' | 'expense' | 'funding';
 type PeriodType = 'today' | 'week' | 'month' | 'custom';
 
 export default function EntriesPage() {
   const { t } = useTranslation();
+  useDocumentMeta({ titleKey: 'pages.entries', noindex: true });
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Tab from URL ?type=

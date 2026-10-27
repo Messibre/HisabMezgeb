@@ -4,6 +4,7 @@ import { useTheme, type ThemeMode } from '@/store/theme.store';
 import { Button } from '@/components/ui/button';
 import SegmentedControl from '@/components/common/SegmentedControl';
 import { cn } from '@/lib/utils';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 const LANGUAGES = [
   { code: 'en', nativeLabel: 'English' },
@@ -13,6 +14,7 @@ const LANGUAGES = [
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
+  useDocumentMeta({ titleKey: 'pages.settings', noindex: true });
   const { logout } = useAuth();
   const { mode, setMode } = useTheme();
 

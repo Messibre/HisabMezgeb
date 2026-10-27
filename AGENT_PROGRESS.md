@@ -58,8 +58,11 @@ Started: 2026-10-26 11:15
 - Used Ethiopian phone validator pattern `^(\+251\s?9\d{8}|09\d{8})$` supporting both international and local formats.
 - Set amount input regex to `^\d{1,8}(\.\d{1,2})?$` across all entry types and debt borrow/payment sheets.
 - Preserved single-flight refresh mechanism and zero token exposure in JS storage.
+- PLACEHOLDER LOGO: Created placeholder brand logo at `frontend/public/brand/logo.svg` (primary-green #2e5a27 circle with white wallet shape) and generated matching `favicon.svg`, `favicon.ico` (16x16, 32x32), `apple-touch-icon.png` (180x180 with NO transparency), `icon-192.png`, `icon-512.png`, `icon-512-maskable.png` (central 80% safe zone on solid #f9f9f8), and `og-image.png` (1200x630). Replace `frontend/public/brand/logo.svg` when final brand logo is available.
+- PWA Manifest: Configured `site.webmanifest` with `start_url: "/home"`, `scope: "/"`, `display: "standalone"`, `theme_color: "#2e5a27"`, and `background_color: "#f9f9f8"`.
 
 ## NOT VERIFIED (needs real backend, browser, or device)
+- Lighthouse audit: NOT VERIFIED (Lighthouse CLI not installed in the local execution environment).
 - Real backend cookie transmission (Set-Cookie / HttpOnly cookie exchange with live backend API service).
 - Real device touch gesture inertia on Vaul BottomSheet under iOS Safari / Android WebView.
 - Visual inspection on physical mobile device screens at 390px viewport width (visual check: NOT DONE on physical device; verified via comprehensive DOM assertions and headless testing).

@@ -13,9 +13,11 @@ import PasswordInput from '@/components/common/PasswordInput';
 import { createPhoneSchema } from '@/lib/validation';
 import { getAuthErrorMessage } from '@/lib/authErrors';
 import { ROUTES } from '@/constants';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 export default function RegisterPage() {
   const { t } = useTranslation();
+  useDocumentMeta({ titleKey: 'auth.registerTitle', noindex: false });
   const { register: registerAccount } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
 

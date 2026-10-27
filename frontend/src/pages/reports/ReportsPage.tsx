@@ -13,9 +13,11 @@ import { useDebtsPeriodReport } from '@/hooks/useDebtsPeriodReport';
 import { useExpenseBreakdown } from '@/hooks/useExpenseBreakdown';
 import { useExportReport } from '@/hooks/useExportReport';
 import { todayLocal, startOfWeek, endOfWeek, startOfMonth, endOfMonth, formatDate } from '@/lib/date';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
+  useDocumentMeta({ titleKey: 'pages.reports', noindex: true });
   const [period, setPeriod] = useState<PeriodType>('week');
   const [customFrom, setCustomFrom] = useState(() => startOfWeek());
   const [customTo, setCustomTo] = useState(() => todayLocal());
