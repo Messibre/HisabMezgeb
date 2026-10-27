@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { useAuthStore } from '@/store/auth.store';
 

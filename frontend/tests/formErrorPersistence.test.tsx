@@ -5,7 +5,11 @@ import FormErrorSummary from '@/components/common/FormErrorSummary';
 import { toUserError } from '@/lib/errors';
 
 // Test form component representing mutation form
-function SampleExpenseForm({ onSubmitMutation }: { onSubmitMutation: (data: any) => Promise<void> }) {
+function SampleExpenseForm({
+  onSubmitMutation,
+}: {
+  onSubmitMutation: (data: { amount: string; note: string }) => Promise<void>;
+}) {
   const [amount, setAmount] = useState('1500');
   const [note, setNote] = useState('Shop sugar purchase');
   const [serverError, setServerError] = useState<{ message: string; requestId?: string } | null>(null);

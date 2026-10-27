@@ -6,11 +6,11 @@ export const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5 minutes — data stays fresh
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
-      retry: (failureCount, error: any) => {
+      retry: (failureCount, error: unknown) => {
         // Retry queries up to 2 times ONLY for network errors and 5xx with backoff. Never for 4xx.
         if (failureCount >= 2) return false;
 
-        const status = error?.response?.status;
+        const status = (error as { response?: { status?: number } })?.response?.status;
         if (typeof status === 'number' && status >= 400 && status < 500) {
           return false;
         }

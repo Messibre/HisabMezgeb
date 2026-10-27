@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { toUserError, type UserErrorKind } from '@/lib/errors';
+import { toUserError, type UserErrorKind, type ErrorContext } from '@/lib/errors';
 
 describe('toUserError table-driven tests', () => {
   interface TestCase {
     name: string;
-    error: any;
-    context?: any;
+    error: unknown;
+    context?: ErrorContext;
     expectedKind: UserErrorKind;
     expectedTitleKey: string;
     expectedMessageKey: string;

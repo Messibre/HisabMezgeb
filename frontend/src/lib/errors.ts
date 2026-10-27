@@ -47,10 +47,11 @@ function parseFieldErrors(errors: unknown): Record<string, string> | undefined {
           result._general = item;
         }
       } else if (item && typeof item === 'object' && 'path' in item && 'message' in item) {
-        const field = Array.isArray((item as any).path)
-          ? (item as any).path.join('.')
-          : String((item as any).path);
-        result[field] = String((item as any).message);
+        const itemObj = item as { path: unknown; message: unknown };
+        const field = Array.isArray(itemObj.path)
+          ? itemObj.path.join('.')
+          : String(itemObj.path);
+        result[field] = String(itemObj.message);
       }
     }
   } else if (typeof errors === 'object') {
@@ -62,6 +63,21 @@ function parseFieldErrors(errors: unknown): Record<string, string> | undefined {
   return Object.keys(result).length > 0 ? result : undefined;
 }
 
+interface ApiErrorShape {
+  response?: {
+    status?: number;
+    data?: {
+      code?: string;
+      message?: string;
+      requestId?: string;
+      errors?: unknown;
+    };
+    headers?: Record<string, string | undefined>;
+  };
+  code?: string;
+  message?: string;
+}
+
 /**
  * Transforms any error (backend API, network, JS crash) into a safe, user-friendly error contract.
  * Mapping precedence:
@@ -71,7 +87,7 @@ function parseFieldErrors(errors: unknown): Record<string, string> | undefined {
  * 4. Fallback unknown error
  */
 export function toUserError(error: unknown, context?: ErrorContext): UserError {
-  const err = error as any;
+  const err = error as ApiErrorShape | undefined;
   const responseData = err?.response?.data;
   const status = typeof err?.response?.status === 'number' ? err.response.status : undefined;
   const code = responseData?.code || err?.code;
