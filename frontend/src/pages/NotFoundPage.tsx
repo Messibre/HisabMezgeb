@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/store/auth.store';
 import { ROUTES } from '@/constants';
 import { Button } from '@/components/ui/button';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 export interface NotFoundPageProps {
   insideLayout?: boolean;
@@ -11,15 +12,15 @@ export interface NotFoundPageProps {
 
 export default function NotFoundPage({ insideLayout = false }: NotFoundPageProps) {
   const { t } = useTranslation();
+  useDocumentMeta({ titleKey: 'notFound.documentTitle', noindex: true });
   const navigate = useNavigate();
   const status = useAuthStore((s) => s.status);
   const isAuthenticated = status === 'authenticated';
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    document.title = t('notFound.documentTitle', 'Page not found - Hisab Mezgeb');
     headingRef.current?.focus();
-  }, [t]);
+  }, []);
 
   const handlePrimaryClick = () => {
     if (isAuthenticated) {

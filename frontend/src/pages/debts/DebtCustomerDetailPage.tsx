@@ -29,11 +29,13 @@ import { EditCustomerSheet } from './components/EditCustomerSheet';
 import { EditHistoryRecordSheet } from './components/EditHistoryRecordSheet';
 import { DebtHistoryList } from './components/DebtHistoryList';
 import type { DebtHistoryItem } from '@/types/api';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 export default function DebtCustomerDetailPage() {
   const { customerId = '' } = useParams<{ customerId: string }>();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  useDocumentMeta({ titleKey: 'pages.customerDetail', noindex: true });
 
   const isEnglish = i18n.language === 'en';
 

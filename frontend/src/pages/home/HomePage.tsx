@@ -12,9 +12,11 @@ import StatCard from '@/components/common/StatCard';
 import { SkeletonBlock } from '@/components/common/SkeletonRow';
 import ErrorState from '@/components/common/ErrorState';
 import { ROUTES } from '@/constants';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 export default function HomePage() {
   const { t } = useTranslation();
+  useDocumentMeta({ titleKey: 'pages.home', noindex: true });
   const navigate = useNavigate();
   const { account } = useAuthStore();
 

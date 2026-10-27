@@ -17,9 +17,11 @@ import { todayLocal } from '@/lib/date';
 import { buildDebtCustomerDetailPath } from '@/constants';
 import { CustomerCard } from './components/CustomerCard';
 import type { DebtCustomer } from '@/types/api';
+import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
 export default function DebtsListPage() {
   const { t } = useTranslation();
+  useDocumentMeta({ titleKey: 'pages.debts', noindex: true });
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
