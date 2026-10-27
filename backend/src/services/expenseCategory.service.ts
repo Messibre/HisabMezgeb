@@ -1,6 +1,6 @@
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 export type ExpenseCategory = {
   id: string;
@@ -41,7 +41,7 @@ export const createCategory = async (
   });
 
   if (existing) {
-    throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists');
+    throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists', [], ERROR_CODES.DUPLICATE_CATEGORY);
   }
 
   const created = await prisma.expenseCategory.create({
@@ -72,7 +72,7 @@ export const updateCategory = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found', [], ERROR_CODES.CATEGORY_NOT_FOUND);
   }
 
   // If updating name, check for duplicate (excluding the current category)
@@ -88,7 +88,7 @@ export const updateCategory = async (
 
     // ✅ CRITICAL: Only throw if a DIFFERENT category already has this name
     if (duplicate && duplicate.id !== categoryId) {
-      throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists');
+      throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists', [], ERROR_CODES.DUPLICATE_CATEGORY);
     }
   }
 

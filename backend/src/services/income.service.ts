@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 export type SafeIncome = {
   id: string;
@@ -71,6 +71,8 @@ export const createIncome = async (
     throw new ApiError(
       HTTP_STATUS.CONFLICT,
       'Income already recorded for this date — update it instead',
+      [],
+      ERROR_CODES.DUPLICATE_INCOME_ENTRY,
     );
   }
 
@@ -112,7 +114,7 @@ export const updateIncome = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Income entry not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Income entry not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   const updateData: { amount?: Prisma.Decimal; note?: string | null } = {};
@@ -145,7 +147,7 @@ export const softDeleteIncome = async (accountId: string, incomeId: string): Pro
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Income entry not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Income entry not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   await prisma.dailyIncome.update({

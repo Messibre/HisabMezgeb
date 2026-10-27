@@ -3,6 +3,7 @@ import { AlertCircle } from 'lucide-react';
 
 export interface ErrorStateProps {
   message: string;
+  requestId?: string;
   onRetry?: () => void;
   retryLabel?: string;
   className?: string;
@@ -10,6 +11,7 @@ export interface ErrorStateProps {
 
 export default function ErrorState({
   message,
+  requestId,
   onRetry,
   retryLabel,
   className = '',
@@ -25,9 +27,15 @@ export default function ErrorState({
       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--money-out)]/20 text-[var(--money-out)] mb-3">
         <AlertCircle className="h-6 w-6" aria-hidden="true" />
       </div>
-      <p className="text-sm font-medium text-foreground max-w-sm mb-4">
+      <p className="text-sm font-medium text-foreground max-w-sm mb-2">
         {message}
       </p>
+      {requestId && (
+        <p className="text-xs text-muted-foreground mb-4 font-mono select-all">
+          {t('errors.reference', 'Reference')}: {requestId}
+        </p>
+      )}
+      {!requestId && <div className="mb-2" />}
       {onRetry && (
         <button
           type="button"

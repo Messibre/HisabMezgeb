@@ -1,6 +1,6 @@
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 export type AppSettings = {
   id: string;
@@ -17,7 +17,7 @@ export const getSettings = async (accountId: string): Promise<AppSettings> => {
   });
 
   if (!settings) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Settings not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Settings not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
   return settings as AppSettings;
 };
@@ -34,7 +34,7 @@ export const updateSettings = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Settings not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Settings not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   if (data.language === undefined && data.notificationsEnabled === undefined) {

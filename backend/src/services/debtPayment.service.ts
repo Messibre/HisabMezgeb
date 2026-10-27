@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 import { calculateCustomerBalance } from './debtCustomer.service.js';
 
 export type PaymentRecord = {
@@ -55,13 +55,13 @@ export const createPayment = async (
   });
 
   if (!customer) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
   // 2. Check current balance (must be >= amount)
   const currentBalance = await calculateCustomerBalance(customerId);
   if (amount > currentBalance) {
-    throw new ApiError(HTTP_STATUS.BAD_REQUEST, 'Payment cannot exceed the amount owed');
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, 'Payment cannot exceed the amount owed', [], ERROR_CODES.PAYMENT_EXCEEDS_BALANCE);
   }
 
   // 3. Create payment (never touches income – FR-23)
@@ -111,7 +111,7 @@ export const updatePayment = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Payment not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Payment not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   // 2. If amount is being updated, ensure it doesn't exceed current balance
@@ -124,7 +124,7 @@ export const updatePayment = async (
 
   const newAmount = data.amount !== undefined ? data.amount : existing.amount.toNumber();
   if (newAmount > balanceWithoutThisPayment) {
-    throw new ApiError(HTTP_STATUS.BAD_REQUEST, 'Payment cannot exceed the amount owed');
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, 'Payment cannot exceed the amount owed', [], ERROR_CODES.PAYMENT_EXCEEDS_BALANCE);
   }
 
   // 3. Build update data
@@ -161,7 +161,7 @@ export const softDeletePayment = async (accountId: string, paymentId: string): P
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Payment not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Payment not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   await prisma.debtPayment.update({

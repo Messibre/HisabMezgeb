@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 export type CustomerWithBalance = {
   id: string;
@@ -141,7 +141,7 @@ export const getCustomerWithHistory = async (
   });
 
   if (!customer) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
   // Fetch borrows and payments separately
@@ -220,7 +220,7 @@ export const updateCustomer = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
   const updateData: { name?: string; note?: string | null } = {};
@@ -271,7 +271,7 @@ export const softDeleteCustomer = async (accountId: string, customerId: string):
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
   await prisma.debtCustomer.update({

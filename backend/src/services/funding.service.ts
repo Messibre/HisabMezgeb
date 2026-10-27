@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
 export type FundingType = 'salary_injection' | 'borrowed_in' | 'borrowed_repaid';
 
@@ -109,7 +109,7 @@ export const updateFunding = async (
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Funding entry not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Funding entry not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   const updateData: { amount?: Prisma.Decimal; note?: string | null } = {};
@@ -142,7 +142,7 @@ export const softDeleteFunding = async (accountId: string, fundingId: string): P
   });
 
   if (!existing) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Funding entry not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Funding entry not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   await prisma.fundingEntry.update({

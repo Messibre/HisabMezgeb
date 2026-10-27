@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import { env } from '../config/env.js';
 import ApiError from '../utils/ApiError.js';
-import { HTTP_STATUS } from '../constants/index.js';
+import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 import { normalizePhone } from '../utils/phoneNormalizer.js';
 import {
   generateAccessToken,
@@ -132,7 +132,7 @@ export const registerAccount = async (phoneNumber: string, password: string, sho
       'code' in error &&
       (error as any).code === 'P2002'
     ) {
-      throw new ApiError(HTTP_STATUS.CONFLICT, 'This phone number is already registered');
+      throw new ApiError(HTTP_STATUS.CONFLICT, 'This phone number is already registered', [], ERROR_CODES.PHONE_ALREADY_REGISTERED);
     }
     throw error;
   }
@@ -162,12 +162,12 @@ export const loginAccount = async (phoneNumber: string, password: string) => {
   });
 
   if (!account || !accountWithPassword) {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Incorrect phone number or password');
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Incorrect phone number or password', [], ERROR_CODES.INVALID_CREDENTIALS);
   }
 
   const isPasswordValid = await bcrypt.compare(password, accountWithPassword.password);
   if (!isPasswordValid) {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Incorrect phone number or password');
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Incorrect phone number or password', [], ERROR_CODES.INVALID_CREDENTIALS);
   }
 
   const accountId = account.id;
@@ -186,7 +186,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
   try {
     payload = verifyRefreshToken(refreshToken) as { accountId: string };
   } catch {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token');
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token', [], ERROR_CODES.SESSION_EXPIRED);
   }
 
   const { accountId } = payload;
@@ -207,7 +207,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
   });
 
   if (!storedToken) {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token');
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token', [], ERROR_CODES.SESSION_EXPIRED);
   }
 
   const newAccessToken = generateAccessToken({ accountId });
@@ -246,12 +246,12 @@ export const changePassword = async (
   });
 
   if (!account) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Account not found');
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Account not found', [], ERROR_CODES.RECORD_NOT_FOUND);
   }
 
   const isPasswordValid = await bcrypt.compare(currentPassword, account.password);
   if (!isPasswordValid) {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Current password is incorrect');
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Current password is incorrect', [], ERROR_CODES.INVALID_CREDENTIALS);
   }
 
   const saltRounds = parseInt(env.BCRYPT_SALT_ROUNDS, 10);
@@ -275,7 +275,7 @@ export const changePassword = async (
     });
   } catch (error: unknown) {
     if (isRecordNotFoundError(error)) {
-      throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Account not found');
+      throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Account not found', [], ERROR_CODES.RECORD_NOT_FOUND);
     }
     logger.error({ error, accountId }, 'Password change failed with unexpected error');
     throw error;

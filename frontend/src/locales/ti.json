@@ -74,13 +74,90 @@
   },
   "notFound": {
     "title": "404",
-    "message": "እታ ገጽ ኣይተረኽበትን",
-    "goHome": "ናብ ገዛ ተመለስ"
+    "documentTitle": "ገጽ ኣይተረኽበን - ሒሳብ መዝገብ",
+    "heading": "ገጽ ኣይተረኽበን",
+    "message": "እቲ ዝደለይዎ ገጽ ክንረኽቦ ኣይከኣልናን።",
+    "goHome": "ናብ መበገሲ ገጽ",
+    "goLogin": "ናብ መእተዊ ገጽ",
+    "goBack": "ተመለስ"
   },
   "errorBoundary": {
     "title": "ገለ ጌጋ ተፈጢሩ።",
     "message": "በጃኹም ገጽ እንደገና ኣሐድስዎ።",
     "goHome": "ናብ ገዛ ኺድ"
+  },
+  "errors": {
+    "reference": "መወከሲ",
+    "notSaved": "እዚ ኣይተዓቀበን። በጃኹም እንደገና ፈትኑ።",
+    "offlineQueueSaved": "ኢንተርኔት የለን። ስራሕካ ምቕጻል ትኽእል ኢኻ፣ መስመር ምስ ተመለሰ ብቐጥታ ክለኣኽ እዩ።",
+    "offlineNoQueue": "ኢንተርኔት የለን። በጃኹም መስመር ምስ ረኸብኩም እንደገና ፈትኑ።",
+    "offline": {
+      "title": "ናይ ኢንተርኔት ርክብ የለን",
+      "message": "በጃኹም ርክብኩም ኣረጋጊጽኩም እንደገና ፈትኑ።"
+    },
+    "timeout": {
+      "title": "ናይ ግዜ ደረት ሓሊፉ",
+      "message": "ሰርቨር ምላሽ ንምሃብ ነዊሕ ግዜ ወሲዱ። በጃኹም እንደገና ፈትኑ።"
+    },
+    "session": {
+      "title": "ናይ ምጽናሕ ግዜ ተወዲኡ",
+      "message": "በጃኹም እንደገና እተዉ።"
+    },
+    "validation": {
+      "title": "ሓበሬታኹም ኣረጋግጹ",
+      "message": "በጃኹም ነቶም ዝተሓበሩ ክፍሊታት ኣዐሪኹም እንደገና ፈትኑ።"
+    },
+    "invalidCredentials": {
+      "title": "ምእታው ኣይተኻእለን",
+      "message": "ጌጋ ቁጽሪ ተሌፎን ወይ መሕለፊ ቃል። በጃኹም እንደገና ፈትኑ።"
+    },
+    "phoneRegistered": {
+      "title": "እዚ ተሌፎን ተመዝጊቡ እዩ",
+      "message": "እዚ ቁጽሪ ተሌፎን ድሮ ተመዝጊቡ እዩ። ክትኣትዉ ፈትኑ።"
+    },
+    "duplicateIncome": {
+      "title": "ድሮ ተመዝጊቡ ኣሎ",
+      "message": "ናይዛ መዓልቲ እዚኣ ኣታዊ ድሮ ተመዝጊቡ ኣሎ።"
+    },
+    "duplicateExpense": {
+      "title": "ድሮ ተመዝጊቡ ኣሎ",
+      "message": "ተመሳሳሊ ናይ ወጻኢ መዝገብ ድሮ ተመዝጊቡ ኣሎ።"
+    },
+    "duplicateCategory": {
+      "title": "ምድብ ድሮ ኣሎ",
+      "message": "በዚ ስም እዚ ዝተመዝገበ ምድብ ድሮ ኣሎ።"
+    },
+    "paymentExceedsBalance": {
+      "title": "ክፍሊት ልዕሊ ዕዳ እዩ",
+      "message": "እቲ ክፍሊት ካብቲ ዝተረፈ ዕዳ ክበልጽ ኣይኽእልን።"
+    },
+    "categoryNotFound": {
+      "title": "ምድብ ኣይተረኽበን",
+      "message": "እዚ ምድብ ክርከብ ኣይተኻእለን።"
+    },
+    "customerNotFound": {
+      "title": "ዓሚል ኣይተረኽበን",
+      "message": "እዚ ዓሚል ክርከብ ኣይተኻእለን።"
+    },
+    "recordNotFound": {
+      "title": "መዝገብ ኣይተረኽበን",
+      "message": "እቲ ዝተደለየ መዝገብ ክርከብ ኣይተኻእለን።"
+    },
+    "rateLimited": {
+      "title": "ፈተነታት በዚሑ",
+      "message": "ፈተነታት በዚሑ ኣሎ። በጃኹም ቅሩብ ጸኒሕኩም እንደገና ፈትኑ።"
+    },
+    "server": {
+      "title": "ናይ ሰርቨር ጌጋ",
+      "message": "ኣብ ወገንና ጸገም ተፈጢሩ። በጃኹም ድሕሪ ሒደት ግዜ እንደገና ፈትኑ።"
+    },
+    "unknown": {
+      "title": "ገለ ጌጋ ተፈጢሩ",
+      "message": "ዘይተጸበዮ ጌጋ ተፈጢሩ። በጃኹም እንደገና ፈትኑ።"
+    },
+    "unhandled": {
+      "message": "ዘይተጸበዮ ጌጋ ተፈጢሩ። በጃኹም እንደገና ፈትኑ።"
+    }
   },
   "home": {
     "greetingWithShop": "ሰላም፣ {{name}}",
@@ -163,6 +240,7 @@
     "paid": "ዝኸፈሎ",
     "noActivity": "ንዚ ዓሚል እዚ ክሳብ ሕጂ ዝኾነ ምንቅስቓስ የለን።",
     "customerNotFound": "ዓሚል ኣይተረኽበን",
+    "customerNotFoundDesc": "እዚ ዓሚል ተሰሪዙ ክኸውን ይኽእል ወይ እቲ መላገቢ ጌጋ እዩ።",
     "backToDebts": "ናብ ዝርዝር ዕዳታት ተመለስ",
     "editCustomer": "ዓሚል ኣመዓራሪ",
     "deleteCustomer": "ዓሚል ሰርዝ",

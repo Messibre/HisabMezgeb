@@ -74,13 +74,90 @@
   },
   "notFound": {
     "title": "404",
-    "message": "Page not found",
-    "goHome": "Go home"
+    "documentTitle": "Page not found - Hisab Mezgeb",
+    "heading": "Page Not Found",
+    "message": "We couldn't find the page you're looking for.",
+    "goHome": "Go to Home",
+    "goLogin": "Go to Login",
+    "goBack": "Go back"
   },
   "errorBoundary": {
     "title": "Something went wrong.",
     "message": "Please try refreshing the page.",
     "goHome": "Go to Home"
+  },
+  "errors": {
+    "reference": "Reference",
+    "notSaved": "This was not saved. Please try again.",
+    "offlineQueueSaved": "No internet. You can keep working, we will send it when you are back online.",
+    "offlineNoQueue": "No internet. Please try again when you are connected.",
+    "offline": {
+      "title": "No internet connection",
+      "message": "Please check your network and try again."
+    },
+    "timeout": {
+      "title": "Request timed out",
+      "message": "The server took too long to respond. Please try again."
+    },
+    "session": {
+      "title": "Session Expired",
+      "message": "Please log in again."
+    },
+    "validation": {
+      "title": "Check your details",
+      "message": "Please correct the highlighted fields and try again."
+    },
+    "invalidCredentials": {
+      "title": "Login Failed",
+      "message": "Incorrect phone number or password. Please try again."
+    },
+    "phoneRegistered": {
+      "title": "Phone already registered",
+      "message": "This phone number is already registered. Try logging in."
+    },
+    "duplicateIncome": {
+      "title": "Entry already exists",
+      "message": "An income entry for this date already exists."
+    },
+    "duplicateExpense": {
+      "title": "Entry already exists",
+      "message": "An expense entry matching this already exists."
+    },
+    "duplicateCategory": {
+      "title": "Category already exists",
+      "message": "A category with this name already exists."
+    },
+    "paymentExceedsBalance": {
+      "title": "Amount too large",
+      "message": "Payment cannot be more than the remaining debt."
+    },
+    "categoryNotFound": {
+      "title": "Category not found",
+      "message": "This category could not be found."
+    },
+    "customerNotFound": {
+      "title": "Customer not found",
+      "message": "This customer could not be found."
+    },
+    "recordNotFound": {
+      "title": "Not found",
+      "message": "The requested item could not be found."
+    },
+    "rateLimited": {
+      "title": "Too many attempts",
+      "message": "Too many tries. Please wait a moment and try again."
+    },
+    "server": {
+      "title": "Server error",
+      "message": "Something went wrong on our side. Please try again in a moment."
+    },
+    "unknown": {
+      "title": "Something went wrong",
+      "message": "An unexpected error occurred. Please try again."
+    },
+    "unhandled": {
+      "message": "An unexpected error occurred. Please try again."
+    }
   },
   "home": {
     "greetingWithShop": "Selam, {{name}}",
@@ -163,6 +240,7 @@
     "paid": "Paid",
     "noActivity": "No activity yet for this customer.",
     "customerNotFound": "Customer not found",
+    "customerNotFoundDesc": "This customer may have been deleted or the link is incorrect.",
     "backToDebts": "Back to Debts",
     "editCustomer": "Edit customer",
     "deleteCustomer": "Delete customer",
