@@ -4,7 +4,48 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f9f8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111411" />
     <title>Hisab Mezgeb</title>
+    <!--
+      Prevent flash of unstyled theme on initial load.
+      NOTE: If a Content-Security-Policy (CSP) is added later, this script needs a hash or nonce.
+    -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('hisab-theme');
+          var mode = 'system';
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.state && parsed.state.mode) {
+              mode = parsed.state.mode;
+            }
+          }
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = mode === 'dark' || (mode === 'system' && prefersDark);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+          }
+          if (mode !== 'system') {
+            var metaTags = document.querySelectorAll('meta[name="theme-color"]');
+            for (var i = 0; i < metaTags.length; i++) {
+              metaTags[i].parentNode.removeChild(metaTags[i]);
+            }
+            var meta = document.createElement('meta');
+            meta.name = 'theme-color';
+            meta.content = isDark ? '#111411' : '#f9f9f8';
+            document.head.appendChild(meta);
+          }
+        } catch (e) {
+          // Storage access can fail (e.g. private mode, cookies disabled)
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

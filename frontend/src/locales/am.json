@@ -290,5 +290,14 @@
     "noDataDescription": "በዚህ የቀን ክልል የተመዘገቡ ግብይቶች እዚህ ይታያሉ።",
     "exportSuccess": "ሪፖርቱ በተሳካ ሁኔታ ተልኳል",
     "exportFailed": "ሪፖርቱን መላክ አልተሳካም"
+  },
+  "settings": {
+    "language": "ቋንቋ",
+    "theme": "ገጽታ (ቴም)",
+    "themeHelper": "ብርሃን፣ ጨለማ ወይም የመሳሪያዎን ቅንብር ይምረጡ",
+    "themeLight": "ብርሃን",
+    "themeDark": "ጨለማ",
+    "themeSystem": "የስርዓት",
+    "toggleTheme": "ገጽታ ቀይር"
   }
 }

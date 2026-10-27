@@ -76,7 +76,7 @@ export default function ConfirmDialog({
       >
         <div className="flex items-center gap-3 mb-3">
           {isDanger && (
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--money-out)]/20 text-[var(--money-out)]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-destructive/15 text-destructive">
               <AlertTriangle className="h-5 w-5" aria-hidden="true" />
             </div>
           )}
@@ -104,7 +104,7 @@ export default function ConfirmDialog({
             onClick={onConfirm}
             className={`inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 shadow-xs ${
               isDanger
-                ? 'bg-[var(--money-out)] text-white hover:bg-[var(--money-out)]/90'
+                ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
                 : 'bg-primary text-primary-foreground hover:bg-primary/90'
             }`}
           >
