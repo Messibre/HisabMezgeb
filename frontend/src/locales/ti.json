@@ -290,5 +290,14 @@
     "noDataDescription": "ኣብዚ ናይ ዕለት ደረት ዝተመዝገቡ ምንቅስቓሳት ኣብዚ ክረኣዩ እዮም።",
     "exportSuccess": "ጸብጻብ ብትኽክል ተወሪዱ",
     "exportFailed": "ጸብጻብ ምውራድ ኣይተኻእለን"
+  },
+  "settings": {
+    "language": "ቋንቋ",
+    "theme": "ተማ (Theme)",
+    "themeHelper": "ብርሃን፣ ጸላም ወይ ናይ መሳርሒኹም ምረጹ",
+    "themeLight": "ብርሃን",
+    "themeDark": "ጸላም",
+    "themeSystem": "ናይ ሲስተም",
+    "toggleTheme": "ተማ ምልዋጥ"
   }
 }

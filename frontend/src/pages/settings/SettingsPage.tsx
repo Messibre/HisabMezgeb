@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
+import { useTheme, type ThemeMode } from '@/store/theme.store';
 import { Button } from '@/components/ui/button';
+import SegmentedControl from '@/components/common/SegmentedControl';
 import { cn } from '@/lib/utils';
 
 const LANGUAGES = [
@@ -9,25 +11,33 @@ const LANGUAGES = [
   { code: 'ti', nativeLabel: 'ትግርኛ' },
 ] as const;
 
-/**
- * Stub page — see [6. Frontend UI, Pages & Components] section 6.2 for the
- * full spec (shop name, dark mode, notifications, password, categories).
- *
- * The language switcher below is real and functional today, since it only
- * needs i18next (already wired in src/lib/i18n.ts) — it doesn't depend on
- * the backend AppSettings/[5. API Specification] /settings endpoint the way
- * the other rows do. Once that endpoint exists, wire this same switcher to
- * also call useUpdateSettings so the choice persists to the account, not
- * just this device's localStorage (see the note in src/lib/i18n.ts).
- */
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
   const { logout } = useAuth();
+  const { mode, setMode } = useTheme();
 
   return (
     <div className="p-4 flex flex-col gap-6">
       <h1 className="text-xl font-semibold text-foreground">{t('pages.settings')}</h1>
 
+      {/* Theme switcher */}
+      <div>
+        <p className="text-sm font-medium text-foreground mb-1">{t('settings.theme', 'Theme')}</p>
+        <p className="text-xs text-muted-foreground mb-3">
+          {t('settings.themeHelper', 'Choose light, dark, or follow your device settings')}
+        </p>
+        <SegmentedControl
+          value={mode}
+          onChange={(val) => setMode(val as ThemeMode)}
+          options={[
+            { value: 'light', label: t('settings.themeLight', 'Light') },
+            { value: 'dark', label: t('settings.themeDark', 'Dark') },
+            { value: 'system', label: t('settings.themeSystem', 'System') },
+          ]}
+        />
+      </div>
+
+      {/* Language switcher */}
       <div>
         <p className="text-sm font-medium text-foreground mb-2">{t('settings.language')}</p>
         <div className="flex gap-2">

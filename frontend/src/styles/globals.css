@@ -15,6 +15,11 @@
   }
   html {
     @apply font-sans;
+    scrollbar-color: var(--outline) transparent;
+  }
+  ::selection {
+    background-color: var(--primary);
+    color: var(--on-primary);
   }
   /*
    * Quicksand is the primary brand font. Ge'ez script (Amharic/Tigrigna)
@@ -163,8 +168,10 @@
   --accent: #f3f4f3;
   --accent-foreground: #191c19;
   --border: #c0c9c2;
-  --input: #c0c9c2;
+  --input: #717973;
   --ring: #2e5a27;
+
+  color-scheme: light;
 
   /* Radii */
   --radius: 16px;
@@ -187,6 +194,8 @@
 
 .dark {
   /* ── Dark Mode Palette ── */
+  color-scheme: dark;
+
   /* Surfaces & Background */
   --background: #111411;
   --foreground: #e1e3e0;
@@ -248,11 +257,49 @@
   --accent: #1d211d;
   --accent-foreground: #e1e3e0;
   --border: #404943;
-  --input: #404943;
+  --input: #8a938c;
   --ring: #9ed495;
 
-  /* Shadows */
+  /* Shadows (subtle in dark mode; surfaces & borders provide depth) */
   --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-floating: 0 4px 20px rgba(0, 0, 0, 0.5);
   --shadow-navbar: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Print and export styles always force the light look */
+@media print {
+  :root,
+  .dark,
+  html,
+  body {
+    color-scheme: light !important;
+    background-color: #ffffff !important;
+    color: #191c19 !important;
+  }
+  .dark {
+    --background: #ffffff !important;
+    --foreground: #191c19 !important;
+    --surface: #ffffff !important;
+    --card: #ffffff !important;
+    --card-foreground: #191c19 !important;
+    --border: #c0c9c2 !important;
+    --input: #717973 !important;
+    --primary: #2e5a27 !important;
+    --on-primary: #ffffff !important;
+    --primary-foreground: #ffffff !important;
+    --primary-container: #d2e8cc !important;
+    --on-primary-container: #0b1f07 !important;
+    --secondary: #52dc90 !important;
+    --secondary-container: #a3f7bf !important;
+    --on-secondary-container: #00210c !important;
+    --muted: #f3f4f3 !important;
+    --muted-foreground: #404943 !important;
+    --surface-container-low: #f3f4f3 !important;
+    --surface-container: #eceeec !important;
+    --money-in: #1b8a44 !important;
+    --money-out: #c8441b !important;
+    --money-neutral: #b46d23 !important;
+    --nav-active-bg: #a3f7bf !important;
+    --nav-active-fg: #00210c !important;
+  }
 }

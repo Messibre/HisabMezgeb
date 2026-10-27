@@ -290,5 +290,14 @@
     "noDataDescription": "Transactions entered for this date range will appear here.",
     "exportSuccess": "Report exported successfully",
     "exportFailed": "Failed to export report"
+  },
+  "settings": {
+    "language": "Language",
+    "theme": "Theme",
+    "themeHelper": "Choose light, dark, or follow your device settings",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "toggleTheme": "Toggle theme"
   }
 }

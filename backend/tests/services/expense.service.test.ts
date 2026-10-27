@@ -71,6 +71,7 @@ describe('Expense Service', () => {
   const expenseId = 'exp-456';
   const categoryId = 'cat-789';
   const mockDate = new Date('2026-06-01');
+  const fixedTimestamp = new Date('2026-06-01T12:00:00.000Z');
 
   // ── Full category mock (all fields required by Prisma type) ──
   const mockCategory: MockCategory = {
@@ -79,8 +80,8 @@ describe('Expense Service', () => {
     name: 'Cost of Goods',
     group: 'business',
     isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: fixedTimestamp,
+    updatedAt: fixedTimestamp,
   };
 
   const mockExpenseWithCategory: ExpenseWithCategory = {
@@ -91,8 +92,8 @@ describe('Expense Service', () => {
     date: mockDate,
     amount: 1500.5,
     note: 'Daily expense',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: fixedTimestamp,
+    updatedAt: fixedTimestamp,
   };
 
   const mockExpenseResponse: ExpenseResponse = {
@@ -102,8 +103,8 @@ describe('Expense Service', () => {
     date: mockDate,
     amount: 1500.5,
     note: 'Daily expense',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: fixedTimestamp,
+    updatedAt: fixedTimestamp,
   };
 
   const mockPrismaExpense: MockExpense = {
@@ -114,8 +115,8 @@ describe('Expense Service', () => {
     amount: new Decimal(1500.5),
     note: 'Daily expense',
     deletedAt: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: fixedTimestamp,
+    updatedAt: fixedTimestamp,
     category: { name: 'Cost of Goods' },
   };
 
