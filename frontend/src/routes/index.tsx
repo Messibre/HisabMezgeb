@@ -10,6 +10,7 @@ import RouteErrorElement from '@/components/common/RouteErrorElement';
 
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
+const LandingPage = lazy(() => import('@/pages/landing/LandingPage'));
 const HomePage = lazy(() => import('@/pages/home/HomePage'));
 const EntriesPage = lazy(() => import('@/pages/entries/EntriesPage'));
 const DebtsListPage = lazy(() => import('@/pages/debts/DebtsListPage'));
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
   {
     errorElement: <RouteErrorElement />,
     children: [
+      { path: ROUTES.LANDING, element: withSuspense(<LandingPage />) },
       {
         element: <PublicRoute />,
         children: [

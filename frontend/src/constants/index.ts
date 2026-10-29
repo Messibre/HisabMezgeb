@@ -1,6 +1,6 @@
 export const ROUTES = {
-  // TODO: Home moves to '/home' in the landing page task (installed PWA start_url is '/home', while '/' will be public landing page)
-  HOME: '/',
+  LANDING: '/',
+  HOME: '/home',
   LOGIN: '/login',
   REGISTER: '/register',
   ENTRIES: '/entries',

@@ -28,6 +28,7 @@ export default function BottomTabLayout() {
           <NavLink
             key={to}
             to={to}
+            end={to === ROUTES.HOME}
             className={({ isActive }) =>
               `flex flex-1 min-w-0 min-h-[48px] flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 isActive

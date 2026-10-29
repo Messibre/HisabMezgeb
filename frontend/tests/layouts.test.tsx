@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import AppHeader from '@/components/common/AppHeader';
 import BottomTabLayout from '@/components/layouts/BottomTabLayout';
 import AuthShell from '@/components/common/AuthShell';
+import { ROUTES } from '@/constants';
 
 describe('Layout and Header components (M4)', () => {
   it('AppHeader renders brand title by default without hamburger menu', () => {
@@ -35,7 +36,7 @@ describe('Layout and Header components (M4)', () => {
 
   it('BottomTabLayout renders 5 tabs with flex-1 min-w-0 and aria-current on active', () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={[ROUTES.HOME]}>
         <BottomTabLayout />
       </MemoryRouter>
     );
