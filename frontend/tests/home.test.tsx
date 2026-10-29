@@ -22,7 +22,7 @@ vi.mock('@/hooks/useReportSummary', () => ({
 
 function renderHomePage() {
   return render(
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={['/home']}>
       <HomePage />
     </MemoryRouter>
   );

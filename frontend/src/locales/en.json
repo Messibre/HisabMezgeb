@@ -299,5 +299,84 @@
     "themeDark": "Dark",
     "themeSystem": "System",
     "toggleTheme": "Toggle theme"
+  },
+  "landing": {
+    "documentTitle": "Hisab Mezgeb - Your shop's daily money and debt book",
+    "metaDescription": "Simple daily money and debt book for small shops. Record daily income and expenses, track customer debt, and view simple reports in Amharic, Tigrigna, and English.",
+    "skipToContent": "Skip to main content",
+    "header": {
+      "login": "Log in",
+      "language": "Language",
+      "brand": "Hisab Mezgeb"
+    },
+    "hero": {
+      "title": "Your shop's daily money and debt book.",
+      "subtitle": "Record daily cash, track customer debts, and see how your shop is doing every week.",
+      "ctaCreateAccount": "Create account",
+      "ctaLogin": "Log in"
+    },
+    "features": {
+      "title": "What it does",
+      "card1": {
+        "title": "Daily income and expenses",
+        "description": "Write down each day's income and expenses."
+      },
+      "card2": {
+        "title": "Customer debt ledger",
+        "description": "Keep a clear list of who owes you and how much."
+      },
+      "card3": {
+        "title": "Weekly and monthly reports",
+        "description": "See simple reports for any week or month."
+      },
+      "card4": {
+        "title": "Three languages",
+        "description": "Works in Amharic, Tigrigna and English."
+      }
+    },
+    "howItWorks": {
+      "title": "How to use it",
+      "step1": {
+        "number": "1",
+        "title": "Create an account",
+        "description": "Create an account with your phone number."
+      },
+      "step2": {
+        "number": "2",
+        "title": "Write down each night",
+        "description": "Each night, write the day's income and expenses."
+      },
+      "step3": {
+        "number": "3",
+        "title": "Track credit and reports",
+        "description": "When a customer takes goods or pays, add it to their page. Then look at Reports."
+      }
+    },
+    "smallShops": {
+      "title": "Made for small shops",
+      "point1": {
+        "title": "Phone and password login",
+        "description": "Sign in securely with your phone number and password."
+      },
+      "point2": {
+        "title": "Works on a phone",
+        "description": "Designed for small screens with clear, readable buttons."
+      },
+      "point3": {
+        "title": "Private to your account",
+        "description": "Your records are private to your account."
+      }
+    },
+    "bottomCta": {
+      "title": "Ready to track your shop's money?",
+      "subtitle": "Start your digital ledger in seconds.",
+      "button": "Create account"
+    },
+    "footer": {
+      "tagline": "Your shop's daily money and debt book.",
+      "login": "Log in",
+      "register": "Create account",
+      "rights": "All rights reserved."
+    }
   }
 }

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /home
+Disallow: /entries
+Disallow: /debts
+Disallow: /reports
+Disallow: /settings

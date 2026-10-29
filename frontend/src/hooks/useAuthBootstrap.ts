@@ -9,6 +9,12 @@ export function useAuthBootstrap() {
   useEffect(() => {
     if (status !== 'unknown') return;
 
+    // Only call /auth/refresh when a persisted account exists on this device
+    if (!account) {
+      setStatus('unauthenticated');
+      return;
+    }
+
     let isMounted = true;
 
     async function bootstrap() {
