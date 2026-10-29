@@ -18,6 +18,11 @@
       "prettier --write"
     ]
   },
+  "overrides": {
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    }
+  },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.9",
     "@fontsource-variable/noto-sans-ethiopic": "^5.3.0",
