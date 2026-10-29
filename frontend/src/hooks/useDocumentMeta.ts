@@ -96,6 +96,7 @@ export function useDocumentMeta({
         descriptionMeta.setAttribute('content', previousDescription);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     t,
     i18n.language,
