@@ -4,6 +4,7 @@ import { Download, Share2, FileText, FileSpreadsheet, Loader2, AlertCircle, Info
 import { toast } from 'sonner';
 import BottomSheet from './BottomSheet';
 import api from '@/lib/axios';
+import { extractFilenameFromHeader } from '@/lib/utils';
 
 export type ExportDocType = 'report' | 'statement';
 export type ExportDocFormat = 'pdf' | 'docx' | 'csv';
@@ -19,28 +20,6 @@ export interface ExportSheetProps {
   };
   customerId?: string;
   customerName?: string;
-}
-
-export function extractFilenameFromHeader(header?: string, fallback = 'download'): string {
-  if (!header) return fallback;
-
-  // RFC 5987 / UTF-8 format: filename*=UTF-8''...
-  const utf8Match = header.match(/filename\*=UTF-8''([^;]+)/i);
-  if (utf8Match && utf8Match[1]) {
-    try {
-      return decodeURIComponent(utf8Match[1].trim());
-    } catch {
-      // fallback to standard match
-    }
-  }
-
-  // Standard format: filename="xyz" or filename=xyz
-  const match = header.match(/filename="?([^";]+)"?/i);
-  if (match && match[1]) {
-    return match[1].trim();
-  }
-
-  return fallback;
 }
 
 export default function ExportSheet({
@@ -80,8 +59,8 @@ export default function ExportSheet({
       throw new Error('OFFLINE');
     }
 
-    let url = '';
-    let fallbackFilename = '';
+    let url: string;
+    let fallbackFilename: string;
 
     if (type === 'report' && reportParams) {
       const { from, to } = reportParams;
@@ -125,7 +104,7 @@ export default function ExportSheet({
 
       toast.success(t('export.successToast', 'File downloaded successfully'));
       onOpenChange(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
       handleExportError(err);
     } finally {
       setIsDownloading(false);
@@ -167,8 +146,8 @@ export default function ExportSheet({
         toast.success(t('export.successToast', 'File downloaded successfully'));
         onOpenChange(false);
       }
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
+    } catch (err: unknown) {
+      if ((err as Error)?.name === 'AbortError') {
         // User cancelled share modal, don't show error
         return;
       }
@@ -178,20 +157,31 @@ export default function ExportSheet({
     }
   };
 
-  const handleExportError = (err: any) => {
-    if (err?.message === 'OFFLINE' || !navigator.onLine) {
+  const handleExportError = (err: unknown) => {
+    const errorObj = err as {
+      message?: string;
+      code?: string;
+      name?: string;
+      response?: {
+        status?: number;
+        headers?: Record<string, string>;
+        data?: { requestId?: string };
+      };
+    };
+
+    if (errorObj?.message === 'OFFLINE' || !navigator.onLine) {
       toast.error(t('export.offlineError', 'Exporting needs internet connection'));
       return;
     }
 
-    if (err?.code === 'ECONNABORTED' || err?.response?.status === 408) {
+    if (errorObj?.code === 'ECONNABORTED' || errorObj?.response?.status === 408) {
       toast.error(t('export.timeoutError', 'Export request timed out. Please try again.'));
       return;
     }
 
     const requestId =
-      err?.response?.headers?.['x-request-id'] ||
-      err?.response?.data?.requestId;
+      errorObj?.response?.headers?.['x-request-id'] ||
+      errorObj?.response?.data?.requestId;
 
     const baseMsg = t('export.serverError', 'Server error exporting document');
     toast.error(requestId ? `${baseMsg} (Ref: ${requestId})` : baseMsg);

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ExportSheet, { extractFilenameFromHeader } from '@/components/common/ExportSheet';
+import ExportSheet from '@/components/common/ExportSheet';
+import { extractFilenameFromHeader } from '@/lib/utils';
 import api from '@/lib/axios';
 
 vi.mock('@/lib/axios', () => ({
@@ -109,7 +110,7 @@ describe('ExportSheet Component and Helpers', () => {
   describe('Download flow and Error handling', () => {
     it('triggers download with temporary URL and revokes it on success', async () => {
       const mockBlob = new Blob(['mock content'], { type: 'application/pdf' });
-      (api.get as any).mockResolvedValue({
+      vi.mocked(api.get).mockResolvedValue({
         data: mockBlob,
         headers: {
           'content-disposition': 'attachment; filename="hisab-report-test.pdf"',
@@ -142,8 +143,8 @@ describe('ExportSheet Component and Helpers', () => {
 
     it('handles timeout error gracefully', async () => {
       const timeoutErr = new Error('timeout of 60000ms exceeded');
-      (timeoutErr as any).code = 'ECONNABORTED';
-      (api.get as any).mockRejectedValue(timeoutErr);
+      Object.assign(timeoutErr, { code: 'ECONNABORTED' });
+      vi.mocked(api.get).mockRejectedValue(timeoutErr);
 
       render(
         <ExportSheet
@@ -188,7 +189,7 @@ describe('ExportSheet Component and Helpers', () => {
   describe('System Share flow', () => {
     it('uses navigator.share when available with file sharing', async () => {
       const mockBlob = new Blob(['mock-pdf'], { type: 'application/pdf' });
-      (api.get as any).mockResolvedValue({
+      vi.mocked(api.get).mockResolvedValue({
         data: mockBlob,
         headers: {
           'content-disposition': 'attachment; filename="statement-test.pdf"',
