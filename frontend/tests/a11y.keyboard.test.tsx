@@ -78,10 +78,10 @@ describe('Keyboard Walk-through & Interaction Tests', () => {
       )
     );
 
-    const phoneInput = container.querySelector('#login-phone');
-    const passwordInput = container.querySelector('#login-password');
-    const submitBtn = container.querySelector('button[type="submit"]');
-    const registerLink = container.querySelector('a[href="/register"]');
+    const phoneInput = container.querySelector<HTMLInputElement>('#login-phone');
+    const passwordInput = container.querySelector<HTMLInputElement>('#login-password');
+    const submitBtn = container.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const registerLink = container.querySelector<HTMLAnchorElement>('a[href="/register"]');
 
     expect(phoneInput).not.toBeNull();
     expect(passwordInput).not.toBeNull();
@@ -89,10 +89,10 @@ describe('Keyboard Walk-through & Interaction Tests', () => {
     expect(registerLink).not.toBeNull();
 
     // Verify order in DOM tab sequence
-    const phoneIdx = inputs.indexOf(phoneInput as any);
-    const passIdx = inputs.indexOf(passwordInput as any);
-    const submitIdx = inputs.indexOf(submitBtn as any);
-    const registerIdx = inputs.indexOf(registerLink as any);
+    const phoneIdx = inputs.indexOf(phoneInput!);
+    const passIdx = inputs.indexOf(passwordInput!);
+    const submitIdx = inputs.indexOf(submitBtn!);
+    const registerIdx = inputs.indexOf(registerLink!);
 
     expect(phoneIdx).toBeLessThan(passIdx);
     expect(passIdx).toBeLessThan(submitIdx);
