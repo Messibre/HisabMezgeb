@@ -33,6 +33,17 @@ export const getDebtCustomerSchema = z.object({
   }),
 });
 
+export const customerStatementSchema = z.object({
+  params: z.object({
+    id: z.string().uuid('Invalid customer ID format'),
+  }),
+  query: z.object({
+    format: z.enum(['pdf', 'docx']).default('pdf'),
+    lang: z.enum(['en', 'am', 'ti']).default('en'),
+  }),
+});
+
 export type CreateDebtCustomerInput = z.infer<typeof createDebtCustomerSchema>['body'];
 export type UpdateDebtCustomerInput = z.infer<typeof updateDebtCustomerSchema>['body'];
 export type ListDebtCustomersQuery = z.infer<typeof listDebtCustomersSchema>['query'];
+export type CustomerStatementQuery = z.infer<typeof customerStatementSchema>['query'];

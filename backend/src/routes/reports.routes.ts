@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import validate from '../middlewares/validate.middleware.js';
-import { reportPeriodSchema } from '../schemas/reports.schema.js';
+import { exportLimiter, exportTimeoutGuard } from '../middlewares/rateLimiter.middleware.js';
+import { reportPeriodSchema, exportReportSchema } from '../schemas/reports.schema.js';
 import {
   getSummaryHandler,
   getDebtsPeriodHandler,
@@ -19,6 +20,13 @@ router.get(
   validate(reportPeriodSchema),
   getExpenseBreakdownHandler,
 );
-router.get('/export', authMiddleware, validate(reportPeriodSchema), exportReportHandler);
+router.get(
+  '/export',
+  authMiddleware,
+  exportLimiter,
+  exportTimeoutGuard(),
+  validate(exportReportSchema),
+  exportReportHandler,
+);
 
 export default router;

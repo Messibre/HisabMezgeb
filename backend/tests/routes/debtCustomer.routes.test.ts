@@ -43,6 +43,11 @@ vi.mock('../../src/controllers/debtCustomer.controller.js', () => ({
       .status(200)
       .json({ statusCode: 200, success: true, message: 'Debt customer deleted', data: null }),
   ),
+  getCustomerStatementHandler: vi.fn((req, res) => {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="statement.pdf"');
+    res.status(200).send(Buffer.from('%PDF-1.4 test'));
+  }),
 }));
 
 vi.mock('../../src/controllers/debtBorrowRecord.controller.js', () => ({

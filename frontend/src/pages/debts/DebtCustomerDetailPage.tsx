@@ -9,6 +9,7 @@ import {
   Pencil,
   Trash2,
   AlertTriangle,
+  Share2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import AppHeader from '@/components/common/AppHeader';
@@ -18,6 +19,7 @@ import SkeletonBlock from '@/components/common/SkeletonBlock';
 import EmptyState from '@/components/common/EmptyState';
 import ErrorState from '@/components/common/ErrorState';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import ExportSheet from '@/components/common/ExportSheet';
 import { toUserError } from '@/lib/errors';
 import {
   useDebtCustomerDetail,
@@ -54,6 +56,7 @@ export default function DebtCustomerDetailPage() {
   const [showBorrowSheet, setShowBorrowSheet] = useState(false);
   const [showPaymentSheet, setShowPaymentSheet] = useState(false);
   const [showEditCustomerSheet, setShowEditCustomerSheet] = useState(false);
+  const [showStatementSheet, setShowStatementSheet] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<DebtHistoryItem | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -143,8 +146,21 @@ export default function DebtCustomerDetailPage() {
               {showMenu && (
                 <div
                   role="menu"
-                  className="absolute right-0 top-full mt-1 w-44 bg-card border border-border rounded-xl shadow-lg z-30 py-1 overflow-hidden"
+                  className="absolute right-0 top-full mt-1 w-48 bg-card border border-border rounded-xl shadow-lg z-30 py-1 overflow-hidden"
                 >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setShowMenu(false);
+                      setShowStatementSheet(true);
+                    }}
+                    className="w-full text-left px-3.5 py-2.5 text-xs font-medium text-foreground hover:bg-muted flex items-center gap-2.5 transition-colors"
+                  >
+                    <Share2 className="w-4 h-4 text-muted-foreground" />
+                    <span>{t('export.shareStatement', 'Share statement')}</span>
+                  </button>
+
                   <button
                     type="button"
                     role="menuitem"
@@ -323,6 +339,17 @@ export default function DebtCustomerDetailPage() {
         tone="danger"
         loading={deleteCustomer.isPending}
       />
+
+      {/* Share / Export Customer Statement BottomSheet */}
+      {customer && (
+        <ExportSheet
+          open={showStatementSheet}
+          onOpenChange={setShowStatementSheet}
+          type="statement"
+          customerId={customer.id}
+          customerName={customer.name}
+        />
+      )}
     </div>
   );
 }

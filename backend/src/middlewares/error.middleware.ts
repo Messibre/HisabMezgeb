@@ -42,11 +42,12 @@ const errorMiddleware = (err: Error, req: Request, res: Response, _next: NextFun
   logger.error({ err, requestId }, `[${req.method}] ${req.path}`);
 
   // 2. Handle Known Operational Errors (ApiError)
-  if (err instanceof ApiError) {
-    const code = getDefaultCode(err);
+  if (err instanceof ApiError || ('statusCode' in err && typeof (err as any).statusCode === 'number')) {
+    const apiErr = err as ApiError;
+    const code = getDefaultCode(apiErr);
     return res
-      .status(err.statusCode)
-      .json(new ErrorResponse(err.statusCode, err.message, err.errors, code, requestId));
+      .status(apiErr.statusCode)
+      .json(new ErrorResponse(apiErr.statusCode, apiErr.message, apiErr.errors ?? [], code, requestId));
   }
 
   // 3. Handle Unknown / System Errors (Prisma, syntax errors, native crashes)

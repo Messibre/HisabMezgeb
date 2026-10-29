@@ -177,21 +177,12 @@ describe('Reports Feature & Page', () => {
       expect(refetchFn).toHaveBeenCalled();
     });
 
-    it('triggers CSV download when Export CSV button is clicked', async () => {
-      // Mock window.URL methods
-      const createObjectURLMock = vi.fn().mockReturnValue('blob:mock-url');
-      const revokeObjectURLMock = vi.fn();
-      window.URL.createObjectURL = createObjectURLMock;
-      window.URL.revokeObjectURL = revokeObjectURLMock;
-
+    it('opens Export BottomSheet when Export button is clicked', async () => {
       renderReportsPage();
-      const exportBtn = screen.getByRole('button', { name: /export csv/i });
+      const exportBtn = screen.getByRole('button', { name: /export/i });
       fireEvent.click(exportBtn);
 
-      await waitFor(() => {
-        expect(mockExportMutateAsync).toHaveBeenCalled();
-      });
-      expect(createObjectURLMock).toHaveBeenCalled();
+      expect(screen.getByText(/export report/i)).toBeInTheDocument();
     });
 
     it('supports switching to custom period and selecting dates', () => {

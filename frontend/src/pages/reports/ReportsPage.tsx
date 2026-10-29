@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Download, TrendingUp, TrendingDown, Users, Wallet, ArrowDownRight, ArrowUpRight, FileSpreadsheet } from 'lucide-react';
-import { toast } from 'sonner';
 import AppHeader from '@/components/common/AppHeader';
 import { PeriodPicker, type PeriodType } from '@/components/common/PeriodPicker';
 import StatCard from '@/components/common/StatCard';
@@ -11,7 +10,7 @@ import { SkeletonBlock } from '@/components/common/SkeletonRow';
 import { useReportSummary } from '@/hooks/useReportSummary';
 import { useDebtsPeriodReport } from '@/hooks/useDebtsPeriodReport';
 import { useExpenseBreakdown } from '@/hooks/useExpenseBreakdown';
-import { useExportReport } from '@/hooks/useExportReport';
+import ExportSheet from '@/components/common/ExportSheet';
 import { todayLocal, startOfWeek, endOfWeek, startOfMonth, endOfMonth, formatDate } from '@/lib/date';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 
@@ -21,6 +20,7 @@ export default function ReportsPage() {
   const [period, setPeriod] = useState<PeriodType>('week');
   const [customFrom, setCustomFrom] = useState(() => startOfWeek());
   const [customTo, setCustomTo] = useState(() => todayLocal());
+  const [showExportSheet, setShowExportSheet] = useState(false);
 
   const { from, to } = useMemo(() => {
     const today = todayLocal();
@@ -61,8 +61,6 @@ export default function ReportsPage() {
     refetch: refetchBreakdown,
   } = useExpenseBreakdown(from, to);
 
-  const exportMutation = useExportReport();
-
   const isLoading = isSummaryLoading || isDebtsLoading || isBreakdownLoading;
   const isError = isSummaryError || isDebtsError || isBreakdownError;
 
@@ -70,23 +68,6 @@ export default function ReportsPage() {
     void refetchSummary();
     void refetchDebts();
     void refetchBreakdown();
-  };
-
-  const handleExport = async () => {
-    try {
-      const blob = await exportMutation.mutateAsync({ from, to });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `report-${from}-to-${to}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-      toast.success(t('reports.exportSuccess', 'Report exported successfully'));
-    } catch {
-      toast.error(t('reports.exportFailed', 'Failed to export report'));
-    }
   };
 
   const isAllZero =
@@ -254,25 +235,28 @@ export default function ReportsPage() {
               </div>
             )}
 
-            {/* Export CSV Button */}
+            {/* Export Button */}
             <section className="pt-2">
               <button
                 type="button"
-                onClick={handleExport}
-                disabled={exportMutation.isPending}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-surface-container-high border border-outline-variant/60 text-foreground font-semibold shadow-xs transition-colors hover:bg-surface-container-highest active:scale-[0.98] disabled:opacity-50"
+                onClick={() => setShowExportSheet(true)}
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-surface-container-high border border-outline-variant/60 text-foreground font-semibold shadow-xs transition-colors hover:bg-surface-container-highest active:scale-[0.98]"
               >
                 <Download className="h-4 w-4" />
-                <span>
-                  {exportMutation.isPending
-                    ? t('reports.exporting', 'Exporting...')
-                    : t('reports.exportCsv', 'Export CSV')}
-                </span>
+                <span>{t('reports.export', 'Export')}</span>
               </button>
             </section>
           </>
         )}
       </main>
+
+      {/* Export Options BottomSheet */}
+      <ExportSheet
+        open={showExportSheet}
+        onOpenChange={setShowExportSheet}
+        type="report"
+        reportParams={{ from, to }}
+      />
     </div>
   );
 }

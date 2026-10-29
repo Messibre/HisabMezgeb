@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import validate from '../middlewares/validate.middleware.js';
+import { exportLimiter, exportTimeoutGuard } from '../middlewares/rateLimiter.middleware.js';
 import {
   createDebtCustomerSchema,
   updateDebtCustomerSchema,
   listDebtCustomersSchema,
   getDebtCustomerSchema,
+  customerStatementSchema,
 } from '../schemas/debtCustomer.schema.js';
 import { createBorrowRecordSchema } from '../schemas/debtBorrowRecord.schema.js';
 import { createPaymentSchema } from '../schemas/debtPayment.schema.js';
@@ -15,6 +17,7 @@ import {
   getCustomerHandler,
   updateCustomerHandler,
   deleteCustomerHandler,
+  getCustomerStatementHandler,
 } from '../controllers/debtCustomer.controller.js';
 import { createBorrowRecordHandler } from '../controllers/debtBorrowRecord.controller.js';
 import { createPaymentHandler } from '../controllers/debtPayment.controller.js';
@@ -23,6 +26,16 @@ const router = Router();
 
 router.get('/', authMiddleware, validate(listDebtCustomersSchema), listCustomersHandler);
 router.post('/', authMiddleware, validate(createDebtCustomerSchema), createCustomerHandler);
+
+router.get(
+  '/:id/statement',
+  authMiddleware,
+  exportLimiter,
+  exportTimeoutGuard(),
+  validate(customerStatementSchema),
+  getCustomerStatementHandler,
+);
+
 router.get('/:id', authMiddleware, validate(getDebtCustomerSchema), getCustomerHandler);
 router.patch('/:id', authMiddleware, validate(updateDebtCustomerSchema), updateCustomerHandler);
 router.delete('/:id', authMiddleware, deleteCustomerHandler);

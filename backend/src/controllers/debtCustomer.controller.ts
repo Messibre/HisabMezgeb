@@ -10,6 +10,8 @@ import {
   updateCustomer,
   softDeleteCustomer,
 } from '../services/debtCustomer.service.js';
+import { exportCustomerStatement } from '../services/export/export.service.js';
+import { SupportedLang } from '../services/export/documentModel.js';
 
 export const listCustomersHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
   const accountId = req.accountId!;
@@ -65,4 +67,28 @@ export const deleteCustomerHandler = asyncHandler(async (req: AuthRequest, res: 
   res
     .status(HTTP_STATUS.OK)
     .json(new SuccessResponse(HTTP_STATUS.OK, 'Debt customer deleted', null));
+});
+
+export const getCustomerStatementHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const accountId = req.accountId!;
+  const { id } = req.params;
+  const { format, lang } = req.query as {
+    format?: 'pdf' | 'docx';
+    lang?: SupportedLang;
+  };
+
+  const result = await exportCustomerStatement(
+    accountId,
+    id as string,
+    format ?? 'pdf',
+    lang ?? 'en',
+  );
+
+  res.setHeader('Content-Type', result.contentType);
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${result.filename}"; filename*=UTF-8''${encodeURIComponent(result.filename)}`,
+  );
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(HTTP_STATUS.OK).send(result.buffer);
 });
