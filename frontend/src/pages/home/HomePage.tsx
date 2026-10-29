@@ -43,7 +43,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-background pb-28">
       <AppHeader />
 
-      <main className="mx-auto max-w-md px-4 pt-4 space-y-6">
+      <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
         {/* Greeting Section */}
         <section className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
@@ -160,7 +160,7 @@ export default function HomePage() {
             </div>
           )}
         </section>
-      </main>
+      </div>
     </div>
   );
 }

@@ -70,7 +70,6 @@ function EditCustomerForm({
             setName(e.target.value);
             setNameError('');
           }}
-          autoFocus
         />
       </FormField>
 

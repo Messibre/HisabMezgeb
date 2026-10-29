@@ -33,9 +33,9 @@ export default function StatCard({
   return (
     <CardWrapper
       {...interactiveProps}
-      className={`relative flex flex-col justify-between rounded-xl bg-card border border-border/40 p-4 text-left shadow-xs transition-colors overflow-hidden ${
+      className={`relative flex flex-col justify-between rounded-xl bg-card border border-border p-4 text-left shadow-xs transition-colors overflow-hidden ${
         onClick
-          ? 'cursor-pointer hover:bg-surface-container-high/40 active:scale-[0.99] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary'
+          ? 'cursor-pointer hover:bg-surface-container-high/40 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           : ''
       } ${className}`}
     >
@@ -58,7 +58,7 @@ export default function StatCard({
         )}
       </div>
       <div>
-        <MoneyText amount={amount} tone={tone} size={size} />
+        <MoneyText amount={amount} tone={tone} size={size} showSign={tone === 'in' || tone === 'out'} />
       </div>
     </CardWrapper>
   );

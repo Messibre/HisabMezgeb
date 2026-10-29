@@ -73,9 +73,9 @@ describe('NotFound (404) Page', () => {
       </MemoryRouter>
     );
 
-    const main = container.querySelector('main');
-    expect(main).toHaveClass('min-h-[70vh]');
-    expect(main).not.toHaveClass('min-h-screen');
+    const root = container.firstElementChild;
+    expect(root).toHaveClass('min-h-[70vh]');
+    expect(root).not.toHaveClass('min-h-screen');
   });
 
   it('renders outside layout with insideLayout=false with min-h-screen', () => {

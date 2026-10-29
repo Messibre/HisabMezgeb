@@ -121,7 +121,7 @@ export default function DebtsListPage() {
     <div className="min-h-screen bg-background pb-28">
       <AppHeader title={t('pages.debts', 'Debts')} />
 
-      <main className="max-w-md mx-auto px-4 py-3 space-y-4">
+      <div className="max-w-md mx-auto px-4 py-3 space-y-4">
         {/* Search Bar */}
         <div role="search" className="relative">
           <div className="relative flex items-center">
@@ -207,16 +207,16 @@ export default function DebtsListPage() {
             ))
           )}
         </div>
-      </main>
+      </div>
 
       {/* Floating Action Button (+) */}
       <button
         type="button"
         onClick={() => handleOpenNewCustomer('')}
         aria-label={t('debts.addCustomerAria', 'Add customer')}
-        className="fixed bottom-20 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        className="fixed bottom-20 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <Plus className="w-6 h-6" />
+        <Plus className="w-6 h-6" aria-hidden="true" />
       </button>
 
       {/* New Customer BottomSheet */}
@@ -239,7 +239,6 @@ export default function DebtsListPage() {
                 setNameError('');
               }}
               placeholder={t('debts.namePlaceholder', 'Enter customer name')}
-              autoFocus
             />
           </FormField>
 

@@ -94,7 +94,7 @@ export default function LandingPage() {
       </header>
 
       {/* Main Content */}
-      <main id="main-content" className="flex-1 focus:outline-none">
+      <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
         {/* Hero Section */}
         <section
           aria-labelledby="hero-heading"
