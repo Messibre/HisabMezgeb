@@ -284,6 +284,7 @@
     "debtActivity": "የዕዳ እንቅስቃሴ (በዚህ ጊዜ)",
     "newlyBorrowed": "አዲስ የተበደረ",
     "repaid": "የተመለሰ",
+    "export": "ሪፖርት አውርድ",
     "exportCsv": "CSV ላክ",
     "exporting": "በመላክ ላይ...",
     "noData": "በዚህ ጊዜ ምንም መረጃ የለም",
@@ -378,5 +379,26 @@
       "register": "መለያ ይክፈቱ",
       "rights": "መብቱ በህግ የተጠበቀ ነው።"
     }
+  },
+  "export": {
+    "exportTitle": "ሰነድ አውርድ",
+    "shareStatement": "የሂሳብ መግለጫ አጋራ",
+    "shareStatementTitle": "የደንበኛ ሂሳብ መግለጫ አጋራ",
+    "exportReportTitle": "ሪፖርት አውርድ",
+    "format": "ቅርጸት",
+    "language": "ቋንቋ",
+    "pdfFormat": "PDF (ለማተም እና ለማጋራት የተመረጠ)",
+    "docxFormat": "Word (.docx - የሚስተካከል)",
+    "csvFormat": "CSV (ኤክሴል)",
+    "download": "አውርድ",
+    "downloading": "በማውረድ ላይ...",
+    "share": "አጋራ",
+    "sharing": "ለማጋራት በመዘጋጀት ላይ...",
+    "successToast": "ሰነዱ በተሳካ ሁኔታ ወርዷል",
+    "shareSuccessToast": "መግለጫው በተሳካ ሁኔታ ተጋርቷል",
+    "offlineError": "ሰነዶችን ለማውረድ የኢንተርኔት ግንኙነት ያስፈልጋል",
+    "timeoutError": "ጥያቄው ጊዜው አልፎበታል። እባክዎ እንደገና ይሞክሩ።",
+    "serverError": "ሰነዱን ማውረድ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+    "wordNotice": "ማስታወሻ፡ በWord ውስጥ የግዕዝ ፊደላት በትክክል እንዲታዩ የግዕዝ ፎንት መጫን አለበት።"
   }
 }

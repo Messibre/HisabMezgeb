@@ -9,6 +9,8 @@ import {
   buildExpenseBreakdown,
   generateCsvExport,
 } from '../services/reports.service.js';
+import { exportReport } from '../services/export/export.service.js';
+import { ExportFormat, SupportedLang } from '../services/export/documentModel.js';
 
 export const getSummaryHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
   const accountId = req.accountId!;
@@ -45,11 +47,35 @@ export const getExpenseBreakdownHandler = asyncHandler(async (req: AuthRequest, 
 
 export const exportReportHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
   const accountId = req.accountId!;
-  const { from, to } = req.query as { from: string; to: string };
+  const { from, to, format, lang } = req.query as {
+    from: string;
+    to: string;
+    format?: ExportFormat;
+    lang?: SupportedLang;
+  };
 
-  const csv = await generateCsvExport(accountId, new Date(from), new Date(to));
+  if (format === 'csv' || !format) {
+    const csv = await generateCsvExport(accountId, new Date(from), new Date(to));
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=report-${from}-to-${to}.csv`);
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(HTTP_STATUS.OK).send(csv);
+    return;
+  }
 
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename=report-${from}-to-${to}.csv`);
-  res.status(HTTP_STATUS.OK).send(csv);
+  const result = await exportReport(
+    accountId,
+    new Date(from),
+    new Date(to),
+    format,
+    lang ?? 'en',
+  );
+
+  res.setHeader('Content-Type', result.contentType);
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${result.filename}"; filename*=UTF-8''${encodeURIComponent(result.filename)}`,
+  );
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(HTTP_STATUS.OK).send(result.buffer);
 });

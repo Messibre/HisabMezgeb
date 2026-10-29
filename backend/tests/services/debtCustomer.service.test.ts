@@ -12,6 +12,7 @@ import {
   CustomerDetail,
 } from '../../src/services/debtCustomer.service.js';
 import ApiError from '../../src/utils/ApiError.js';
+import { ERROR_CODES } from '../../src/constants/index.js';
 
 const Decimal = Prisma.Decimal;
 
@@ -405,6 +406,23 @@ describe('DebtCustomer Service', () => {
       await expect(getCustomerWithHistory(accountId, customerId)).rejects.toMatchObject({
         statusCode: 404,
         message: 'Debt customer not found',
+      });
+    });
+
+    it('should return 404 when querying customer belonging to another account', async () => {
+      mockCustomerFindUnique.mockResolvedValue(null);
+
+      await expect(getCustomerWithHistory('different-account-999', customerId)).rejects.toMatchObject({
+        statusCode: 404,
+        message: 'Debt customer not found',
+        code: ERROR_CODES.CUSTOMER_NOT_FOUND,
+      });
+      expect(mockCustomerFindUnique).toHaveBeenCalledWith({
+        where: {
+          id: customerId,
+          accountId: 'different-account-999',
+          deletedAt: null,
+        },
       });
     });
 

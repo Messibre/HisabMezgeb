@@ -284,6 +284,7 @@
     "debtActivity": "ምንቅስቓስ ዕዳ (ኣብዚ እዋን)",
     "newlyBorrowed": "ሓድሽ ዝተለቅሐ",
     "repaid": "ዝተኸፍለ",
+    "export": "ጸብጻብ ኣውርድ",
     "exportCsv": "CSV ኣውርድ",
     "exporting": "የውርድ ኣሎ...",
     "noData": "ኣብዚ እዋን ዝተረኽበ ዳታ የለን",
@@ -378,5 +379,26 @@
       "register": "ኣካውንት ክፈቱ",
       "rights": "ኩሉ መሰል ብሕጊ ዝተሓለወ እዩ።"
     }
+  },
+  "export": {
+    "exportTitle": "ሰነድ ኣውርድ",
+    "shareStatement": "ናይ ሒሳብ መግለጺ ኣካፍል",
+    "shareStatementTitle": "ናይ ዓሚል ሒሳብ መግለጺ ኣካፍል",
+    "exportReportTitle": "ጸብጻብ ኣውርድ",
+    "format": "ቅርጺ",
+    "language": "ቋንቋ",
+    "pdfFormat": "PDF (ንሕትመት ንምክፋልን ዝምረጽ)",
+    "docxFormat": "Word (.docx - ዝዕረ)",
+    "csvFormat": "CSV (ኤክሴል)",
+    "download": "ኣውርድ",
+    "downloading": "የውርድ ኣሎ...",
+    "share": "ኣካፍል",
+    "sharing": "ንምክፋል ይዳሎ ኣሎ...",
+    "successToast": "ሰነድ ብትኽክል ተወሪዱ",
+    "shareSuccessToast": "መግለጺ ብትኽክል ተኻፊሉ",
+    "offlineError": "ሰነዳት ንምውራድ ናይ ኢንተርኔት ርክብ የድሊ",
+    "timeoutError": "ሕቶኹም ግዜ ወሲዱ። በጃኹም ደጊምኩም ፈትኑ።",
+    "serverError": "ሰነድ ምውራድ ኣይተኻእለን። በጃኹም ደጊምኩም ፈትኑ።",
+    "wordNotice": "መዘክር፡ ኣብ Word ፊደላት ግዕዝ ብትኽክል ንኽርኣዩ ናይ ግዕዝ ፎንት ክህሉ ኣለዎ።"
   }
 }

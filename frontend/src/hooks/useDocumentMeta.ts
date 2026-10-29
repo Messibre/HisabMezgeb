@@ -24,6 +24,8 @@ export function useDocumentMeta({
   fallbackDescription,
 }: UseDocumentMetaOptions) {
   const { t, i18n } = useTranslation();
+  const titleParamsKey = JSON.stringify(titleParams);
+  const descriptionParamsKey = JSON.stringify(descriptionParams);
 
   useEffect(() => {
     // 1. Update document.title
@@ -94,6 +96,7 @@ export function useDocumentMeta({
         descriptionMeta.setAttribute('content', previousDescription);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     t,
     i18n.language,
@@ -102,10 +105,7 @@ export function useDocumentMeta({
     noindex,
     fallbackTitle,
     fallbackDescription,
-    // JSON.stringify for stable object comparisons
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(titleParams),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(descriptionParams),
+    titleParamsKey,
+    descriptionParamsKey,
   ]);
 }

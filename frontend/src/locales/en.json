@@ -284,6 +284,7 @@
     "debtActivity": "Debt Activity (This Period)",
     "newlyBorrowed": "Newly Borrowed",
     "repaid": "Repaid",
+    "export": "Export",
     "exportCsv": "Export CSV",
     "exporting": "Exporting...",
     "noData": "No data for this period yet",
@@ -378,5 +379,26 @@
       "register": "Create account",
       "rights": "All rights reserved."
     }
+  },
+  "export": {
+    "exportTitle": "Export Document",
+    "shareStatement": "Share statement",
+    "shareStatementTitle": "Share Customer Statement",
+    "exportReportTitle": "Export Report",
+    "format": "Format",
+    "language": "Language",
+    "pdfFormat": "PDF (Recommended for printing & sharing)",
+    "docxFormat": "Word (.docx - Editable)",
+    "csvFormat": "CSV (Spreadsheet)",
+    "download": "Download",
+    "downloading": "Preparing download...",
+    "share": "Share",
+    "sharing": "Preparing to share...",
+    "successToast": "File downloaded successfully",
+    "shareSuccessToast": "Statement shared successfully",
+    "offlineError": "Exporting needs internet connection",
+    "timeoutError": "Export request timed out. Please try again.",
+    "serverError": "Server error exporting document",
+    "wordNotice": "Note: Viewing Ge'ez characters in Word requires a Ge'ez font installed."
   }
 }
