@@ -94,7 +94,7 @@ describe('M10 Home Page', () => {
     });
     renderHomePage();
     expect(screen.getByText(/today's income/i)).toBeInTheDocument();
-    expect(screen.getByText('3,500')).toBeInTheDocument();
+    expect(screen.getByText(/3,500/)).toBeInTheDocument();
     const editBtn = screen.getByRole('link', { name: /edit/i });
     expect(editBtn).toBeInTheDocument();
     expect(editBtn.getAttribute('href')).toContain('/entries?type=income');
@@ -132,10 +132,10 @@ describe('M10 Home Page', () => {
 
     expect(mockUseReportSummary).toHaveBeenCalledWith(startWeek, today);
     expect(screen.getByText("This Week's Income")).toBeInTheDocument();
-    expect(screen.getByText('12,500')).toBeInTheDocument();
+    expect(screen.getByText(/12,500/)).toBeInTheDocument();
     expect(screen.getByText('Shop Expenses')).toBeInTheDocument();
-    expect(screen.getByText('3,400')).toBeInTheDocument();
+    expect(screen.getByText(/3,400/)).toBeInTheDocument();
     expect(screen.getByText('Customer Debts')).toBeInTheDocument();
-    expect(screen.getByText('4,800')).toBeInTheDocument();
+    expect(screen.getByText(/4,800/)).toBeInTheDocument();
   });
 });

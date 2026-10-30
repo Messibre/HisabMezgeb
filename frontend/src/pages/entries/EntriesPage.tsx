@@ -283,7 +283,7 @@ export default function EntriesPage() {
     <div className="min-h-screen bg-background pb-24">
       <AppHeader title={t('pages.entries', 'Entries')} />
 
-      <main className="max-w-md mx-auto px-4 py-3 space-y-4">
+      <div className="max-w-md mx-auto px-4 py-3 space-y-4">
         {/* Segmented control */}
         <SegmentedControl
           name="entry-type"
@@ -625,7 +625,7 @@ export default function EntriesPage() {
             </div>
           )}
         </section>
-      </main>
+      </div>
 
       {/* Edit Entry BottomSheet */}
       <EditEntrySheet

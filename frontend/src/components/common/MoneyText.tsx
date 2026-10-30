@@ -10,6 +10,7 @@ export interface MoneyTextProps {
   size?: MoneySize;
   showCurrency?: boolean;
   currency?: string;
+  showSign?: boolean;
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export default function MoneyText({
   size = 'md',
   showCurrency = true,
   currency,
+  showSign = false,
   className = '',
 }: MoneyTextProps) {
   const { t, i18n } = useTranslation();
@@ -70,6 +72,15 @@ export default function MoneyText({
   };
 
   const sizeStyle = getSizeClasses();
+  const sign = showSign && tone === 'in' ? '+' : showSign && tone === 'out' ? '-' : '';
+  const toneLabel =
+    tone === 'in'
+      ? t('common.income', 'Income')
+      : tone === 'out'
+        ? t('common.expense', 'Expense')
+        : tone === 'neutral'
+          ? t('debts.owed', 'Owed')
+          : '';
 
   return (
     <span
@@ -78,7 +89,8 @@ export default function MoneyText({
       {showCurrency && (
         <span className={sizeStyle.currency}>{effectiveCurrency}</span>
       )}
-      <span>{formattedValue}</span>
+      <span>{sign}{formattedValue}</span>
+      {toneLabel && <span className="sr-only"> ({toneLabel})</span>}
     </span>
   );
 }

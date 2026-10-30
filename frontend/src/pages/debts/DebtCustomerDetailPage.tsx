@@ -89,7 +89,7 @@ export default function DebtCustomerDetailPage() {
           title={t('debts.ledgerTitle', 'Ledger')}
           onBack={() => navigate('/debts')}
         />
-        <main className="max-w-md mx-auto p-4 pt-12">
+        <div className="max-w-md mx-auto p-4 pt-12">
           <EmptyState
             icon={<AlertTriangle className="w-8 h-8 text-destructive" />}
             title={t('debts.customerNotFound', 'Customer not found')}
@@ -100,7 +100,7 @@ export default function DebtCustomerDetailPage() {
             actionLabel={t('debts.backToDebts', 'Back to Debts')}
             onAction={() => navigate('/debts')}
           />
-        </main>
+        </div>
       </div>
     );
   }
@@ -112,13 +112,13 @@ export default function DebtCustomerDetailPage() {
           title={t('debts.ledgerTitle', 'Ledger')}
           onBack={() => navigate('/debts')}
         />
-        <main className="max-w-md mx-auto p-4">
+        <div className="max-w-md mx-auto p-4">
           <ErrorState
             message={t(userError?.messageKey || 'errors.server.message')}
             requestId={userError?.requestId}
             onRetry={() => refetch()}
           />
-        </main>
+        </div>
       </div>
     );
   }
@@ -130,6 +130,7 @@ export default function DebtCustomerDetailPage() {
     <div className="min-h-screen bg-background pb-20">
       <AppHeader
         title={t('debts.ledgerTitle', 'Ledger')}
+        headingTag="span"
         onBack={() => navigate('/debts')}
         rightAction={
           customer ? (
@@ -137,10 +138,12 @@ export default function DebtCustomerDetailPage() {
               <button
                 type="button"
                 onClick={() => setShowMenu((prev) => !prev)}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label="Options"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label={t('common.options', 'More options')}
+                aria-haspopup="true"
+                aria-expanded={showMenu}
               >
-                <MoreVertical className="w-5 h-5" />
+                <MoreVertical className="w-5 h-5" aria-hidden="true" />
               </button>
 
               {showMenu && (
@@ -157,7 +160,7 @@ export default function DebtCustomerDetailPage() {
                     }}
                     className="w-full text-left px-3.5 py-2.5 text-xs font-medium text-foreground hover:bg-muted flex items-center gap-2.5 transition-colors"
                   >
-                    <Share2 className="w-4 h-4 text-muted-foreground" />
+                    <Share2 className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
                     <span>{t('export.shareStatement', 'Share statement')}</span>
                   </button>
 
@@ -170,7 +173,7 @@ export default function DebtCustomerDetailPage() {
                     }}
                     className="w-full text-left px-3.5 py-2.5 text-xs font-medium text-foreground hover:bg-muted flex items-center gap-2.5 transition-colors"
                   >
-                    <Pencil className="w-4 h-4 text-muted-foreground" />
+                    <Pencil className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
                     <span>{t('debts.editCustomer', 'Edit customer')}</span>
                   </button>
 
@@ -183,7 +186,7 @@ export default function DebtCustomerDetailPage() {
                     }}
                     className="w-full text-left px-3.5 py-2.5 text-xs font-medium text-destructive hover:bg-destructive/10 flex items-center gap-2.5 transition-colors"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4" aria-hidden="true" />
                     <span>{t('debts.deleteCustomer', 'Delete customer')}</span>
                   </button>
                 </div>
@@ -193,7 +196,7 @@ export default function DebtCustomerDetailPage() {
         }
       />
 
-      <main className="max-w-md mx-auto px-4 py-4 space-y-5">
+      <div className="max-w-md mx-auto px-4 py-4 space-y-5">
         {isLoading ? (
           <div className="space-y-4">
             <div className="flex flex-col items-center gap-2">
@@ -217,7 +220,7 @@ export default function DebtCustomerDetailPage() {
             {/* Customer Avatar and Name */}
             <div className="flex flex-col items-center text-center">
               <div
-                className="w-16 h-16 rounded-full bg-primary/20 text-primary font-bold text-2xl flex items-center justify-center select-none shadow-xs mb-2"
+                className="w-16 h-16 rounded-full bg-primary-container text-on-primary-container font-bold text-2xl flex items-center justify-center select-none shadow-xs mb-2"
                 aria-hidden="true"
               >
                 {initial}
@@ -283,7 +286,7 @@ export default function DebtCustomerDetailPage() {
             />
           </>
         ) : null}
-      </main>
+      </div>
 
       {/* Add Borrow BottomSheet */}
       {customer && (

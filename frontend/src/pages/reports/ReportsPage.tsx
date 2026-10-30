@@ -83,7 +83,7 @@ export default function ReportsPage() {
     <div className="min-h-screen bg-background pb-32">
       <AppHeader title={t('reports.title', 'Reports')} />
 
-      <main className="mx-auto max-w-md px-4 pt-4 space-y-6">
+      <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
         {/* Period Selector */}
         <section className="space-y-3">
           <PeriodPicker value={period} onChange={setPeriod} />
@@ -248,7 +248,7 @@ export default function ReportsPage() {
             </section>
           </>
         )}
-      </main>
+      </div>
 
       {/* Export Options BottomSheet */}
       <ExportSheet

@@ -8,10 +8,12 @@ export default function Toaster() {
     <SonnerToaster
       theme={resolved}
       position="top-center"
+      duration={5000}
+      closeButton
       richColors
       toastOptions={{
         className:
-          'rounded-2xl font-sans border border-border/40 bg-card text-foreground shadow-lg dark:shadow-none dark:border-border',
+          'rounded-2xl font-sans border border-border bg-card text-foreground shadow-lg dark:shadow-none dark:border-border',
       }}
     />
   );

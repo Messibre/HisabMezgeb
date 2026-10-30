@@ -38,12 +38,15 @@ export default function NotFoundPage({ insideLayout = false }: NotFoundPageProps
     }
   };
 
+  const RootTag = insideLayout ? 'div' : 'main';
+
   return (
-    <main
-      role="main"
+    <RootTag
+      id={insideLayout ? undefined : 'main'}
+      tabIndex={insideLayout ? undefined : -1}
       className={`${
         insideLayout ? 'min-h-[70vh]' : 'min-h-screen'
-      } flex flex-col items-center justify-center p-6 text-center bg-background`}
+      } flex flex-col items-center justify-center p-6 text-center bg-background focus:outline-none`}
     >
       {/* Friendly, accessible inline SVG illustration */}
       <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-surface-container-high/60 text-muted-foreground mb-6 shadow-xs">
@@ -97,6 +100,6 @@ export default function NotFoundPage({ insideLayout = false }: NotFoundPageProps
           {t('notFound.goBack', 'Go back')}
         </Button>
       </div>
-    </main>
+    </RootTag>
   );
 }

@@ -7,6 +7,7 @@ import AuthLayout from '@/components/layouts/AuthLayout';
 import { ROUTES } from '@/constants';
 
 import RouteErrorElement from '@/components/common/RouteErrorElement';
+import RootLayout from '@/components/layouts/RootLayout';
 
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
@@ -35,6 +36,7 @@ const withSuspense = (element: React.ReactNode) => (
 
 const router = createBrowserRouter([
   {
+    element: <RootLayout />,
     errorElement: <RouteErrorElement />,
     children: [
       { path: ROUTES.LANDING, element: withSuspense(<LandingPage />) },

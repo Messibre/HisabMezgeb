@@ -8,7 +8,6 @@ export interface AmountInputProps {
   label?: string;
   helperText?: string;
   error?: string;
-  autoFocus?: boolean;
   placeholder?: string;
   id?: string;
   className?: string;
@@ -23,7 +22,6 @@ export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
       label,
       helperText,
       error,
-      autoFocus = false,
       placeholder = '0.00',
       id = 'amount',
       className = '',
@@ -44,7 +42,7 @@ export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
 
     return (
       <div
-        className={`flex flex-col items-center justify-center gap-2 rounded-xl bg-card p-6 shadow-[0px_2px_12px_rgba(0,0,0,0.04)] border border-border/40 ${className}`}
+        className={`flex flex-col items-center justify-center gap-2 rounded-xl bg-card p-6 shadow-xs border border-border ${className}`}
       >
         <label htmlFor={id} className="text-sm font-semibold text-muted-foreground">
           {fieldLabel}
@@ -57,7 +55,6 @@ export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
             id={id}
             type="text"
             inputMode="decimal"
-            autoFocus={autoFocus}
             value={value}
             onChange={handleChange}
             placeholder={placeholder}

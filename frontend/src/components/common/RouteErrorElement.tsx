@@ -29,7 +29,7 @@ export default function RouteErrorElement() {
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--money-out)]/20 text-[var(--money-out)] mb-4">
         <AlertCircle className="h-7 w-7" aria-hidden="true" />
       </div>
-      <h2 className="text-xl font-bold text-foreground mb-2">{title}</h2>
+      <h1 className="text-xl font-bold text-foreground mb-2">{title}</h1>
       <p className="text-sm text-muted-foreground max-w-md mb-2">{message}</p>
       {userError.requestId && (
         <p className="text-xs text-muted-foreground mb-4 font-mono select-all">

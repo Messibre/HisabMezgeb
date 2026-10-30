@@ -83,16 +83,16 @@ export const lightTokens: ThemeTokens = {
   onSecondaryContainer: '#00210c',
   secondaryForeground: '#00210c',
 
-  moneyIn: '#1b8a44',
+  moneyIn: '#167a3c',
   moneyInStrong: '#146934',
   moneyOut: '#c8441b',
   moneyOutStrong: '#9e3210',
-  moneyNeutral: '#b46d23',
+  moneyNeutral: '#965612',
   moneyNeutralStrong: '#8a5014',
 
   navActiveBg: '#a3f7bf',
   navActiveFg: '#00210c',
-  navInactive: '#717973',
+  navInactive: '#6c746e',
 
   danger: '#ba1a1a',
   dangerContainer: '#ffdad6',
@@ -115,7 +115,7 @@ export const lightTokens: ThemeTokens = {
 
   onSurface: '#191c19',
   onSurfaceVariant: '#404943',
-  outline: '#717973',
+  outline: '#6c746e',
   outlineVariant: '#c0c9c2',
   outlineStrong: '#404943',
 
@@ -123,9 +123,9 @@ export const lightTokens: ThemeTokens = {
   mutedForeground: '#404943',
   accent: '#f3f4f3',
   accentForeground: '#191c19',
-  border: '#c0c9c2',
+  border: '#828a84',
   // Darker token for input borders to satisfy WCAG 3:1 non-text contrast requirement
-  input: '#717973',
+  input: '#828a84',
   ring: '#2e5a27',
 };
 
@@ -183,7 +183,7 @@ export const darkTokens: ThemeTokens = {
   mutedForeground: '#c0c9c2',
   accent: '#1d211d',
   accentForeground: '#e1e3e0',
-  border: '#404943',
+  border: '#6e7670',
   // Dark mode input border token satisfying >= 3:1 contrast against dark card/surface
   input: '#8a938c',
   ring: '#9ed495',
