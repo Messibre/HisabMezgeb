@@ -8,6 +8,16 @@ import { useAuthBootstrap } from '@/hooks/useAuthBootstrap';
 import { useTheme } from '@/store/theme.store';
 import { OfflineBanner } from '@/components/common/OfflineBanner';
 import Toaster from '@/components/common/Toaster';
+import { PWAUpdateBanner } from '@/components/common/PWAUpdateBanner';
+
+/**
+ * Whether to enable PWA features.
+ * Disabled inside Capacitor native shells and in development mode.
+ */
+const enablePWA =
+  typeof window !== 'undefined' &&
+  !('Capacitor' in window) &&
+  import.meta.env.PROD;
 
 function App() {
   useSyncHtmlLang();
@@ -19,6 +29,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <OfflineBanner />
         <Toaster />
+        {enablePWA && <PWAUpdateBanner />}
         <RouterProvider router={router} />
       </QueryClientProvider>
     </ErrorBoundary>
