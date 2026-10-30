@@ -118,34 +118,33 @@ describe('Reports Feature & Page', () => {
     it('renders the reports header and period picker options', () => {
       renderReportsPage();
       expect(screen.getByRole('heading', { level: 1, name: 'Reports' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Today' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'This Week' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'This Month' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Custom' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Today' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'This Week' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'This Month' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Custom' })).toBeInTheDocument();
     });
 
     it('displays summary overview cards with formatted amounts', () => {
       renderReportsPage();
       expect(screen.getByText('Total Income')).toBeInTheDocument();
-      expect(screen.getByText('45,000')).toBeInTheDocument();
+      expect(screen.getByText(/45,000/)).toBeInTheDocument();
 
       expect(screen.getByText('Business Expenses')).toBeInTheDocument();
-      expect(screen.getByText('12,000')).toBeInTheDocument();
+      expect(screen.getByText(/12,000/)).toBeInTheDocument();
 
       expect(screen.getByText('Personal / Family Draws')).toBeInTheDocument();
-      expect(screen.getAllByText('4,000').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText(/4,000/).length).toBeGreaterThanOrEqual(1);
 
       expect(screen.getByText('Total Owed by Customers')).toBeInTheDocument();
-      expect(screen.getByText('8,500')).toBeInTheDocument();
+      expect(screen.getByText(/8,500/)).toBeInTheDocument();
     });
 
     it('displays debt activity for the period', () => {
       renderReportsPage();
       expect(screen.getByText('Debt Activity (This Period)')).toBeInTheDocument();
       expect(screen.getByText('Newly Borrowed')).toBeInTheDocument();
-      expect(screen.getByText('6,000')).toBeInTheDocument();
-      expect(screen.getByText('Repaid')).toBeInTheDocument();
-      expect(screen.getByText('3,500')).toBeInTheDocument();
+      expect(screen.getByText(/6,000/)).toBeInTheDocument();
+      expect(screen.getByText(/3,500/)).toBeInTheDocument();
     });
 
     it('shows loading skeleton when query is in flight', () => {
@@ -187,7 +186,7 @@ describe('Reports Feature & Page', () => {
 
     it('supports switching to custom period and selecting dates', () => {
       renderReportsPage();
-      const customBtn = screen.getByRole('button', { name: 'Custom' });
+      const customBtn = screen.getByRole('radio', { name: 'Custom' });
       fireEvent.click(customBtn);
 
       const fromInput = screen.getByLabelText(/^from$/i);

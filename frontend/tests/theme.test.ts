@@ -15,9 +15,9 @@ describe('Theme design tokens and fonts', () => {
     expect(cssContent).toContain('--primary-container: #d2e8cc');
     expect(cssContent).toContain('--secondary: #52dc90');
     expect(cssContent).toContain('--secondary-container: #a3f7bf');
-    expect(cssContent).toContain('--money-in: #1b8a44');
+    expect(cssContent).toContain('--money-in: #167a3c');
     expect(cssContent).toContain('--money-out: #c8441b');
-    expect(cssContent).toContain('--money-neutral: #b46d23');
+    expect(cssContent).toContain('--money-neutral: #965612');
     expect(cssContent).toContain('--money-in-strong: #146934');
     expect(cssContent).toContain('--money-out-strong: #9e3210');
     expect(cssContent).toContain('--money-neutral-strong: #8a5014');

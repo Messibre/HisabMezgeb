@@ -42,7 +42,7 @@ describe('M6 Display & State Components', () => {
         />
       );
       expect(screen.getByText("This Week's Income")).toBeInTheDocument();
-      expect(screen.getByText('12,500')).toBeInTheDocument();
+      expect(screen.getByText(/12,500/)).toBeInTheDocument();
       expect(screen.getByTestId('stat-accent-bar')).toBeInTheDocument();
     });
 
