@@ -30,8 +30,17 @@ export function useAuth() {
     } catch {
       // Ignore network failures on logout; clear local state regardless
     }
+    // Clear TanStack Query in-memory cache
     queryClient.clear();
     clearSession();
+
+    // Cache Storage holds strictly static app files (precached JS/CSS/HTML/fonts/icons).
+    // API responses are NetworkOnly and never cached in Cache Storage.
+    // NOTE: When an explicit logout by a *different* user account occurs,
+    // the offline mutation queue in IndexedDB should be cleared; however,
+    // when an offline queue exists for the current user or on an expired session,
+    // it must survive to prevent data loss.
+
     navigate(ROUTES.LOGIN);
   };
 

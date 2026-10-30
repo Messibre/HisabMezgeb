@@ -66,11 +66,12 @@
   },
   "settings": {
     "language": "ቋንቋ",
-    "darkMode": "ጨለማ ገጽታ",
-    "notifications": "የዕለታዊ ማስታወሻ ማሳወቂያ",
-    "shopName": "የሱቅ ስም",
-    "changePassword": "የይለፍ ቃል ይቀይሩ",
-    "manageCategories": "የወጪ ምድቦችን ያስተዳድሩ"
+    "theme": "ገጽታ (ቴም)",
+    "themeHelper": "ብርሃን፣ ጨለማ ወይም የመሳሪያዎን ቅንብር ይምረጡ",
+    "themeLight": "ብርሃን",
+    "themeDark": "ጨለማ",
+    "themeSystem": "የስርዓት",
+    "toggleTheme": "ገጽታ ቀይር"
   },
   "notFound": {
     "title": "404",
@@ -292,15 +293,6 @@
     "exportSuccess": "ሪፖርቱ በተሳካ ሁኔታ ተልኳል",
     "exportFailed": "ሪፖርቱን መላክ አልተሳካም"
   },
-  "settings": {
-    "language": "ቋንቋ",
-    "theme": "ገጽታ (ቴም)",
-    "themeHelper": "ብርሃን፣ ጨለማ ወይም የመሳሪያዎን ቅንብር ይምረጡ",
-    "themeLight": "ብርሃን",
-    "themeDark": "ጨለማ",
-    "themeSystem": "የስርዓት",
-    "toggleTheme": "ገጽታ ቀይር"
-  },
   "landing": {
     "documentTitle": "ሂሳብ መዝገብ - የሱቅዎ የዕለት ገንዘብ እና የብድር መዝገብ",
     "metaDescription": "ለአነስተኛ ሱቆች የተሰራ የገንዘብ እና የብድር መዝገብ። የቀን ገቢ እና ወጪ ይመዝግቡ፣ የደንበኞችን ብድር ይከታተሉ፣ ቀላል ሪፖርቶችን በአማርኛ፣ በትግርኛ እና በእንግሊዝኛ ይመልከቱ።",
@@ -400,5 +392,17 @@
     "timeoutError": "ጥያቄው ጊዜው አልፎበታል። እባክዎ እንደገና ይሞክሩ።",
     "serverError": "ሰነዱን ማውረድ አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
     "wordNotice": "ማስታወሻ፡ በWord ውስጥ የግዕዝ ፊደላት በትክክል እንዲታዩ የግዕዝ ፎንት መጫን አለበት።"
+  },
+  "pwa": {
+    "offlineReady": "ከመስመር ውጭ ለመስራት ዝግጁ ነው",
+    "updateAvailable": "አዲስ ስሪት አለ",
+    "update": "አዘምን",
+    "dismiss": "እሺ",
+    "installApp": "መተግበሪያውን ጫን",
+    "installBannerText": "ለቀላል መዳረሻ ሂሳብ መዝገብን ይጫኑ",
+    "notNow": "አሁን አይደለም",
+    "install": "ጫን",
+    "iosInstallTitle": "ይህን መተግበሪያ ጫን",
+    "iosInstallInstructions": "የማጋሪያ ምልክቱን (□↑) ይጫኑ፣ ከዚያ \"Add to Home Screen\" ይምረጡ"
   }
 }

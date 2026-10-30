@@ -2,11 +2,13 @@
   "name": "Hisab Mezgeb",
   "short_name": "Hisab Mezgeb",
   "description": "Simple money and debt tracker for small businesses",
+  "id": "/",
   "start_url": "/home",
   "scope": "/",
   "display": "standalone",
   "theme_color": "#2e5a27",
   "background_color": "#f9f9f8",
+  "lang": "en",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -23,6 +25,18 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add income",
+      "url": "/entries?type=income",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Debts",
+      "url": "/debts",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

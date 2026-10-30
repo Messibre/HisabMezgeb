@@ -13,6 +13,7 @@ import { SkeletonBlock } from '@/components/common/SkeletonRow';
 import ErrorState from '@/components/common/ErrorState';
 import { ROUTES } from '@/constants';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
+import { InstallBanner, IOSInstallCard } from '@/components/common/InstallPrompts';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -42,6 +43,10 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background pb-28">
       <AppHeader />
+
+      {/* PWA Install prompts (Android banner & iOS instructions card) */}
+      <InstallBanner />
+      <IOSInstallCard />
 
       <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
         {/* Greeting Section */}

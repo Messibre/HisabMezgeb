@@ -66,11 +66,12 @@
   },
   "settings": {
     "language": "Language",
-    "darkMode": "Dark Mode",
-    "notifications": "Daily Reminder Notification",
-    "shopName": "Shop Name",
-    "changePassword": "Change Password",
-    "manageCategories": "Manage Expense Categories"
+    "theme": "Theme",
+    "themeHelper": "Choose light, dark, or follow your device settings",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "toggleTheme": "Toggle theme"
   },
   "notFound": {
     "title": "404",
@@ -292,15 +293,6 @@
     "exportSuccess": "Report exported successfully",
     "exportFailed": "Failed to export report"
   },
-  "settings": {
-    "language": "Language",
-    "theme": "Theme",
-    "themeHelper": "Choose light, dark, or follow your device settings",
-    "themeLight": "Light",
-    "themeDark": "Dark",
-    "themeSystem": "System",
-    "toggleTheme": "Toggle theme"
-  },
   "landing": {
     "documentTitle": "Hisab Mezgeb - Your shop's daily money and debt book",
     "metaDescription": "Simple daily money and debt book for small shops. Record daily income and expenses, track customer debt, and view simple reports in Amharic, Tigrigna, and English.",
@@ -400,5 +392,17 @@
     "timeoutError": "Export request timed out. Please try again.",
     "serverError": "Server error exporting document",
     "wordNotice": "Note: Viewing Ge'ez characters in Word requires a Ge'ez font installed."
+  },
+  "pwa": {
+    "offlineReady": "Ready to work offline",
+    "updateAvailable": "New version available",
+    "update": "Update",
+    "dismiss": "OK",
+    "installApp": "Install app",
+    "installBannerText": "Install Hisab Mezgeb for quick access",
+    "notNow": "Not now",
+    "install": "Install",
+    "iosInstallTitle": "Install this app",
+    "iosInstallInstructions": "Tap the Share button (□↑), then tap \"Add to Home Screen\""
   }
 }
