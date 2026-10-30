@@ -66,11 +66,12 @@
   },
   "settings": {
     "language": "ቋንቋ",
-    "darkMode": "ጸሊም ትርኢት",
-    "notifications": "ናይ መዓልታዊ መዘኻኸሪ ምልክታ",
-    "shopName": "ስም ድኳን",
-    "changePassword": "መሕለፊ ቃል ቀይር",
-    "manageCategories": "ምድባት ወጻኢታት ኣመሓድር"
+    "theme": "ተማ (Theme)",
+    "themeHelper": "ብርሃን፣ ጸላም ወይ ናይ መሳርሒኹም ምረጹ",
+    "themeLight": "ብርሃን",
+    "themeDark": "ጸላም",
+    "themeSystem": "ናይ ሲስተም",
+    "toggleTheme": "ተማ ምልዋጥ"
   },
   "notFound": {
     "title": "404",
@@ -292,15 +293,6 @@
     "exportSuccess": "ጸብጻብ ብትኽክል ተወሪዱ",
     "exportFailed": "ጸብጻብ ምውራድ ኣይተኻእለን"
   },
-  "settings": {
-    "language": "ቋንቋ",
-    "theme": "ተማ (Theme)",
-    "themeHelper": "ብርሃን፣ ጸላም ወይ ናይ መሳርሒኹም ምረጹ",
-    "themeLight": "ብርሃን",
-    "themeDark": "ጸላም",
-    "themeSystem": "ናይ ሲስተም",
-    "toggleTheme": "ተማ ምልዋጥ"
-  },
   "landing": {
     "documentTitle": "ሂሳብ መዝገብ - ናይ ድኳንኩም ናይ መዓልቲ ገንዘብን ዕዳን መዝገብ",
     "metaDescription": "ንደቀቕቲ ድኳናት ዝተሰርሐ ናይ ገንዘብን ዕዳን መዝገብ። ናይ መዓልቲ ኣታዊን ወጻእን መዝግቡ፣ ናይ ዓማዊል ዕዳ ተኸታተሉ፣ ቀለልቲ ጸብጻባት ብትግርኛ፣ ብኣምሓርኛን ብእንግሊዝኛን ርኣዩ።",
@@ -400,5 +392,17 @@
     "timeoutError": "ሕቶኹም ግዜ ወሲዱ። በጃኹም ደጊምኩም ፈትኑ።",
     "serverError": "ሰነድ ምውራድ ኣይተኻእለን። በጃኹም ደጊምኩም ፈትኑ።",
     "wordNotice": "መዘክር፡ ኣብ Word ፊደላት ግዕዝ ብትኽክል ንኽርኣዩ ናይ ግዕዝ ፎንት ክህሉ ኣለዎ።"
+  },
+  "pwa": {
+    "offlineReady": "ካብ መስመር ወጻኢ ንምስራሕ ድሉው እዩ",
+    "updateAvailable": "ሓድሽ ስሪት ኣሎ",
+    "update": "ኣሐድስ",
+    "dismiss": "ሕራይ",
+    "installApp": "መተግበሪ ጽዓን",
+    "installBannerText": "ብቕልጡፍ ንምጥቃም ሒሳብ መዝገብ ጽዓኑ",
+    "notNow": "ሕጂ ኣይኮነን",
+    "install": "ጽዓን",
+    "iosInstallTitle": "እዚ መተግበሪ ጽዓን",
+    "iosInstallInstructions": "ናይ ምክፋል ምልክት (□↑) ጠውቑ፣ ድሕሪኡ \"Add to Home Screen\" ጠውቑ"
   }
 }

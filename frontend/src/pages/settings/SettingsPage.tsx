@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import SegmentedControl from '@/components/common/SegmentedControl';
 import { cn } from '@/lib/utils';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
+import { InstallButton } from '@/components/common/InstallPrompts';
 
 const LANGUAGES = [
   { code: 'en', nativeLabel: 'English' },
@@ -60,6 +61,9 @@ export default function SettingsPage() {
           ))}
         </div>
       </div>
+
+      {/* Install app button — only visible when A2HS prompt is available */}
+      <InstallButton />
 
       <p className="text-muted-foreground text-sm">{t('pages.moreSettingsComingSoon')}</p>
 
