@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MAX_AMOUNT, MAX_NOTE_LENGTH } from '../constants/index.js';
 
 const dateSchema = z.coerce
   .date()
@@ -7,6 +8,7 @@ const dateSchema = z.coerce
 const amountSchema = z
   .number()
   .positive('Amount must be greater than 0')
+  .max(MAX_AMOUNT, 'Amount is too large')
   .multipleOf(0.01, 'Amount must have at most 2 decimal places');
 
 const fundingTypeEnum = z.enum(['salary_injection', 'borrowed_in', 'borrowed_repaid']);
@@ -16,7 +18,7 @@ export const createFundingSchema = z.object({
     date: dateSchema,
     type: fundingTypeEnum,
     amount: amountSchema,
-    note: z.string().optional(),
+    note: z.string().max(MAX_NOTE_LENGTH).optional(),
   }),
 });
 
@@ -26,7 +28,7 @@ export const updateFundingSchema = z.object({
   }),
   body: z.object({
     amount: amountSchema.optional(),
-    note: z.string().optional(),
+    note: z.string().max(MAX_NOTE_LENGTH).optional(),
   }),
 });
 

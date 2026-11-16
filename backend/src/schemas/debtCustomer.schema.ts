@@ -7,7 +7,7 @@ const dateSchema = z.coerce
 export const createDebtCustomerSchema = z.object({
   body: z.object({
     name: z.string().min(1, 'Customer name is required').max(100),
-    note: z.string().optional(),
+    note: z.string().max(500).optional(),
   }),
 });
 
@@ -17,7 +17,7 @@ export const updateDebtCustomerSchema = z.object({
   }),
   body: z.object({
     name: z.string().min(1).max(100).optional(),
-    note: z.string().optional(),
+    note: z.string().max(500).optional(),
   }),
 });
 

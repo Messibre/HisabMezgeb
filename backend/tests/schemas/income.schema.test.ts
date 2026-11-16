@@ -218,4 +218,27 @@ describe('Income Schema', () => {
       expect(result.success).toBe(false);
     });
   });
+
+  describe('input limits', () => {
+    it('rejects an amount that does not fit Decimal(10,2)', () => {
+      const result = createIncomeSchema.safeParse({
+        body: { date: '2026-11-14', amount: 100_000_000 },
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('accepts the largest amount that fits Decimal(10,2)', () => {
+      const result = createIncomeSchema.safeParse({
+        body: { date: '2026-11-14', amount: 99_999_999.99 },
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects a note longer than 500 characters', () => {
+      const result = createIncomeSchema.safeParse({
+        body: { date: '2026-11-14', amount: 10, note: 'x'.repeat(501) },
+      });
+      expect(result.success).toBe(false);
+    });
+  });
 });
