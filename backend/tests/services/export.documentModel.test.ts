@@ -91,7 +91,7 @@ describe('Document Model Builders (Pure, Table-Driven)', () => {
         expectedChecks: (model) => {
           expect(model.title).toBe('የፋይናንስ ሪፖርት');
           expect(model.shopName).toBe('አበበ ሱቅ');
-          expect(model.periodText).toBe('ጊዜ፡ ከ 2026-10-15 እስከ 2026-10-15');
+          expect(model.periodText).toBe('ጊዜ፡ ከ ጥቅምት 5, 2019 ዓ.ም እስከ ጥቅምት 5, 2019 ዓ.ም');
           expect(model.sections[0].items[0].value).toBe('ብር 12,500.00');
           expect(model.sections[1].title).toBe('የዕዳ እንቅስቃሴ (በዚህ ጊዜ)');
           expect(model.sections[2].table?.rows[0].cells[0]).toBe('ዕቃ ግዢ');

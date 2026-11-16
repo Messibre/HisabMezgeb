@@ -4,7 +4,8 @@ import {
   ExportFormat,
   I18N_STRINGS,
   formatMoney,
-  formatDateGregorian,
+  formatDocDate,
+  type DocCalendar,
   DocTable,
   DocSection,
 } from './documentModel.js';
@@ -27,6 +28,7 @@ export interface StatementDataInput {
 
 export interface StatementDocOptions {
   lang?: SupportedLang;
+  calendar?: DocCalendar;
   format?: ExportFormat;
 }
 
@@ -38,11 +40,12 @@ export function buildStatementDocumentModel(
   options: StatementDocOptions = {},
 ): DocumentModel {
   const lang = options.lang ?? 'en';
+  const calendar = options.calendar;
   const format = options.format ?? 'pdf';
   const t = I18N_STRINGS[lang] ?? I18N_STRINGS.en;
 
   const stmtDate = data.statementDate ?? new Date();
-  const dateStr = formatDateGregorian(stmtDate, lang);
+  const dateStr = formatDocDate(stmtDate, lang, calendar);
 
   // Compute running balance table (oldest to newest)
   // Use exact cent integer math to avoid any floating-point arithmetic errors.
@@ -57,7 +60,7 @@ export function buildStatementDocumentModel(
       runningCents = Math.max(0, runningCents - amountCents);
     }
 
-    const eventDateStr = formatDateGregorian(event.date, lang);
+    const eventDateStr = formatDocDate(event.date, lang, calendar);
     const kindLabel = isBorrow ? t.borrowKind : t.paymentKind;
     const desc = event.itemsDescription ? `${kindLabel}: ${event.itemsDescription}` : kindLabel;
     const borrowedStr = isBorrow ? formatMoney(event.amount, lang) : '-';

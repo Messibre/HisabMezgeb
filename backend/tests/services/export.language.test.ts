@@ -74,4 +74,16 @@ describe('export language', () => {
     expect(displayCategoryName('ክራይ', 'am')).toBe('ክራይ');
     expect(displayCategoryName('My own category', 'am')).toBe('My own category');
   });
+
+  it('Amharic documents show Ethiopian dates by default; Gregorian on request', () => {
+    const am = buildReportDocumentModel(reportInput, { lang: 'am' });
+    expect(am.periodText).toContain('ጥቅምት 22, 2019 ዓ.ም');
+    expect(am.periodText).toContain('ኅዳር 5, 2019 ዓ.ም');
+
+    const amGregorian = buildReportDocumentModel(reportInput, { lang: 'am', calendar: 'gregorian' });
+    expect(amGregorian.periodText).toContain('2026-11-14');
+
+    const en = buildReportDocumentModel(reportInput, { lang: 'en' });
+    expect(en.periodText).toContain('2026-11-14');
+  });
 });

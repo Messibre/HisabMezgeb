@@ -5,7 +5,8 @@ import {
   I18N_STRINGS,
   formatMoney,
   displayCategoryName,
-  formatDateGregorian,
+  formatDocDate,
+  type DocCalendar,
   DocSection,
   DocTable,
 } from './documentModel.js';
@@ -39,6 +40,7 @@ export interface ReportDataInput {
 
 export interface ReportDocOptions {
   lang?: SupportedLang;
+  calendar?: DocCalendar;
   format?: ExportFormat;
 }
 
@@ -50,13 +52,14 @@ export function buildReportDocumentModel(
   options: ReportDocOptions = {},
 ): DocumentModel {
   const lang = options.lang ?? 'en';
+  const calendar = options.calendar;
   const format = options.format ?? 'pdf';
   const t = I18N_STRINGS[lang] ?? I18N_STRINGS.en;
 
-  const fromStr = formatDateGregorian(data.from, lang);
-  const toStr = formatDateGregorian(data.to, lang);
+  const fromStr = formatDocDate(data.from, lang, calendar);
+  const toStr = formatDocDate(data.to, lang, calendar);
   const generatedAt = data.generatedAt ?? new Date();
-  const genDateStr = formatDateGregorian(generatedAt, lang);
+  const genDateStr = formatDocDate(generatedAt, lang, calendar);
 
   const sections: DocSection[] = [];
 

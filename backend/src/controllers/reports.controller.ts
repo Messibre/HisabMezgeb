@@ -47,11 +47,12 @@ export const getExpenseBreakdownHandler = asyncHandler(async (req: AuthRequest, 
 
 export const exportReportHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
   const accountId = req.accountId!;
-  const { from, to, format, lang } = req.query as {
+  const { from, to, format, lang, calendar } = req.query as {
     from: string;
     to: string;
     format?: ExportFormat;
     lang?: SupportedLang;
+    calendar?: 'ethiopian' | 'gregorian';
   };
 
   if (format === 'csv' || !format) {
@@ -69,6 +70,7 @@ export const exportReportHandler = asyncHandler(async (req: AuthRequest, res: Re
     new Date(to),
     format,
     lang ?? 'en',
+    calendar,
   );
 
   res.setHeader('Content-Type', result.contentType);

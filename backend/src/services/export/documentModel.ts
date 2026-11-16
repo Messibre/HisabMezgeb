@@ -1,5 +1,7 @@
+import { formatEthiopicDate } from '../../utils/ethiopicCalendar.js';
 export type SupportedLang = 'en' | 'am' | 'ti';
 export type ExportFormat = 'pdf' | 'docx' | 'csv';
+export type DocCalendar = 'ethiopian' | 'gregorian';
 
 export interface DocTableColumn {
   header: string;
@@ -239,4 +241,14 @@ export function formatDateGregorian(date: Date, _lang: SupportedLang = 'en'): st
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+/** Default document calendar: Ethiopian for Amharic and Tigrigna, Gregorian for English. */
+export function defaultCalendar(lang: SupportedLang): DocCalendar {
+  return lang === 'en' ? 'gregorian' : 'ethiopian';
+}
+
+/** A date as shown in a document: "ኅዳር 5, 2019 ዓ.ም" (Ethiopian) or YYYY-MM-DD (Gregorian). */
+export function formatDocDate(date: Date, lang: SupportedLang, calendar: DocCalendar = defaultCalendar(lang)): string {
+  return calendar === 'ethiopian' ? formatEthiopicDate(new Date(date), lang) : formatDateGregorian(date, lang);
 }

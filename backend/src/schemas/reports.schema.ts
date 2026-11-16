@@ -24,6 +24,7 @@ export const exportReportSchema = z.object({
       to: dateSchema,
       format: z.enum(['pdf', 'docx', 'csv']).default('csv'),
       lang: z.enum(['en', 'am', 'ti']).default('en'),
+      calendar: z.enum(['ethiopian', 'gregorian']).optional(),
     })
     .refine((data) => data.from <= data.to, {
       message: 'from date must be before or equal to to date',

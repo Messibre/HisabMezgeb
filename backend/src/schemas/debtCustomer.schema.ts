@@ -40,6 +40,7 @@ export const customerStatementSchema = z.object({
   query: z.object({
     format: z.enum(['pdf', 'docx']).default('pdf'),
     lang: z.enum(['en', 'am', 'ti']).default('en'),
+    calendar: z.enum(['ethiopian', 'gregorian']).optional(),
   }),
 });
 
