@@ -21,3 +21,14 @@ Nothing here was silently rewritten. "Current" is what the app shows on this bra
 | `pwa.iosInstallInstructions` | … "Add to Home Screen" … | contains English "Add to Home Screen" | keep | same | keep | It quotes the iOS menu item, which is English on most phones. | info |
 
 **Tigrigna:** every Tigrigna string in the app still needs a native Tigrigna check.
+
+## Calendar (WP10)
+
+| Item | Amharic | Tigrigna | English | Status |
+|---|---|---|---|---|
+| Ethiopian months | መስከረም, ጥቅምት, ኅዳር, ታኅሣሥ, ጥር, የካቲት, መጋቢት, ሚያዝያ, ግንቦት, ሰኔ, ሐምሌ, ነሐሴ, ጳጉሜን | መስከረም, ጥቅምቲ, ሕዳር, ታሕሳስ, ጥሪ, ለካቲት, መጋቢት, ሚያዝያ, ግንቦት, ሰነ, ሓምለ, ነሓሰ, ጳጉሜን | Meskerem … Pagume | needs Meseret |
+| Era | ዓ.ም | ዓ.ም | E.C. | needs Meseret |
+| Gregorian months | ጃንዋሪ … ዲሴምበር | ጥሪ … ታሕሳስ (Eritrean usage) | January … December | needs Meseret / Tigrigna speaker |
+| `settings.calendar*`, `date.day/month/year` | የቀን መቁጠሪያ, የኢትዮጵያ, ግሪጎሪያን, ቀን, ወር, ዓመት | ዓውደ ኣዋርሕ, ናይ ኢትዮጵያ, ግሪጎርያን, መዓልቲ, ወርሒ, ዓመት | | needs Meseret |
+
+Month tables live in `frontend/src/lib/calendar/index.ts` and `backend/src/utils/ethiopicCalendar.ts`; change both together.
