@@ -18,12 +18,10 @@ import {
 
 const router = Router();
 
-// Public routes (rate-limited)
 router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
 router.post('/refresh', refreshLimiter, validate(refreshTokenSchema), refresh);
 
-// Protected routes
 router.post('/logout', authMiddleware, logout);
 router.patch('/password', authMiddleware, validate(changePasswordSchema), changePassword);
 

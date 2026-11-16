@@ -14,8 +14,6 @@ export type PaymentRecord = {
   updatedAt: Date;
 };
 
-// ── Helpers ──
-
 function toPaymentRecord(raw: {
   id: string;
   customerId: string;
@@ -39,8 +37,6 @@ function toPaymentRecord(raw: {
 const lockCustomer = async (tx: Prisma.TransactionClient, customerId: string): Promise<void> => {
   await tx.$queryRaw`SELECT id FROM "hisab"."debt_customers" WHERE id = ${customerId} FOR UPDATE`;
 };
-
-// ── Service Functions ──
 
 export const createPayment = async (
   accountId: string,

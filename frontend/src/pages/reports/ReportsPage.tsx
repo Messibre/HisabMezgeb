@@ -39,7 +39,6 @@ export default function ReportsPage() {
     }
   }, [period, customFrom, customTo]);
 
-  // Fetch report data
   const {
     data: summary,
     isLoading: isSummaryLoading,
@@ -84,7 +83,6 @@ export default function ReportsPage() {
       <AppHeader title={t('reports.title', 'Reports')} />
 
       <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
-        {/* Period Selector */}
         <section className="space-y-3">
           <PeriodPicker value={period} onChange={setPeriod} />
 
@@ -124,7 +122,6 @@ export default function ReportsPage() {
           </div>
         </section>
 
-        {/* Content body based on loading/error/data states */}
         {isLoading ? (
           <div className="space-y-4" data-testid="reports-skeleton">
             <div className="grid grid-cols-2 gap-3">
@@ -144,7 +141,6 @@ export default function ReportsPage() {
           />
         ) : (
           <>
-            {/* Summary Metrics Cards */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.overview', 'Overview')}
@@ -189,7 +185,6 @@ export default function ReportsPage() {
               </div>
             </section>
 
-            {/* Expense Breakdown Section */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.expenseBreakdown', 'Expense Breakdown')}
@@ -200,7 +195,6 @@ export default function ReportsPage() {
               />
             </section>
 
-            {/* Debts Activity This Period */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.debtActivity', 'Debt Activity (This Period)')}
@@ -221,7 +215,6 @@ export default function ReportsPage() {
               </div>
             </section>
 
-            {/* Empty state notice if period had zero activity */}
             {isAllZero && (
               <div
                 className="rounded-xl border border-outline-variant/40 bg-card p-6 text-center text-sm text-on-surface-variant"
@@ -235,7 +228,6 @@ export default function ReportsPage() {
               </div>
             )}
 
-            {/* Export Button */}
             <section className="pt-2">
               <button
                 type="button"
@@ -250,7 +242,6 @@ export default function ReportsPage() {
         )}
       </div>
 
-      {/* Export Options BottomSheet */}
       <ExportSheet
         open={showExportSheet}
         onOpenChange={setShowExportSheet}

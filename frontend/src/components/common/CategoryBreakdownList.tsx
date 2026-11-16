@@ -14,8 +14,7 @@ export default function CategoryBreakdownList({
 }: CategoryBreakdownListProps) {
   const { t } = useTranslation();
 
-  // Filter out zero-amount items to only display categories that had spending,
-  // or sort them descending by amount
+  // Sorted by amount, largest first; only categories with spending are listed.
   const sortedItems = [...items].sort((a, b) => b.total - a.total);
   const activeItems = sortedItems.filter((item) => item.total > 0);
 
@@ -61,7 +60,6 @@ export default function CategoryBreakdownList({
               </div>
             </div>
 
-            {/* Horizontal progress bar */}
             <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container-high/60">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${

@@ -301,7 +301,6 @@ export function toUserError(error: unknown, context?: ErrorContext): UserError {
   };
 }
 
-// ── Toast De-duplication Cache ──
 const recentToastMessages = new Map<string, number>();
 const TOAST_DEDUPE_MS = 3500;
 
@@ -330,7 +329,6 @@ export function showUserErrorToast(error: unknown, context?: ErrorContext): void
   });
 }
 
-// ── Global Error Reporting & Throttled Toast ──
 let lastGlobalToastTimestamp = 0;
 const GLOBAL_TOAST_THROTTLE_MS = 10000;
 

@@ -1,22 +1,12 @@
 import { useSyncExternalStore, useCallback } from 'react';
 
-/**
- * Detects whether the app is running in standalone (installed PWA) mode.
- *
- * Checks:
- *  1. CSS media query `display-mode: standalone`
- *  2. navigator.standalone (iOS Safari)
- *
- * Returns true when the app is installed and running as a standalone app.
- */
-
+/** Installed PWA: display-mode standalone, or navigator.standalone on iOS Safari. */
 function getIsStandalone(): boolean {
   if (typeof window === 'undefined') return false;
   // iOS Safari sets navigator.standalone
   if ('standalone' in navigator && (navigator as { standalone?: boolean }).standalone === true) {
     return true;
   }
-  // Standard: check display-mode media query
   if (typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)').matches) {
     return true;
   }
@@ -40,12 +30,6 @@ function getServerSnapshot(): boolean {
 export function useIsStandalone(): boolean {
   return useSyncExternalStore(subscribe, getIsStandalone, getServerSnapshot);
 }
-
-// ─── useOnlineStatus (re-export from existing hook for consistency) ───
-// Already exists at @/hooks/useOnlineStatus — just re-exporting for the
-// public surface the task requests. No new code needed.
-
-// ─── Install prompt types ───
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -83,8 +67,6 @@ function setDismissed(): void {
   }
 }
 
-// ─── Store for the deferred prompt event ───
-
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
 let dismissedState = false;
 const listeners = new Set<() => void>();
@@ -94,7 +76,6 @@ function notifyListeners() {
   listeners.forEach((fn) => fn());
 }
 
-// Initial state
 if (typeof window !== 'undefined') {
   dismissedState = isDismissed();
 }
@@ -195,4 +176,3 @@ export function useIsIOSSafariNotInstalled(): boolean {
 
   return isIOS && isSafari;
 }
-

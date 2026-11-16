@@ -47,7 +47,6 @@ export function usePWAUpdate() {
         void registration.update();
       }, UPDATE_CHECK_INTERVAL_MS);
 
-      // Log for debugging
       if (import.meta.env.DEV) {
         console.log('[PWA] SW registered:', swUrl);
       }
@@ -57,7 +56,6 @@ export function usePWAUpdate() {
     },
   });
 
-  // Cleanup the interval on unmount
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
@@ -91,4 +89,3 @@ export function usePWAUpdate() {
     dismissNeedRefresh,
   };
 }
-

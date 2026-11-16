@@ -30,8 +30,7 @@ function PageLoader() {
   );
 }
 
-// Wrap each lazy element so Suspense boundaries stay per-page,
-// matching the granularity your original Suspense had.
+// Wrap each lazy element so Suspense boundaries stay per-page.
 const withSuspense = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
 );

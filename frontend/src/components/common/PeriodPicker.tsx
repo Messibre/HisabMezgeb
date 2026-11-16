@@ -29,7 +29,6 @@ export function PeriodPicker({ value, onChange }: PeriodPickerProps) {
     if (nextIndex !== currentIndex) {
       const nextOption = options[nextIndex];
       onChange(nextOption.value);
-      // Focus next button
       const buttons = (e.currentTarget.parentElement?.querySelectorAll('button') || []) as NodeListOf<HTMLButtonElement>;
       buttons[nextIndex]?.focus();
     }

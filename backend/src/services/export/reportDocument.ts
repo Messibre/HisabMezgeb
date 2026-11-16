@@ -60,7 +60,6 @@ export function buildReportDocumentModel(
 
   const sections: DocSection[] = [];
 
-  // Section 1: Financial Summary
   sections.push({
     title: t.financialSummary,
     items: [
@@ -94,7 +93,6 @@ export function buildReportDocumentModel(
     note: t.totalOwedNote,
   });
 
-  // Section 2: Debt Activity during this period (if available)
   if (data.debtsPeriod) {
     sections.push({
       title: t.debtsSummary,
@@ -111,7 +109,6 @@ export function buildReportDocumentModel(
     });
   }
 
-  // Section 3: Expense Breakdown by Category
   const activeExpenses = data.expenseBreakdown.filter((e) => e.total > 0);
   if (activeExpenses.length > 0) {
     const table: DocTable = {

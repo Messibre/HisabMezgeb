@@ -16,7 +16,6 @@ export type FundingEntry = {
   updatedAt: Date;
 };
 
-// ── Helper with explicit Prisma raw type ──
 type PrismaFundingEntry = {
   id: string;
   accountId: string;
@@ -41,8 +40,6 @@ function toFundingEntry(raw: PrismaFundingEntry): FundingEntry {
     updatedAt: raw.updatedAt,
   };
 }
-
-// ── Service Functions ──
 
 export const listFunding = async (
   accountId: string,

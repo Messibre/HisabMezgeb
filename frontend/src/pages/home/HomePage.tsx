@@ -47,12 +47,10 @@ export default function HomePage() {
     <div className="min-h-screen bg-background pb-28">
       <AppHeader />
 
-      {/* PWA Install prompts (Android banner & iOS instructions card) */}
       <InstallBanner />
       <IOSInstallCard />
 
       <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
-        {/* Greeting Section */}
         <section className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {shopName
@@ -64,7 +62,6 @@ export default function HomePage() {
           </p>
         </section>
 
-        {/* Today's Income Card */}
         <section>
           {isIncomeLoading ? (
             <div
@@ -81,7 +78,6 @@ export default function HomePage() {
               onRetry={() => refetchIncome()}
             />
           ) : todayIncome ? (
-            /* Entered state */
             <div className="rounded-2xl bg-card border border-border/40 p-5 shadow-xs flex items-center justify-between">
               <div className="space-y-1">
                 <span className="text-xs font-medium text-on-surface-variant block">
@@ -97,7 +93,6 @@ export default function HomePage() {
               </Link>
             </div>
           ) : (
-            /* Not entered state */
             <div className="rounded-2xl bg-card border border-border/40 p-6 text-center shadow-xs space-y-4">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Receipt className="h-7 w-7" aria-hidden="true" />
@@ -115,7 +110,6 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* Week Snapshot Section */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-foreground">

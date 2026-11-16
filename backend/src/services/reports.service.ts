@@ -25,8 +25,6 @@ type ExpenseBreakdownItem = {
   total: number;
 };
 
-// ── Build Summary ──
-
 export const buildSummary = async (
   accountId: string,
   from: Date,
@@ -79,14 +77,11 @@ export const buildSummary = async (
   };
 };
 
-// ── Build Debt Period Report ──
-
 export const buildDebtsPeriodReport = async (
   accountId: string,
   from: Date,
   to: Date,
 ): Promise<DebtPeriodReport> => {
-  // Newly borrowed in period
   const borrowAgg = await prisma.debtBorrowRecord.aggregate({
     where: {
       accountId,
@@ -97,7 +92,6 @@ export const buildDebtsPeriodReport = async (
   });
   const totalNewlyBorrowed = borrowAgg._sum.amount?.toNumber() ?? 0;
 
-  // Repaid in period (payments)
   const paymentAgg = await prisma.debtPayment.aggregate({
     where: {
       accountId,
@@ -111,14 +105,11 @@ export const buildDebtsPeriodReport = async (
   return { totalNewlyBorrowed, totalRepaidInPeriod };
 };
 
-// ── Build Expense Breakdown ──
-
 export const buildExpenseBreakdown = async (
   accountId: string,
   from: Date,
   to: Date,
 ): Promise<ExpenseBreakdownItem[]> => {
-  // Get all active categories for this account
   const categories = await prisma.expenseCategory.findMany({
     where: {
       accountId,
@@ -126,7 +117,6 @@ export const buildExpenseBreakdown = async (
     },
   });
 
-  // Group expenses by category for the given period
   const groupResults = await prisma.dailyExpense.groupBy({
     by: ['categoryId'],
     where: {
@@ -137,7 +127,6 @@ export const buildExpenseBreakdown = async (
     _sum: { amount: true },
   });
 
-  // Build a map of categoryId -> total
   const totalsMap = new Map<string, number>();
   for (const item of groupResults) {
     const amount = item._sum.amount?.toNumber() ?? 0;
@@ -158,42 +147,34 @@ export const buildExpenseBreakdown = async (
   return breakdown;
 };
 
-// ── Generate CSV Export ──
-
 export const generateCsvExport = async (
   accountId: string,
   from: Date,
   to: Date,
 ): Promise<string> => {
-  // Gather all data
   const summary = await buildSummary(accountId, from, to);
   const debts = await buildDebtsPeriodReport(accountId, from, to);
   const breakdown = await buildExpenseBreakdown(accountId, from, to);
 
   const lines: string[] = [];
 
-  // Header
   lines.push(
     'Period,Income,Business Expenses,Personal/Family Draws,Funding In,Funding Out,Total Owed by Customers',
   );
 
-  // Summary line
   const fromStr = from.toISOString().split('T')[0];
   const toStr = to.toISOString().split('T')[0];
   lines.push(
     `${fromStr} to ${toStr},${summary.totalIncome},${summary.totalBusinessExpenses},${summary.totalPersonalDraws},${summary.totalFundingIn},${summary.totalFundingOut},${summary.totalOwedByCustomers}`,
   );
 
-  // Blank line
   lines.push('');
 
-  // Debts period section
   lines.push('Debts Period Report');
   lines.push(`Newly Borrowed,${debts.totalNewlyBorrowed}`);
   lines.push(`Repaid,${debts.totalRepaidInPeriod}`);
   lines.push('');
 
-  // Expense breakdown section
   lines.push('Expense Breakdown by Category');
   lines.push('Category,Group,Total');
   for (const item of breakdown) {

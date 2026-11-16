@@ -22,7 +22,6 @@ export function CustomerCard({ customer }: CustomerCardProps) {
       }`}
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
-        {/* Avatar */}
         <div
           className="w-10 h-10 rounded-full bg-primary/15 text-primary font-bold text-sm flex items-center justify-center shrink-0 select-none"
           aria-hidden="true"
@@ -30,7 +29,6 @@ export function CustomerCard({ customer }: CustomerCardProps) {
           {initial}
         </div>
 
-        {/* Name & Note */}
         <div className="min-w-0 flex-1">
           <h3 className="font-semibold text-sm text-foreground truncate">
             {customer.name}
@@ -43,7 +41,6 @@ export function CustomerCard({ customer }: CustomerCardProps) {
         </div>
       </div>
 
-      {/* Balance or Settled */}
       <div className="flex items-center gap-2 shrink-0 pl-3">
         {hasDebt ? (
           <MoneyText amount={customer.balance} tone="owed" size="md" />

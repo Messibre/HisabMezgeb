@@ -92,7 +92,6 @@ export default function ExportSheet({
     try {
       const { blob, filename } = await executeFetch();
 
-      // Trigger temporary download URL and revoke
       const objectUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = objectUrl;
@@ -192,7 +191,6 @@ export default function ExportSheet({
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title={title}>
       <div className="space-y-5 pt-2">
-        {/* Offline Warning Banner */}
         {!isOnline && (
           <div
             role="alert"
@@ -203,7 +201,6 @@ export default function ExportSheet({
           </div>
         )}
 
-        {/* Format Selector */}
         <div>
           <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
             {t('export.format', 'Format')}
@@ -306,7 +303,6 @@ export default function ExportSheet({
           )}
         </div>
 
-        {/* Language Selector */}
         <div>
           <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
             {t('export.language', 'Language')}
@@ -335,7 +331,6 @@ export default function ExportSheet({
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex items-center gap-3 pt-2">
           {canSystemShare && (
             <button

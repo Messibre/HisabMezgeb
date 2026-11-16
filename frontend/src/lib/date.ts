@@ -1,6 +1,6 @@
 import i18n from '@/lib/i18n';
 
-// 1 = Monday, following the pre-approved spec decision
+// 1 = Monday
 export const WEEK_STARTS_ON = 1;
 
 export function parseLocalDate(input: Date | string): Date {

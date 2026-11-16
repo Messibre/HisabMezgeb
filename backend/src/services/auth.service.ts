@@ -90,7 +90,6 @@ export const registerAccount = async (phoneNumber: string, password: string, sho
   const saltRounds = parseInt(env.BCRYPT_SALT_ROUNDS, 10);
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  // ── Transaction: account + settings + categories ──
   let account: AccountWithSafeFields;
 
   try {
@@ -267,8 +266,7 @@ export const logoutAccount = async (refreshToken: string) => {
       data: { revokedAt: new Date() },
     });
   } catch (error) {
-    // Silently ignore – the client is logging out anyway.
-    // Log at debug level for observability.
+    // Ignore: the client is logging out anyway.
     logger.debug({ error }, 'Logout: failed to revoke refresh token (may already be revoked)');
   }
 };

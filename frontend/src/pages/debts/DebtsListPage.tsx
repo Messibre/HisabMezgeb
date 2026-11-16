@@ -47,7 +47,6 @@ export default function DebtsListPage() {
     return () => clearTimeout(timer);
   }, [searchValue, setSearchParams]);
 
-  // Queries
   const today = todayLocal();
   const { data: reportData } = useReportSummary(today, today);
   // Unknown (loading or failed) stays null and renders a dash, never 0.
@@ -70,19 +69,16 @@ export default function DebtsListPage() {
       if (aSettled && !bSettled) return 1;
       if (!aSettled && bSettled) return -1;
 
-      // Both unsettled: highest balance first
       if (!aSettled && !bSettled) {
         if (b.balance !== a.balance) {
           return b.balance - a.balance;
         }
       }
 
-      // If balances equal or both settled: sort alphabetically by name
       return a.name.localeCompare(b.name);
     });
   }, [customers]);
 
-  // New Customer BottomSheet state
   const [isNewCustomerOpen, setIsNewCustomerOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newNote, setNewNote] = useState('');
@@ -137,7 +133,6 @@ export default function DebtsListPage() {
       <AppHeader title={t('pages.debts', 'Debts')} />
 
       <div className="max-w-md mx-auto px-4 py-3 space-y-4">
-        {/* Search Bar */}
         <div role="search" className="relative">
           <div className="relative flex items-center">
             <Search className="absolute left-3.5 w-4 h-4 text-muted-foreground pointer-events-none" />
@@ -161,7 +156,6 @@ export default function DebtsListPage() {
           </div>
         </div>
 
-        {/* Total Owed Hero Card */}
         <div className="bg-card border border-border/40 rounded-2xl p-5 text-center shadow-[0px_2px_12px_rgba(0,0,0,0.04)]">
           <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
             {t('money.owedToYou', 'Owed to you')}
@@ -169,7 +163,6 @@ export default function DebtsListPage() {
           <MoneyText amount={totalOwed} tone="owed" size="xl" />
         </div>
 
-        {/* Customers List Section */}
         <div className="space-y-2.5">
           {isLoading ? (
             <div className="space-y-2">
@@ -184,7 +177,6 @@ export default function DebtsListPage() {
             />
           ) : sortedCustomers.length === 0 ? (
             debouncedQuery.trim() ? (
-              /* Search Empty State */
               <div className="flex flex-col items-center justify-center p-8 text-center rounded-2xl bg-card/60 border border-border/30">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                   <Search className="w-6 h-6" />
@@ -210,7 +202,6 @@ export default function DebtsListPage() {
                 </button>
               </div>
             ) : (
-              /* No Customers at all */
               <EmptyState
                 icon={<Users className="w-8 h-8" />}
                 title={t('debts.noCustomers', 'No customers yet. Tap + to add one.')}
@@ -224,7 +215,6 @@ export default function DebtsListPage() {
         </div>
       </div>
 
-      {/* Floating Action Button (+) */}
       <button
         type="button"
         onClick={() => handleOpenNewCustomer('')}
@@ -234,7 +224,6 @@ export default function DebtsListPage() {
         <Plus className="w-6 h-6" aria-hidden="true" />
       </button>
 
-      {/* New Customer BottomSheet */}
       <BottomSheet
         open={isNewCustomerOpen}
         onOpenChange={setIsNewCustomerOpen}

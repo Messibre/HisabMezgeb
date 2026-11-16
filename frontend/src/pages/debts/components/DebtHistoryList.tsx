@@ -91,7 +91,6 @@ export function DebtHistoryList({
                   </div>
                 </div>
 
-                {/* Items description for borrows */}
                 {isBorrow && item.itemsDescription && (
                   <div className="mt-2.5 pt-2 border-t border-border/40 text-xs text-muted-foreground">
                     {item.itemsDescription}

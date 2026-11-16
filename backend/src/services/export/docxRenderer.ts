@@ -14,13 +14,9 @@ import { DocumentModel } from './documentModel.js';
 
 const ETHIOPIC_FONT = 'Noto Sans Ethiopic';
 
-/**
- * Render a DocumentModel to a DOCX Buffer.
- */
 export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer> {
   const children: (Paragraph | Table)[] = [];
 
-  // ── Shop Name ──
   if (model.shopName) {
     children.push(
       new Paragraph({
@@ -38,7 +34,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
     );
   }
 
-  // ── Title ──
   children.push(
     new Paragraph({
       children: [
@@ -54,7 +49,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
     }),
   );
 
-  // ── Metadata ──
   if (model.entityName) {
     children.push(
       new Paragraph({
@@ -102,7 +96,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
     }),
   );
 
-  // ── Current Balance Badge (for Statement) ──
   if (model.currentBalanceText) {
     children.push(
       new Table({
@@ -136,7 +129,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
     children.push(new Paragraph({ spacing: { after: 200 } }));
   }
 
-  // ── Sections ──
   for (const section of model.sections) {
     children.push(
       new Paragraph({
@@ -217,12 +209,10 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
       );
     }
 
-    // Table
     if (section.table) {
       const { columns, rows } = section.table;
       const totalRatio = columns.reduce((acc, c) => acc + (c.widthRatio ?? 1), 0);
 
-      // Header Row
       const headerRow = new TableRow({
         children: columns.map((col) => {
           const widthPercent = Math.round(((col.widthRatio ?? 1) / totalRatio) * 100);
@@ -248,7 +238,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
         }),
       });
 
-      // Data Rows
       const dataRows = rows.map((r, rIdx) => {
         return new TableRow({
           children: r.cells.map((cellText, cIdx) => {
@@ -309,7 +298,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
     }
   }
 
-  // ── Closing line ──
   if (model.closingLine) {
     children.push(
       new Paragraph({
@@ -328,7 +316,6 @@ export async function renderDocumentToDocx(model: DocumentModel): Promise<Buffer
     );
   }
 
-  // ── Notes ──
   if (model.notes && model.notes.length > 0) {
     for (const note of model.notes) {
       children.push(

@@ -63,7 +63,6 @@ export default function EntriesPage() {
     setEditEntryId(null);
   };
 
-  // Form states
   const today = todayLocal();
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(today);
@@ -71,25 +70,20 @@ export default function EntriesPage() {
   const [categoryId, setCategoryId] = useState('');
   const [fundingType, setFundingType] = useState<FundingEntry['type']>('salary_injection');
 
-  // Edit mode
   const [isEditMode, setIsEditMode] = useState(false);
   const [editEntryId, setEditEntryId] = useState<string | null>(null);
 
-  // Errors
   const [amountError, setAmountError] = useState('');
   const [categoryError, setCategoryError] = useState('');
   const [serverConflict, setServerConflict] = useState<{ amount: number; date: string } | null>(null);
 
-  // Period filter
   const [period, setPeriod] = useState<PeriodType>('week');
   const [customRange, setCustomRange] = useState({ from: today, to: today });
   const [showCustomRangeSheet, setShowCustomRangeSheet] = useState(false);
   const [showPeriodMenu, setShowPeriodMenu] = useState(false);
 
-  // Selected entry for BottomSheet edit
   const [selectedEntry, setSelectedEntry] = useState<EntryItem | null>(null);
 
-  // Queries & Mutations
   const createIncome = useCreateIncome();
   const createExpense = useCreateExpense();
   const createFunding = useCreateFunding();
@@ -160,7 +154,6 @@ export default function EntriesPage() {
 
   const activeConflict = cachedConflict || (serverConflict ? { id: '', amount: serverConflict.amount, date: serverConflict.date, note: null } : null);
 
-  // Group active categories by business and personal
   const activeCategories = useMemo(
     () => categories.filter((cat) => cat.isActive),
     [categories]
@@ -174,7 +167,6 @@ export default function EntriesPage() {
     [activeCategories]
   );
 
-  // Form submit handler
   const isSaving =
     createIncome.isPending ||
     createExpense.isPending ||
@@ -195,7 +187,6 @@ export default function EntriesPage() {
     setCategoryError('');
     setServerConflict(null);
 
-    // Validate amount
     const parsedAmount = parseFloat(amount);
     if (amount === '' || isNaN(parsedAmount)) {
       setAmountError(t('entries.errorAmountRequired', 'Enter an amount'));
@@ -217,7 +208,6 @@ export default function EntriesPage() {
       return;
     }
 
-    // Validate date
     if (!date) {
       return;
     }
@@ -226,7 +216,6 @@ export default function EntriesPage() {
       return;
     }
 
-    // Validate category for expense
     if (activeTab === 'expense' && !categoryId) {
       setCategoryError(t('entries.errorCategoryRequired', 'Please select a category'));
       return;
@@ -317,7 +306,6 @@ export default function EntriesPage() {
       <AppHeader title={t('pages.entries', 'Entries')} />
 
       <div className="max-w-md mx-auto px-4 py-3 space-y-4">
-        {/* Segmented control */}
         <SegmentedControl
           name="entry-type"
           value={activeTab}
@@ -329,9 +317,7 @@ export default function EntriesPage() {
           ]}
         />
 
-        {/* Entry form */}
         <form onSubmit={handleSubmit} className="space-y-3">
-          {/* Amount input hero card */}
           <AmountInput
             id="entry-amount"
             value={amount}
@@ -351,7 +337,6 @@ export default function EntriesPage() {
             error={amountError}
           />
 
-          {/* Date row */}
           <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
@@ -380,7 +365,6 @@ export default function EntriesPage() {
             />
           </div>
 
-          {/* Extra field: Expense Category Chips */}
           {activeTab === 'expense' && (
             <div className="bg-card border border-border/40 rounded-xl p-3.5 space-y-2.5">
               <label className="block text-xs font-semibold text-muted-foreground">
@@ -461,7 +445,6 @@ export default function EntriesPage() {
             </div>
           )}
 
-          {/* Extra field: Funding Type Chips */}
           {activeTab === 'funding' && (
             <div className="bg-card border border-border/40 rounded-xl p-3.5 space-y-2">
               <label className="block text-xs font-semibold text-muted-foreground">
@@ -497,7 +480,6 @@ export default function EntriesPage() {
             </div>
           )}
 
-          {/* Note input row */}
           <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center shrink-0">
               <FileText className="w-4 h-4" />
@@ -513,7 +495,6 @@ export default function EntriesPage() {
             />
           </div>
 
-          {/* Duplicate conflict banner */}
           {activeConflict && !isEditMode && (
             <div
               role="status"
@@ -537,7 +518,6 @@ export default function EntriesPage() {
             </div>
           )}
 
-          {/* Primary pill save button (52px, full width) */}
           <button
             type="submit"
             disabled={isSaving || isSubmitting || !isOnline}
@@ -556,14 +536,12 @@ export default function EntriesPage() {
           {!isOnline && <OfflineSaveNotice id="entry-offline-notice" />}
         </form>
 
-        {/* Recent entries section */}
         <section className="pt-4 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-foreground">
               {t('entries.recentEntries', 'Recent Entries')}
             </h2>
 
-            {/* Period dropdown */}
             <div className="relative">
               <button
                 type="button"
@@ -622,7 +600,6 @@ export default function EntriesPage() {
             </div>
           </div>
 
-          {/* Entry list states */}
           {isLoadingHistory ? (
             <div className="space-y-2">
               <SkeletonRow />
@@ -662,14 +639,12 @@ export default function EntriesPage() {
         </section>
       </div>
 
-      {/* Edit Entry BottomSheet */}
       <EditEntrySheet
         entry={selectedEntry}
         open={!!selectedEntry}
         onOpenChange={(open) => !open && setSelectedEntry(null)}
       />
 
-      {/* Custom Range BottomSheet */}
       <CustomRangeSheet
         open={showCustomRangeSheet}
         onOpenChange={setShowCustomRangeSheet}

@@ -28,14 +28,12 @@ export default function LandingPage() {
 
   const status = useAuthStore((s) => s.status);
 
-  // Authenticated users are redirected to app Home
   if (status === 'authenticated') {
     return <Navigate to={ROUTES.HOME} replace />;
   }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-primary selection:text-on-primary">
-      {/* Accessible skip link */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-md focus:outline-none"
@@ -43,13 +41,11 @@ export default function LandingPage() {
         {t('landing.skipToContent', 'Skip to main content')}
       </a>
 
-      {/* Header */}
       <header
         role="banner"
         className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur-md transition-colors"
       >
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
-          {/* Logo & Brand */}
           <Link
             to={ROUTES.LANDING}
             className="flex items-center gap-2.5 font-bold text-foreground text-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-md p-1 -m-1"
@@ -77,7 +73,6 @@ export default function LandingPage() {
             <span className="tracking-tight text-base sm:text-lg">{t('brand.name')}</span>
           </Link>
 
-          {/* Navigation & Controls */}
           <nav aria-label="Main Navigation" className="flex items-center gap-1.5 sm:gap-2">
             <LanguageSwitcher />
             <ThemeToggle className="h-11 w-11" />
@@ -93,15 +88,12 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
-        {/* Hero Section */}
         <section
           aria-labelledby="hero-heading"
           className="relative overflow-hidden px-4 pt-12 pb-16 sm:px-6 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28"
         >
           <div className="mx-auto max-w-3xl text-center">
-            {/* Tag Badge */}
             <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary mb-6">
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
               <span>{t('brand.name')}</span>
@@ -122,7 +114,6 @@ export default function LandingPage() {
               )}
             </p>
 
-            {/* Hero CTAs */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-xs sm:max-w-md mx-auto">
               <Button
                 asChild
@@ -146,7 +137,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* What it does */}
         <section
           aria-labelledby="features-heading"
           className="border-t border-border/40 bg-surface-container-low/40 px-4 py-14 sm:px-6 sm:py-20"
@@ -162,7 +152,6 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6">
-              {/* Card 1 */}
               <Card className="rounded-2xl border-border/60 bg-card hover:border-primary/40 transition-colors shadow-xs">
                 <CardHeader className="p-6">
                   <div
@@ -183,7 +172,6 @@ export default function LandingPage() {
                 </CardHeader>
               </Card>
 
-              {/* Card 2 */}
               <Card className="rounded-2xl border-border/60 bg-card hover:border-primary/40 transition-colors shadow-xs">
                 <CardHeader className="p-6">
                   <div
@@ -204,7 +192,6 @@ export default function LandingPage() {
                 </CardHeader>
               </Card>
 
-              {/* Card 3 */}
               <Card className="rounded-2xl border-border/60 bg-card hover:border-primary/40 transition-colors shadow-xs">
                 <CardHeader className="p-6">
                   <div
@@ -225,7 +212,6 @@ export default function LandingPage() {
                 </CardHeader>
               </Card>
 
-              {/* Card 4 */}
               <Card className="rounded-2xl border-border/60 bg-card hover:border-primary/40 transition-colors shadow-xs">
                 <CardHeader className="p-6">
                   <div
@@ -249,7 +235,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* How to use it */}
         <section
           aria-labelledby="how-it-works-heading"
           className="px-4 py-14 sm:px-6 sm:py-20 lg:py-24"
@@ -265,7 +250,6 @@ export default function LandingPage() {
             </div>
 
             <ol className="grid grid-cols-1 gap-6 sm:grid-cols-3 list-none p-0 m-0">
-              {/* Step 1 */}
               <li className="relative flex flex-col items-center text-center p-6 rounded-2xl bg-card border border-border/60 shadow-xs">
                 <span
                   className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-lg mb-4 shadow-xs"
@@ -284,7 +268,6 @@ export default function LandingPage() {
                 </p>
               </li>
 
-              {/* Step 2 */}
               <li className="relative flex flex-col items-center text-center p-6 rounded-2xl bg-card border border-border/60 shadow-xs">
                 <span
                   className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-lg mb-4 shadow-xs"
@@ -303,7 +286,6 @@ export default function LandingPage() {
                 </p>
               </li>
 
-              {/* Step 3 */}
               <li className="relative flex flex-col items-center text-center p-6 rounded-2xl bg-card border border-border/60 shadow-xs">
                 <span
                   className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-lg mb-4 shadow-xs"
@@ -325,7 +307,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Made for small shops */}
         <section
           aria-labelledby="small-shops-heading"
           className="border-t border-border/40 bg-surface-container-low/40 px-4 py-14 sm:px-6 sm:py-20"
@@ -398,7 +379,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Final CTA */}
         <section
           aria-labelledby="bottom-cta-heading"
           className="border-t border-border/40 px-4 py-16 sm:px-6 sm:py-20 text-center"
@@ -429,7 +409,6 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer role="contentinfo" className="border-t border-border/40 bg-card/60 py-8 px-4 sm:px-6">
         <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div className="flex items-center gap-2">

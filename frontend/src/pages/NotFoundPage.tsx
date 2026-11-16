@@ -48,7 +48,6 @@ export default function NotFoundPage({ insideLayout = false }: NotFoundPageProps
         insideLayout ? 'min-h-[70vh]' : 'min-h-screen'
       } flex flex-col items-center justify-center p-6 text-center bg-background focus:outline-none`}
     >
-      {/* Friendly, accessible inline SVG illustration */}
       <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-surface-container-high/60 text-muted-foreground mb-6 shadow-xs">
         <svg
           className="h-12 w-12 text-primary/80"

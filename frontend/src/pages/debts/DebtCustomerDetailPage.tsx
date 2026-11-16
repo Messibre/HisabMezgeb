@@ -41,7 +41,6 @@ export default function DebtCustomerDetailPage() {
 
   const isEnglish = i18n.language === 'en';
 
-  // Customer detail query
   const {
     data: customer,
     isLoading,
@@ -52,7 +51,6 @@ export default function DebtCustomerDetailPage() {
 
   const deleteCustomer = useDeleteDebtCustomer();
 
-  // Subsheet states
   const [showBorrowSheet, setShowBorrowSheet] = useState(false);
   const [showPaymentSheet, setShowPaymentSheet] = useState(false);
   const [showEditCustomerSheet, setShowEditCustomerSheet] = useState(false);
@@ -78,7 +76,6 @@ export default function DebtCustomerDetailPage() {
     }
   };
 
-  // User error transformation
   const userError = isError ? toUserError(error) : null;
   const isNotFound = userError?.kind === 'notFound';
 
@@ -217,7 +214,6 @@ export default function DebtCustomerDetailPage() {
           </div>
         ) : customer ? (
           <>
-            {/* Customer Avatar and Name */}
             <div className="flex flex-col items-center text-center">
               <div
                 className="w-16 h-16 rounded-full bg-primary-container text-on-primary-container font-bold text-2xl flex items-center justify-center select-none shadow-xs mb-2"
@@ -235,7 +231,6 @@ export default function DebtCustomerDetailPage() {
               )}
             </div>
 
-            {/* Balance Card */}
             <div className="bg-card border border-border/40 rounded-2xl p-5 text-center shadow-[0px_2px_12px_rgba(0,0,0,0.04)]">
               <span
                 className={`block text-xs font-semibold text-muted-foreground mb-1 ${
@@ -257,7 +252,6 @@ export default function DebtCustomerDetailPage() {
               )}
             </div>
 
-            {/* Action Buttons: Add Borrow & Add Payment (52px height) */}
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
@@ -279,7 +273,6 @@ export default function DebtCustomerDetailPage() {
               </button>
             </div>
 
-            {/* History List */}
             <DebtHistoryList
               history={sortedHistory}
               onSelectRecord={(rec) => setSelectedRecord(rec)}
@@ -288,7 +281,6 @@ export default function DebtCustomerDetailPage() {
         ) : null}
       </div>
 
-      {/* Add Borrow BottomSheet */}
       {customer && (
         <AddBorrowSheet
           customerId={customer.id}
@@ -297,7 +289,6 @@ export default function DebtCustomerDetailPage() {
         />
       )}
 
-      {/* Add Payment BottomSheet */}
       {customer && (
         <AddPaymentSheet
           customerId={customer.id}
@@ -307,7 +298,6 @@ export default function DebtCustomerDetailPage() {
         />
       )}
 
-      {/* Edit Customer BottomSheet */}
       {customer && (
         <EditCustomerSheet
           customerId={customer.id}
@@ -318,7 +308,6 @@ export default function DebtCustomerDetailPage() {
         />
       )}
 
-      {/* Edit/Delete History Record BottomSheet */}
       {customer && (
         <EditHistoryRecordSheet
           customerId={customer.id}
@@ -328,7 +317,6 @@ export default function DebtCustomerDetailPage() {
         />
       )}
 
-      {/* Delete Customer ConfirmDialog */}
       <ConfirmDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
@@ -343,7 +331,6 @@ export default function DebtCustomerDetailPage() {
         loading={deleteCustomer.isPending}
       />
 
-      {/* Share / Export Customer Statement BottomSheet */}
       {customer && (
         <ExportSheet
           open={showStatementSheet}

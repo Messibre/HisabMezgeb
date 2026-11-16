@@ -94,14 +94,12 @@ export default function ConfirmDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Non-interactive visual backdrop overlay */}
       <div
         aria-hidden="true"
         onClick={loading ? undefined : handleCancelClick}
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
       />
 
-      {/* Accessible Dialog container */}
       <div
         ref={dialogRef}
         role="alertdialog"

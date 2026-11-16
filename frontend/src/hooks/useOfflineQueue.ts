@@ -12,13 +12,11 @@ export function useOfflineQueue() {
   const [pendingCount, setPendingCount] = useState<number>(0);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
-  // Update pending count – declare first
   const updatePendingCount = useCallback(async () => {
     const pending = await getPendingItems();
     setPendingCount(pending.length);
   }, []);
 
-  // Enqueue a request
   const enqueue = useCallback(
     async (
       endpoint: string,
@@ -27,7 +25,6 @@ export function useOfflineQueue() {
     ): Promise<QueueItem> => {
       const item = await addToQueue(endpoint, method, payload);
       if (isOnline && !isSyncing) {
-        // Trigger sync in background
         void syncPendingEntries().then(() => {
           void updatePendingCount();
         });
@@ -38,7 +35,6 @@ export function useOfflineQueue() {
     [isOnline, isSyncing, updatePendingCount]
   );
 
-  // Trigger sync manually
   const syncNow = useCallback(async () => {
     if (isSyncing) return;
     setIsSyncing(true);

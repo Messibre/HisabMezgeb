@@ -1,4 +1,4 @@
-// API response shape matching your backend's ApiResponse class
+// API response shape matching the backend's ApiResponse class
 export interface ApiResponse<T> {
   statusCode: number;
   success: boolean;
@@ -15,7 +15,6 @@ export interface Account {
   createdAt: string;
 }
 
-// Auth types
 export interface LoginCredentials {
   phoneNumber: string;
   password: string;

@@ -30,8 +30,6 @@ export type CustomerDetail = {
   updatedAt: Date;
 };
 
-// ── Shared Balance Helper ──
-
 type BalanceClient = Pick<Prisma.TransactionClient, 'debtBorrowRecord' | 'debtPayment'>;
 
 /**
@@ -65,8 +63,6 @@ export const calculateCustomerBalance = async (
   // Clamp at 0 – should never be negative, but defensive
   return balance.isNegative() ? 0 : balance.toNumber();
 };
-
-// ── Service Functions ──
 
 export const listCustomersWithBalance = async (
   accountId: string,
@@ -126,7 +122,6 @@ export const createCustomer = async (
     note?: string;
   },
 ): Promise<CustomerWithBalance> => {
-  // Build data object conditionally
   const createData: {
     accountId: string;
     name: string;
@@ -170,7 +165,6 @@ export const getCustomerWithHistory = async (
     throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
-  // Fetch borrows and payments separately
   const borrows = await prisma.debtBorrowRecord.findMany({
     where: {
       customerId,

@@ -122,7 +122,6 @@ export function AddPaymentSheet({
       title={t('debts.addPayment', 'Add Payment')}
     >
       <form onSubmit={handleSave} className="space-y-4 pt-1">
-        {/* Full amount / Part of it toggle */}
         <SegmentedControl
           name="payment-type"
           value={paymentType}
@@ -167,7 +166,6 @@ export function AddPaymentSheet({
           />
         </FormField>
 
-        {/* Reminder helper text */}
         <p className="text-xs text-muted-foreground text-center bg-primary/5 border border-primary/15 rounded-xl p-3">
           {t(
             'debts.paymentAmountHelper',
