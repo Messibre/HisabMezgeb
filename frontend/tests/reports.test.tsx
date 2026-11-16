@@ -121,7 +121,7 @@ describe('Reports Feature & Page', () => {
       expect(screen.getByRole('radio', { name: 'Today' })).toBeInTheDocument();
       expect(screen.getByRole('radio', { name: 'This Week' })).toBeInTheDocument();
       expect(screen.getByRole('radio', { name: 'This Month' })).toBeInTheDocument();
-      expect(screen.getByRole('radio', { name: 'Custom' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Custom range' })).toBeInTheDocument();
     });
 
     it('displays summary overview cards with formatted amounts', () => {
@@ -135,8 +135,8 @@ describe('Reports Feature & Page', () => {
       expect(screen.getByText('Personal / Family Draws')).toBeInTheDocument();
       expect(screen.getAllByText(/4,000/).length).toBeGreaterThanOrEqual(1);
 
-      expect(screen.getByText('Total Owed by Customers')).toBeInTheDocument();
-      expect(screen.getByText(/8,500/)).toBeInTheDocument();
+      expect(screen.getByText('Owed to you')).toBeInTheDocument();
+      expect(screen.getByText(/8,500/).textContent).not.toMatch(/[-−]/);
     });
 
     it('displays debt activity for the period', () => {
@@ -186,7 +186,7 @@ describe('Reports Feature & Page', () => {
 
     it('supports switching to custom period and selecting dates', () => {
       renderReportsPage();
-      const customBtn = screen.getByRole('radio', { name: 'Custom' });
+      const customBtn = screen.getByRole('radio', { name: 'Custom range' });
       fireEvent.click(customBtn);
 
       const fromInput = screen.getByLabelText(/^from$/i);

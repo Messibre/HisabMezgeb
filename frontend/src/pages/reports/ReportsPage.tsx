@@ -152,37 +152,37 @@ export default function ReportsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <StatCard
                   label={t('reports.totalIncome', 'Total Income')}
-                  amount={summary?.totalIncome ?? 0}
+                  amount={summary?.totalIncome ?? null}
                   tone="in"
                   icon={<TrendingUp className="h-4 w-4 text-money-in" />}
                 />
                 <StatCard
                   label={t('reports.businessExpenses', 'Shop Expenses')}
-                  amount={summary?.totalBusinessExpenses ?? 0}
+                  amount={summary?.totalBusinessExpenses ?? null}
                   tone="out"
                   icon={<TrendingDown className="h-4 w-4 text-money-out" />}
                 />
                 <StatCard
                   label={t('reports.personalDraws', 'Personal Draws')}
-                  amount={summary?.totalPersonalDraws ?? 0}
+                  amount={summary?.totalPersonalDraws ?? null}
                   tone="neutral"
                   icon={<Wallet className="h-4 w-4 text-money-neutral" />}
                 />
                 <StatCard
-                  label={t('reports.totalOwed', 'Total Debt Owed')}
-                  amount={summary?.totalOwedByCustomers ?? 0}
-                  tone="neutral"
+                  label={t('money.owedToYou', 'Owed to you')}
+                  amount={summary?.totalOwedByCustomers ?? null}
+                  tone="owed"
                   icon={<Users className="h-4 w-4 text-money-neutral" />}
                 />
                 <StatCard
                   label={t('reports.fundingIn', 'Funding In')}
-                  amount={summary?.totalFundingIn ?? 0}
+                  amount={summary?.totalFundingIn ?? null}
                   tone="in"
                   icon={<ArrowDownRight className="h-4 w-4 text-money-in" />}
                 />
                 <StatCard
                   label={t('reports.fundingOut', 'Funding Out')}
-                  amount={summary?.totalFundingOut ?? 0}
+                  amount={summary?.totalFundingOut ?? null}
                   tone="out"
                   icon={<ArrowUpRight className="h-4 w-4 text-money-out" />}
                 />
@@ -208,13 +208,13 @@ export default function ReportsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <StatCard
                   label={t('reports.newlyBorrowed', 'Newly Borrowed')}
-                  amount={debtsPeriod?.totalNewlyBorrowed ?? 0}
+                  amount={debtsPeriod?.totalNewlyBorrowed ?? null}
                   tone="neutral"
                   size="md"
                 />
                 <StatCard
                   label={t('reports.repaid', 'Repaid')}
-                  amount={debtsPeriod?.totalRepaidInPeriod ?? 0}
+                  amount={debtsPeriod?.totalRepaidInPeriod ?? null}
                   tone="in"
                   size="md"
                 />

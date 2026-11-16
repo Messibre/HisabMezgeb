@@ -46,7 +46,8 @@ export default function DebtsListPage() {
   // Queries
   const today = todayLocal();
   const { data: reportData } = useReportSummary(today, today);
-  const totalOwed = reportData?.totalOwedByCustomers ?? 0;
+  // Unknown (loading or failed) stays null and renders a dash, never 0.
+  const totalOwed = reportData?.totalOwedByCustomers ?? null;
 
   const {
     data: customers = [],
@@ -149,9 +150,9 @@ export default function DebtsListPage() {
         {/* Total Owed Hero Card */}
         <div className="bg-card border border-border/40 rounded-2xl p-5 text-center shadow-[0px_2px_12px_rgba(0,0,0,0.04)]">
           <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-            {t('debts.totalOwed', 'Total Owed')}
+            {t('money.owedToYou', 'Owed to you')}
           </span>
-          <MoneyText amount={totalOwed} tone="out" size="xl" />
+          <MoneyText amount={totalOwed} tone="owed" size="xl" />
         </div>
 
         {/* Customers List Section */}

@@ -253,7 +253,7 @@ export default function DebtCustomerDetailPage() {
                   </span>
                 </div>
               ) : (
-                <MoneyText amount={customer.balance} tone="out" size="xl" />
+                <MoneyText amount={customer.balance} tone="owed" size="xl" />
               )}
             </div>
 

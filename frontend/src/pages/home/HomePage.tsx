@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Receipt, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Receipt, Users, ArrowRight } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { useTodayIncome } from '@/hooks/useTodayIncome';
 import { useReportSummary } from '@/hooks/useReportSummary';
@@ -142,23 +142,22 @@ export default function HomePage() {
             <div className="grid grid-cols-2 gap-3">
               <StatCard
                 label={t('home.thisWeeksIncome', "This Week's Income")}
-                amount={summary?.totalIncome ?? 0}
+                amount={summary?.totalIncome ?? null}
                 tone="in"
                 size="lg"
               />
               <StatCard
                 label={t('home.shopExpenses', 'Shop Expenses')}
-                amount={summary?.totalBusinessExpenses ?? 0}
+                amount={summary?.totalBusinessExpenses ?? null}
                 tone="out"
                 size="lg"
               />
               <StatCard
-                label={t('home.customerDebts', 'Customer Debts')}
-                amount={summary?.totalOwedByCustomers ?? 0}
-                tone="out"
+                label={t('money.owedToYou', 'Owed to you')}
+                amount={summary?.totalOwedByCustomers ?? null}
+                tone="owed"
                 size="lg"
-                accentBarColor="var(--money-out)"
-                icon={<AlertTriangle className="h-5 w-5 text-[var(--money-out)]" />}
+                icon={<Users className="h-5 w-5" />}
                 onClick={() => navigate(ROUTES.DEBTS)}
                 className="col-span-2"
               />

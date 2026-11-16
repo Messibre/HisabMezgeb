@@ -194,7 +194,7 @@
     "periodToday": "Today",
     "periodThisWeek": "This Week",
     "periodThisMonth": "This Month",
-    "periodCustom": "Custom Range",
+    "periodCustom": "Custom range",
     "filterPeriod": "Filter period",
     "customRangeTitle": "Select Custom Range",
     "applyRange": "Apply Range",
@@ -268,7 +268,7 @@
     "today": "Today",
     "thisWeek": "This Week",
     "thisMonth": "This Month",
-    "custom": "Custom",
+    "custom": "Custom range",
     "fromDate": "From",
     "toDate": "To",
     "apply": "Apply",
@@ -404,5 +404,8 @@
     "install": "Install",
     "iosInstallTitle": "Install this app",
     "iosInstallInstructions": "Tap the Share button (□↑), then tap \"Add to Home Screen\""
+  },
+  "money": {
+    "owedToYou": "Owed to you"
   }
 }

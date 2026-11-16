@@ -176,7 +176,7 @@
   "entries": {
     "tabIncome": "ገቢ",
     "tabExpense": "ወጪ",
-    "tabFunding": "የገንዘብ ድጋፍ",
+    "tabFunding": "ተጨማሪ ገንዘብ",
     "incomeAmountHelper": "ዛሬ የተቀበሉት ጠቅላላ ጥሬ ገንዘብ፡ ሽያጭ እና የደንበኞች ክፍያዎች አንድ ላይ።",
     "dateLabel": "ቀን",
     "noteLabel": "ማስታወሻ",
@@ -184,7 +184,7 @@
     "categoryLabel": "ምድብ",
     "businessGroup": "ንግድ",
     "personalGroup": "የግል / ቤተሰብ",
-    "fundingTypeLabel": "የድጋፍ አይነት",
+    "fundingTypeLabel": "የተጨማሪ ገንዘብ አይነት",
     "salaryIn": "የደመወዝ ገቢ",
     "borrowedIn": "ብድር የተወሰደ",
     "borrowedRepaid": "ብድር የተመለሰ",
@@ -212,7 +212,7 @@
     "errorAmountRequired": "መጠን ያስገቡ",
     "errorAmountPositive": "መጠኑ ከ 0 በላይ መሆን አለበት",
     "errorCategoryRequired": "እባክዎ ምድብ ይምረጡ",
-    "errorFundingTypeRequired": "እባክዎ የድጋፍ አይነት ይምረጡ",
+    "errorFundingTypeRequired": "እባክዎ የተጨማሪ ገንዘብ አይነት ይምረጡ",
     "errorFutureDate": "የወደፊት ቀን መሆን አይችልም"
   },
   "debts": {
@@ -268,7 +268,7 @@
     "today": "ዛሬ",
     "thisWeek": "በዚህ ሳምንት",
     "thisMonth": "በዚህ ወር",
-    "custom": "ብጁ",
+    "custom": "የተወሰነ ጊዜ",
     "fromDate": "ከ",
     "toDate": "እስከ",
     "apply": "ተግብር",
@@ -404,5 +404,8 @@
     "install": "ጫን",
     "iosInstallTitle": "ይህን መተግበሪያ ጫን",
     "iosInstallInstructions": "የማጋሪያ ምልክቱን (□↑) ይጫኑ፣ ከዚያ \"Add to Home Screen\" ይምረጡ"
+  },
+  "money": {
+    "owedToYou": "ከደንበኞች የሚጠበቅ"
   }
 }

@@ -42,3 +42,28 @@ export function formatMoney(
 
   return formattedNum;
 }
+
+/**
+ * in      income, funding in            "+" green
+ * out     shop expense, funding out     "−" red
+ * neutral personal / family draws       no sign
+ * owed    what customers owe the shop   no sign, neutral (never red, never a minus)
+ */
+export type MoneyTone = 'in' | 'out' | 'neutral' | 'owed' | 'default';
+
+export const UNKNOWN_VALUE = '—';
+const MINUS = '−';
+
+export function parseAmount(amount: string | number | null | undefined): number | null {
+  if (amount === null || amount === undefined || amount === '') return null;
+  const num = typeof amount === 'string' ? Number(amount) : amount;
+  return Number.isFinite(num) ? num : null;
+}
+
+/** Zero (including -0) never gets a sign; owed and draws never get one either. */
+export function moneySign(value: number | null, tone: MoneyTone, showSign: boolean): string {
+  if (!showSign || value === null || Math.round(value * 100) === 0) return '';
+  if (tone === 'in') return '+';
+  if (tone === 'out') return MINUS;
+  return '';
+}

@@ -545,7 +545,7 @@ export default function EntriesPage() {
                     ? t('entries.periodThisWeek', 'This Week')
                     : period === 'month'
                     ? t('entries.periodThisMonth', 'This Month')
-                    : t('entries.periodCustom', 'Custom Range')}
+                    : t('entries.periodCustom', 'Custom range')}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
@@ -560,7 +560,7 @@ export default function EntriesPage() {
                       { key: 'today', label: t('entries.periodToday', 'Today') },
                       { key: 'week', label: t('entries.periodThisWeek', 'This Week') },
                       { key: 'month', label: t('entries.periodThisMonth', 'This Month') },
-                      { key: 'custom', label: t('entries.periodCustom', 'Custom Range') },
+                      { key: 'custom', label: t('entries.periodCustom', 'Custom range') },
                     ] as const
                   ).map((opt) => (
                     <button

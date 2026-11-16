@@ -135,7 +135,13 @@ describe('M10 Home Page', () => {
     expect(screen.getByText(/12,500/)).toBeInTheDocument();
     expect(screen.getByText('Shop Expenses')).toBeInTheDocument();
     expect(screen.getByText(/3,400/)).toBeInTheDocument();
-    expect(screen.getByText('Customer Debts')).toBeInTheDocument();
+    expect(screen.getByText('Owed to you')).toBeInTheDocument();
     expect(screen.getByText(/4,800/)).toBeInTheDocument();
+  });
+
+  it('shows what customers owe without a minus sign', () => {
+    renderHomePage();
+    const owed = screen.getByText(/4,800/);
+    expect(owed.textContent).not.toMatch(/[-−]/);
   });
 });

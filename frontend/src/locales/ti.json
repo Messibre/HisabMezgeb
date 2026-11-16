@@ -176,7 +176,7 @@
   "entries": {
     "tabIncome": "ኣታዊ",
     "tabExpense": "ወጻኢ",
-    "tabFunding": "ናይ ገንዘብ ደገፍ",
+    "tabFunding": "ተወሳኺ ገንዘብ",
     "incomeAmountHelper": "ሎሚ ዝተቐበልካዮ ጠቕላላ ጥረ ገንዘብ፡ መሸጣን ናይ ዓማዊል ክፍሊትን ሓቢሩ።",
     "dateLabel": "ዕለት",
     "noteLabel": "መተሓሳሰቢ",
@@ -184,7 +184,7 @@
     "categoryLabel": "ምድብ",
     "businessGroup": "ንግዲ",
     "personalGroup": "ውልቃዊ / ስድራ",
-    "fundingTypeLabel": "ዓይነት ደገፍ",
+    "fundingTypeLabel": "ዓይነት ተወሳኺ ገንዘብ",
     "salaryIn": "ናይ ደሞዝ ኣታዊ",
     "borrowedIn": "ልቓሕ ዝተወሰደ",
     "borrowedRepaid": "ልቓሕ ዝተመልሰ",
@@ -212,7 +212,7 @@
     "errorAmountRequired": "መጠን የእቱ",
     "errorAmountPositive": "መጠኑ ካብ 0 ንላዕሊ ክኸውን ኣለዎ",
     "errorCategoryRequired": "በጃኹም ምድብ ምረጹ",
-    "errorFundingTypeRequired": "በጃኹም ዓይነት ደገፍ ምረጹ",
+    "errorFundingTypeRequired": "በጃኹም ዓይነት ተወሳኺ ገንዘብ ምረጹ",
     "errorFutureDate": "ናይ መጻኢ ዕለት ክኸውን ኣይኽእልን"
   },
   "debts": {
@@ -268,15 +268,15 @@
     "today": "ሎሚ",
     "thisWeek": "ናይዚ ሰሙን",
     "thisMonth": "ናይዚ ወርሒ",
-    "custom": "ፍሉይ",
+    "custom": "ዝተወሰነ ግዜ",
     "fromDate": "ካብ",
     "toDate": "ክሳብ",
     "apply": "ኣተግብር",
     "totalIncome": "ጠቕላላ ኣታዊ",
     "businessExpenses": "ወጻኢታት ድኳን",
     "personalDraws": "ናይ ውልቂ/ስድራ ወጻኢታት",
-    "fundingIn": "ዝኣተወ ወፍሪ",
-    "fundingOut": "ዝተመልሰ ወፍሪ",
+    "fundingIn": "ዝኣተወ ተወሳኺ ገንዘብ",
+    "fundingOut": "ዝተመልሰ ተወሳኺ ገንዘብ",
     "totalOwed": "ብዓማዊል ዘሎ ጠቕላላ ዕዳ",
     "expenseBreakdown": "ዝርዝር ወጻኢታት",
     "groupBusiness": "ናይ ድኳን",
@@ -404,5 +404,8 @@
     "install": "ጽዓን",
     "iosInstallTitle": "እዚ መተግበሪ ጽዓን",
     "iosInstallInstructions": "ናይ ምክፋል ምልክት (□↑) ጠውቑ፣ ድሕሪኡ \"Add to Home Screen\" ጠውቑ"
+  },
+  "money": {
+    "owedToYou": "ካብ ዓማዊል ዝጽበ"
   }
 }

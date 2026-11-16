@@ -14,7 +14,7 @@ export function PeriodPicker({ value, onChange }: PeriodPickerProps) {
     { value: 'today', label: t('reports.today', 'Today') },
     { value: 'week', label: t('reports.thisWeek', 'This Week') },
     { value: 'month', label: t('reports.thisMonth', 'This Month') },
-    { value: 'custom', label: t('reports.custom', 'Custom') },
+    { value: 'custom', label: t('reports.custom', 'Custom range') },
   ];
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     let nextIndex = currentIndex;

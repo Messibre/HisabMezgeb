@@ -46,7 +46,7 @@ export function CustomerCard({ customer }: CustomerCardProps) {
       {/* Balance or Settled */}
       <div className="flex items-center gap-2 shrink-0 pl-3">
         {hasDebt ? (
-          <MoneyText amount={customer.balance} tone="out" size="md" />
+          <MoneyText amount={customer.balance} tone="owed" size="md" />
         ) : (
           <span className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground bg-muted/60 px-2.5 py-1 rounded-full">
             <Check className="w-3.5 h-3.5 text-money-in" />

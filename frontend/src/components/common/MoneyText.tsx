@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { formatMoney } from '@/lib/money';
+import { formatMoney, parseAmount, moneySign, UNKNOWN_VALUE, type MoneyTone } from '@/lib/money';
 
-export type MoneyTone = 'in' | 'out' | 'neutral' | 'default';
+export type { MoneyTone };
 export type MoneySize = 'sm' | 'md' | 'lg' | 'xl';
 
 export interface MoneyTextProps {
-  amount: string | number;
+  /** null or undefined means "unknown" and renders a dash, never 0. */
+  amount: string | number | null | undefined;
   tone?: MoneyTone;
   size?: MoneySize;
   showCurrency?: boolean;
@@ -26,10 +27,13 @@ export default function MoneyText({
   const { t, i18n } = useTranslation();
   const effectiveCurrency = currency || t('common.currency', 'ETB');
 
-  const formattedValue = formatMoney(amount, {
-    showCurrency: false,
-    lang: i18n.language,
-  });
+  const numeric = parseAmount(amount);
+  const isUnknown = numeric === null;
+  // Normalizes -0 and negative inputs: the sign comes from the tone, not the value.
+  const magnitude = isUnknown ? 0 : Math.abs(numeric) + 0;
+  const formattedValue = isUnknown
+    ? UNKNOWN_VALUE
+    : formatMoney(magnitude, { showCurrency: false, lang: i18n.language });
 
   const getToneClass = () => {
     switch (tone) {
@@ -38,6 +42,7 @@ export default function MoneyText({
       case 'out':
         return size === 'sm' ? 'text-[var(--money-out-strong)]' : 'text-[var(--money-out)]';
       case 'neutral':
+      case 'owed':
         return size === 'sm' ? 'text-[var(--money-neutral-strong)]' : 'text-[var(--money-neutral)]';
       case 'default':
       default:
@@ -72,21 +77,21 @@ export default function MoneyText({
   };
 
   const sizeStyle = getSizeClasses();
-  const sign = showSign && tone === 'in' ? '+' : showSign && tone === 'out' ? '-' : '';
+  const sign = moneySign(numeric, tone, showSign);
   const toneLabel =
     tone === 'in'
       ? t('common.income', 'Income')
       : tone === 'out'
         ? t('common.expense', 'Expense')
-        : tone === 'neutral'
-          ? t('debts.owed', 'Owed')
+        : tone === 'owed'
+          ? t('money.owedToYou', 'Owed to you')
           : '';
 
   return (
     <span
       className={`inline-flex items-baseline font-mono-numbers ${getToneClass()} ${sizeStyle.wrapper} ${className}`}
     >
-      {showCurrency && (
+      {showCurrency && !isUnknown && (
         <span className={sizeStyle.currency}>{effectiveCurrency}</span>
       )}
       <span>{sign}{formattedValue}</span>
