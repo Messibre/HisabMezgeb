@@ -198,6 +198,13 @@ describe('DebtCustomer Service', () => {
   });
 
   describe('calculateCustomerBalance', () => {
+    it('subtracts as decimals, so 1000.30 borrowed minus 1000 paid is exactly 0.3', async () => {
+      mockBorrowAggregate.mockResolvedValueOnce(createAggregateResult(1000.3));
+      mockPaymentAggregate.mockResolvedValueOnce(createAggregateResult(1000));
+
+      expect(await calculateCustomerBalance(customerId)).toBe(0.3);
+    });
+
     it('should return correct balance (borrows - payments)', async () => {
       mockBorrowAggregate.mockResolvedValueOnce(createAggregateResult(1500));
       mockPaymentAggregate.mockResolvedValueOnce(createAggregateResult(800));

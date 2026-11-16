@@ -32,8 +32,17 @@ export type CustomerDetail = {
 
 // ── Shared Balance Helper ──
 
-export const calculateCustomerBalance = async (customerId: string): Promise<number> => {
-  const borrows = await prisma.debtBorrowRecord.aggregate({
+type BalanceClient = Pick<Prisma.TransactionClient, 'debtBorrowRecord' | 'debtPayment'>;
+
+/**
+ * Balance is always computed, never stored. Sums are subtracted as decimals so a
+ * full payment of e.g. 0.30 is never refused because of floating point drift.
+ */
+export const calculateCustomerBalance = async (
+  customerId: string,
+  client: BalanceClient = prisma,
+): Promise<number> => {
+  const borrows = await client.debtBorrowRecord.aggregate({
     where: {
       customerId,
       deletedAt: null,
@@ -41,7 +50,7 @@ export const calculateCustomerBalance = async (customerId: string): Promise<numb
     _sum: { amount: true },
   });
 
-  const payments = await prisma.debtPayment.aggregate({
+  const payments = await client.debtPayment.aggregate({
     where: {
       customerId,
       deletedAt: null,
@@ -49,11 +58,12 @@ export const calculateCustomerBalance = async (customerId: string): Promise<numb
     _sum: { amount: true },
   });
 
-  const totalBorrowed = borrows._sum.amount?.toNumber() ?? 0;
-  const totalPaid = payments._sum.amount?.toNumber() ?? 0;
+  const totalBorrowed = borrows._sum.amount ?? new Prisma.Decimal(0);
+  const totalPaid = payments._sum.amount ?? new Prisma.Decimal(0);
+  const balance = new Prisma.Decimal(totalBorrowed).minus(totalPaid);
 
   // Clamp at 0 – should never be negative, but defensive
-  return Math.max(0, totalBorrowed - totalPaid);
+  return balance.isNegative() ? 0 : balance.toNumber();
 };
 
 // ── Service Functions ──
