@@ -32,88 +32,42 @@ export const buildSummary = async (
   from: Date,
   to: Date,
 ): Promise<ReportSummary> => {
-  // Income total (within period)
-  const incomeAgg = await prisma.dailyIncome.aggregate({
-    where: {
-      accountId,
-      date: { gte: from, lte: to },
-      deletedAt: null,
-    },
-    _sum: { amount: true },
-  });
+  const inPeriod = { accountId, date: { gte: from, lte: to }, deletedAt: null };
+  // Owed is the current balance (ignores the date range) of customers that still exist,
+  // so it matches the Debts list.
+  const ownedByLiveCustomer = { accountId, deletedAt: null, customer: { deletedAt: null } };
+
+  // Independent sums run in parallel instead of one after another.
+  const [incomeAgg, businessAgg, personalAgg, fundingInAgg, fundingOutAgg, allBorrows, allPayments] =
+    await Promise.all([
+      prisma.dailyIncome.aggregate({ where: inPeriod, _sum: { amount: true } }),
+      prisma.dailyExpense.aggregate({
+        where: { ...inPeriod, category: { group: 'business' } },
+        _sum: { amount: true },
+      }),
+      prisma.dailyExpense.aggregate({
+        where: { ...inPeriod, category: { group: 'personal' } },
+        _sum: { amount: true },
+      }),
+      prisma.fundingEntry.aggregate({
+        where: { ...inPeriod, type: { in: ['salary_injection', 'borrowed_in'] } },
+        _sum: { amount: true },
+      }),
+      prisma.fundingEntry.aggregate({
+        where: { ...inPeriod, type: 'borrowed_repaid' },
+        _sum: { amount: true },
+      }),
+      prisma.debtBorrowRecord.aggregate({ where: ownedByLiveCustomer, _sum: { amount: true } }),
+      prisma.debtPayment.aggregate({ where: ownedByLiveCustomer, _sum: { amount: true } }),
+    ]);
+
   const totalIncome = incomeAgg._sum.amount?.toNumber() ?? 0;
-
-  // Business expenses
-  const businessAgg = await prisma.dailyExpense.aggregate({
-    where: {
-      accountId,
-      date: { gte: from, lte: to },
-      deletedAt: null,
-      category: { group: 'business' },
-    },
-    _sum: { amount: true },
-  });
   const totalBusinessExpenses = businessAgg._sum.amount?.toNumber() ?? 0;
-
-  // Personal draws
-  const personalAgg = await prisma.dailyExpense.aggregate({
-    where: {
-      accountId,
-      date: { gte: from, lte: to },
-      deletedAt: null,
-      category: { group: 'personal' },
-    },
-    _sum: { amount: true },
-  });
   const totalPersonalDraws = personalAgg._sum.amount?.toNumber() ?? 0;
-
-  // Funding in (salary_injection + borrowed_in)
-  const fundingInAgg = await prisma.fundingEntry.aggregate({
-    where: {
-      accountId,
-      date: { gte: from, lte: to },
-      deletedAt: null,
-      type: { in: ['salary_injection', 'borrowed_in'] },
-    },
-    _sum: { amount: true },
-  });
   const totalFundingIn = fundingInAgg._sum.amount?.toNumber() ?? 0;
-
-  // Funding out (borrowed_repaid)
-  const fundingOutAgg = await prisma.fundingEntry.aggregate({
-    where: {
-      accountId,
-      date: { gte: from, lte: to },
-      deletedAt: null,
-      type: 'borrowed_repaid',
-    },
-    _sum: { amount: true },
-  });
   const totalFundingOut = fundingOutAgg._sum.amount?.toNumber() ?? 0;
-
-  // Total owed by customers – current balance (ignores date range)
-  // We need to sum the balances of all customers under this account.
-  // To avoid N+1, we can aggregate borrows and payments per customer.
-  // For simplicity, we'll use a query that sums all borrows and payments across all customers.
-  // Since we need the net balance per customer, we can aggregate separately.
-  // Approach: Sum all borrows and all payments for the account, then net.
-  const allBorrows = await prisma.debtBorrowRecord.aggregate({
-    where: {
-      accountId,
-      deletedAt: null,
-    },
-    _sum: { amount: true },
-  });
-  const allPayments = await prisma.debtPayment.aggregate({
-    where: {
-      accountId,
-      deletedAt: null,
-    },
-    _sum: { amount: true },
-  });
-  const totalBorrowedAll = allBorrows._sum.amount?.toNumber() ?? 0;
-  const totalPaidAll = allPayments._sum.amount?.toNumber() ?? 0;
-  const totalOwedByCustomers = Math.max(0, totalBorrowedAll - totalPaidAll);
+  const owed = new Prisma.Decimal(allBorrows._sum.amount ?? 0).minus(allPayments._sum.amount ?? 0);
+  const totalOwedByCustomers = owed.isNegative() ? 0 : owed.toNumber();
 
   return {
     totalIncome,
