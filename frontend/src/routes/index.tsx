@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import BottomTabLayout from '@/components/layouts/BottomTabLayout';
@@ -21,9 +22,10 @@ const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 function PageLoader() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <p className="text-muted-foreground text-sm">Loading...</p>
+      <p className="text-muted-foreground text-sm">{t('common.loading')}</p>
     </div>
   );
 }

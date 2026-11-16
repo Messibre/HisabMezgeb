@@ -52,12 +52,13 @@
     "save": "Save",
     "cancel": "Cancel",
     "tryAgain": "Try Again",
-    "offlineBanner": "Offline — changes will sync automatically",
+    "offlineBanner": "No internet. Entries cannot be saved until you are back online.",
     "back": "Back",
     "income": "Income",
     "expense": "Expense",
     "options": "More options",
-    "skipToContent": "Skip to main content"
+    "skipToContent": "Skip to main content",
+    "backOnline": "Back online"
   },
   "pages": {
     "home": "Home",

@@ -6,7 +6,6 @@ import router from '@/routes';
 import { useSyncHtmlLang } from '@/hooks/useSyncHtmlLang';
 import { useAuthBootstrap } from '@/hooks/useAuthBootstrap';
 import { useTheme } from '@/store/theme.store';
-import { OfflineBanner } from '@/components/common/OfflineBanner';
 import Toaster from '@/components/common/Toaster';
 import { PWAUpdateBanner } from '@/components/common/PWAUpdateBanner';
 import SaveConfirmation from '@/components/common/SaveConfirmation';
@@ -28,7 +27,6 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <OfflineBanner />
         <Toaster />
         <SaveConfirmation />
         {enablePWA && <PWAUpdateBanner />}

@@ -39,7 +39,7 @@ export function PeriodPicker({ value, onChange }: PeriodPickerProps) {
     <div
       role="radiogroup"
       aria-label={t('reports.period', 'Report period')}
-      className="no-scrollbar -mx-6 flex gap-3 overflow-x-auto px-6 pb-2"
+      className="grid grid-cols-2 gap-2 min-[400px]:grid-cols-4"
     >
       {options.map((opt, idx) => {
         const isActive = value === opt.value;
@@ -52,7 +52,7 @@ export function PeriodPicker({ value, onChange }: PeriodPickerProps) {
             type="button"
             onClick={() => onChange(opt.value)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
-            className={`flex h-12 flex-shrink-0 items-center justify-center rounded-full px-6 text-[15px] font-semibold transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+            className={`flex min-h-12 min-w-0 items-center justify-center rounded-full px-3 py-2 text-center text-sm leading-tight font-semibold transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               isActive
                 ? 'bg-primary text-on-primary shadow-xs'
                 : 'border border-border text-foreground hover:bg-surface-container-low'
