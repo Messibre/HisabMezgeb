@@ -73,3 +73,13 @@ Started: 2026-10-26 11:15
 
 ## BLOCKER (only if the run stopped)
 - None. All milestones M0 through M14 executed, tested, and verified successfully without stopping.
+
+---
+
+# Production hardening (doc 17) — branch fix/production-hardening
+
+Started 2026-11-16. Decisions from the owner: migrations held until a backup is verified; hosting Render + Neon/Supabase; sliding 30-day sessions; run all batches.
+
+| WP | Status | Notes |
+|---|---|---|
+| WP1 | done | Audit in docs/security-and-data-audit.md. Fixed: refresh limiter, per-phone/per-account limits, logout only on 401/403, log redaction, deleted-day revive + P2002→409, payment race lock + decimal balance, input limits, prod env warning, npm audit 0/0. Held: Cascade→Restrict migration. NOT VERIFIED: live cookies, DB-backed isolation test (no Docker). |
