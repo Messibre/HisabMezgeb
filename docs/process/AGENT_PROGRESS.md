@@ -86,3 +86,11 @@ Started 2026-11-16. Decisions from the owner: migrations held until a backup is 
 | WP2 | done | 'Owed to you' neutral, no minus; sign table in MoneyText; zero never ±; unknown = dash; labels wrap; glossary + translation-review (needs Meseret). |
 | WP3 | partial | Step A done: Save disabled offline with visible reason, shared SaveConfirmation (status/alert, 4 s, repeats kind/date/amount, row highlight 2 s, check on button), ref double-tap guard, sessionStorage drafts cleared on save/logout. HELD: idempotency keys (migration) and therefore step B (offline queue wiring). |
 
+| WP4 | done | Amharic default (device choice kept after logout), html lang before paint, bilingual static title (proposed wording). |
+| WP5 | done | Categories/funding types/app name/errors translated; exports in am/ti with ብር; English-leak tests. systemKey migration HELD (interim name match). |
+| WP6 | done | Offline banner (SVG, in flow, amber, back-online note); Reports overflow (-mx-6 chips) fixed; Settings header; straight accent bar. Verified in browser at 360px. |
+| WP7 | done | Debts list N+1 removed, summary sums parallel, owed excludes deleted customers, data requests start with the session check. Live timings NOT VERIFIED (see docs/performance-report.md). |
+| WP8 | done | Single-flight bootstrap, cross-tab lock, sliding 30-day rotation with 30 s grace, counted tests. |
+| WP9 | done | Comment lines 639 -> 425, comment-only diff verified. |
+| WP10 | done | Own Ethiopic arithmetic (checked against Intl 1990-2100; no package needed), Day/Month/Year picker, calendar setting, Ethiopian months in reports and exports. Real-phone check NOT VERIFIED. |
+| WP11 | done | Sidebar from 1024px, desktop grids, debts split view; no overflow at 360/768/1024/1440/1920. README rewritten. Screenshots with demo data and a license: NOT DONE (owner's decision). |
