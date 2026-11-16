@@ -14,6 +14,7 @@ import SegmentedControl from '@/components/common/SegmentedControl';
 import { useCreatePayment } from '@/hooks/useDebtCustomerDetail';
 import { todayLocal, isFutureDate } from '@/lib/date';
 import { formatMoney } from '@/lib/money';
+import DateSelect from '@/components/common/DateSelect';
 
 interface AddPaymentSheetProps {
   customerId: string;
@@ -22,12 +23,7 @@ interface AddPaymentSheetProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function AddPaymentSheet({
-  customerId,
-  balance,
-  open,
-  onOpenChange,
-}: AddPaymentSheetProps) {
+export function AddPaymentSheet({ customerId, balance, open, onOpenChange }: AddPaymentSheetProps) {
   const { t } = useTranslation();
   const today = todayLocal();
   const [paymentType, setPaymentType] = useState<'full' | 'part'>('part');
@@ -139,25 +135,19 @@ export function AddPaymentSheet({
           error={amountError}
         />
 
-        <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center justify-between">
-          <label htmlFor="payment-date" className="text-xs font-semibold text-muted-foreground">
-            {t('entries.dateLabel', 'Date')}
-          </label>
-          <input
+        <div className="bg-card border border-border/40 rounded-xl p-3">
+          <DateSelect
+            label={t('entries.dateLabel', 'Date')}
             id="payment-date"
-            type="date"
-            max={today}
             value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="text-xs bg-muted/60 text-foreground px-2.5 py-1.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
+            max={today}
+            onChange={(ymd) => {
+              setDate(ymd);
+            }}
           />
         </div>
 
-        <FormField
-          label={t('debts.noteLabel', 'Note')}
-          id="payment-note"
-          optional
-        >
+        <FormField label={t('debts.noteLabel', 'Note')} id="payment-note" optional>
           <PillInput
             id="payment-note"
             value={note}
@@ -167,10 +157,7 @@ export function AddPaymentSheet({
         </FormField>
 
         <p className="text-xs text-muted-foreground text-center bg-primary/5 border border-primary/15 rounded-xl p-3">
-          {t(
-            'debts.paymentAmountHelper',
-            "Remember to include this cash in today's income total."
-          )}
+          {t('debts.paymentAmountHelper', "Remember to include this cash in today's income total.")}
         </p>
 
         <div className="pt-2">

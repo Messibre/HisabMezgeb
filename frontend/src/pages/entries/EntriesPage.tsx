@@ -11,11 +11,7 @@ import ErrorState from '@/components/common/ErrorState';
 import { useCreateIncome } from '@/hooks/useCreateIncome';
 import { useCreateExpense } from '@/hooks/useCreateExpense';
 import { useCreateFunding } from '@/hooks/useCreateFunding';
-import {
-  useUpdateIncome,
-  useUpdateExpense,
-  useUpdateFunding,
-} from '@/hooks/useEntryMutations';
+import { useUpdateIncome, useUpdateExpense, useUpdateFunding } from '@/hooks/useEntryMutations';
 import { useEntryHistory } from '@/hooks/useEntryHistory';
 import { useExpenseCategories } from '@/hooks/useExpenseCategories';
 import {
@@ -39,6 +35,7 @@ import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
 import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
 import { toUserError } from '@/lib/errors';
 import { categoryLabel } from '@/lib/categories';
+import DateSelect from '@/components/common/DateSelect';
 
 type TabType = 'income' | 'expense' | 'funding';
 type PeriodType = 'today' | 'week' | 'month' | 'custom';
@@ -50,8 +47,7 @@ export default function EntriesPage() {
 
   // Tab from URL ?type=
   const urlType = searchParams.get('type') as TabType | null;
-  const activeTab: TabType =
-    urlType === 'expense' || urlType === 'funding' ? urlType : 'income';
+  const activeTab: TabType = urlType === 'expense' || urlType === 'funding' ? urlType : 'income';
 
   const handleTabChange = (newTab: string) => {
     setSearchParams({ type: newTab });
@@ -75,7 +71,9 @@ export default function EntriesPage() {
 
   const [amountError, setAmountError] = useState('');
   const [categoryError, setCategoryError] = useState('');
-  const [serverConflict, setServerConflict] = useState<{ amount: number; date: string } | null>(null);
+  const [serverConflict, setServerConflict] = useState<{ amount: number; date: string } | null>(
+    null
+  );
 
   const [period, setPeriod] = useState<PeriodType>('week');
   const [customRange, setCustomRange] = useState({ from: today, to: today });
@@ -99,7 +97,8 @@ export default function EntriesPage() {
   const showFailed = useSaveFeedbackStore((s) => s.showFailed);
 
   // Unsaved typed fields survive a reload (per tab; edits have their own key).
-  const draftKey = isEditMode && editEntryId ? `entries:${activeTab}:edit:${editEntryId}` : `entries:${activeTab}`;
+  const draftKey =
+    isEditMode && editEntryId ? `entries:${activeTab}:edit:${editEntryId}` : `entries:${activeTab}`;
   useFormDraft(
     draftKey,
     { amount, note, categoryId: activeTab === 'expense' ? categoryId : '' },
@@ -107,7 +106,7 @@ export default function EntriesPage() {
       if (draft.amount) setAmount(draft.amount);
       if (draft.note) setNote(draft.note);
       if (draft.categoryId) setCategoryId(draft.categoryId);
-    },
+    }
   );
 
   // Calculate date range for recent entries
@@ -139,25 +138,39 @@ export default function EntriesPage() {
         (item) => item.date === date && (!isEditMode || item.id !== editEntryId)
       );
       if (existing) {
-        return { id: existing.id, amount: existing.amount, date: existing.date, note: existing.note };
+        return {
+          id: existing.id,
+          amount: existing.amount,
+          date: existing.date,
+          note: existing.note,
+        };
       }
     } else if (activeTab === 'expense' && categoryId) {
       const existing = (historyData as ExpenseWithCategory[]).find(
-        (item) => item.date === date && item.categoryId === categoryId && (!isEditMode || item.id !== editEntryId)
+        (item) =>
+          item.date === date &&
+          item.categoryId === categoryId &&
+          (!isEditMode || item.id !== editEntryId)
       );
       if (existing) {
-        return { id: existing.id, amount: existing.amount, date: existing.date, note: existing.note };
+        return {
+          id: existing.id,
+          amount: existing.amount,
+          date: existing.date,
+          note: existing.note,
+        };
       }
     }
     return null;
   }, [activeTab, historyData, date, categoryId, isEditMode, editEntryId]);
 
-  const activeConflict = cachedConflict || (serverConflict ? { id: '', amount: serverConflict.amount, date: serverConflict.date, note: null } : null);
+  const activeConflict =
+    cachedConflict ||
+    (serverConflict
+      ? { id: '', amount: serverConflict.amount, date: serverConflict.date, note: null }
+      : null);
 
-  const activeCategories = useMemo(
-    () => categories.filter((cat) => cat.isActive),
-    [categories]
-  );
+  const activeCategories = useMemo(() => categories.filter((cat) => cat.isActive), [categories]);
   const businessCategories = useMemo(
     () => activeCategories.filter((cat) => cat.group === 'business'),
     [activeCategories]
@@ -275,7 +288,8 @@ export default function EntriesPage() {
       setEditEntryId(null);
       setServerConflict(null);
     } catch (err: unknown) {
-      const errorResponse = (err as { response?: { status?: number; data?: { message?: string } } })?.response;
+      const errorResponse = (err as { response?: { status?: number; data?: { message?: string } } })
+        ?.response;
       if (errorResponse?.status === 409) {
         setServerConflict({
           amount: parsedAmount,
@@ -337,31 +351,28 @@ export default function EntriesPage() {
             error={amountError}
           />
 
-          <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-card border border-border/40 rounded-xl p-3 space-y-2.5">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
                 <Calendar className="w-4 h-4" />
               </div>
               <div>
-                <label htmlFor="entry-date" className="block text-xs text-muted-foreground">
+                <span id="entry-date-label" className="block text-xs text-muted-foreground">
                   {t('entries.dateLabel', 'Date')}
-                </label>
+                </span>
                 <span className="text-sm font-medium text-foreground">
                   {date === today ? t('common.today', 'Today') : formatDate(date)}
                 </span>
               </div>
             </div>
-
-            <input
+            <DateSelect
               id="entry-date"
-              type="date"
-              max={today}
               value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
+              max={today}
+              onChange={(ymd) => {
+                setDate(ymd);
                 setServerConflict(null);
               }}
-              className="text-xs bg-muted/60 text-foreground px-2.5 py-1.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             />
           </div>
 
@@ -376,7 +387,11 @@ export default function EntriesPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">
                     {t('entries.businessGroup', 'Business')}
                   </span>
-                  <div role="radiogroup" aria-label="Business categories" className="flex flex-wrap gap-2">
+                  <div
+                    role="radiogroup"
+                    aria-label="Business categories"
+                    className="flex flex-wrap gap-2"
+                  >
                     {businessCategories.map((cat) => {
                       const isSelected = categoryId === cat.id;
                       return (
@@ -409,7 +424,11 @@ export default function EntriesPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">
                     {t('entries.personalGroup', 'Personal / Family')}
                   </span>
-                  <div role="radiogroup" aria-label="Personal categories" className="flex flex-wrap gap-2">
+                  <div
+                    role="radiogroup"
+                    aria-label="Personal categories"
+                    className="flex flex-wrap gap-2"
+                  >
                     {personalCategories.map((cat) => {
                       const isSelected = categoryId === cat.id;
                       return (
@@ -455,7 +474,10 @@ export default function EntriesPage() {
                   [
                     { value: 'salary_injection', label: t('entries.salaryIn', 'Salary in') },
                     { value: 'borrowed_in', label: t('entries.borrowedIn', 'Borrowed in') },
-                    { value: 'borrowed_repaid', label: t('entries.borrowedRepaid', 'Borrowed repaid') },
+                    {
+                      value: 'borrowed_repaid',
+                      label: t('entries.borrowedRepaid', 'Borrowed repaid'),
+                    },
                   ] as const
                 ).map((ft) => {
                   const isSelected = fundingType === ft.value;
@@ -502,7 +524,10 @@ export default function EntriesPage() {
             >
               <span>
                 {t('entries.duplicateRecorded', {
-                  date: activeConflict.date === today ? t('common.today', 'Today') : activeConflict.date,
+                  date:
+                    activeConflict.date === today
+                      ? t('common.today', 'Today')
+                      : activeConflict.date,
                   currency: 'ETB',
                   amount: activeConflict.amount,
                   defaultValue: `Already recorded for ${activeConflict.date}: ETB ${activeConflict.amount}.`,
@@ -529,8 +554,8 @@ export default function EntriesPage() {
               {isSaving || isSubmitting
                 ? t('common.loading', 'Loading...')
                 : isEditMode
-                ? t('entries.updateEntry', 'Update Entry')
-                : t('entries.saveEntry', 'Save Entry')}
+                  ? t('entries.updateEntry', 'Update Entry')
+                  : t('entries.saveEntry', 'Save Entry')}
             </span>
           </button>
           {!isOnline && <OfflineSaveNotice id="entry-offline-notice" />}
@@ -555,10 +580,10 @@ export default function EntriesPage() {
                   {period === 'today'
                     ? t('entries.periodToday', 'Today')
                     : period === 'week'
-                    ? t('entries.periodThisWeek', 'This Week')
-                    : period === 'month'
-                    ? t('entries.periodThisMonth', 'This Month')
-                    : t('entries.periodCustom', 'Custom range')}
+                      ? t('entries.periodThisWeek', 'This Week')
+                      : period === 'month'
+                        ? t('entries.periodThisMonth', 'This Month')
+                        : t('entries.periodCustom', 'Custom range')}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
@@ -623,8 +648,8 @@ export default function EntriesPage() {
                   activeTab === 'income'
                     ? { entryType: 'income', ...(entry as IncomeEntry) }
                     : activeTab === 'expense'
-                    ? { entryType: 'expense', ...(entry as ExpenseWithCategory) }
-                    : { entryType: 'funding', ...(entry as FundingEntry) };
+                      ? { entryType: 'expense', ...(entry as ExpenseWithCategory) }
+                      : { entryType: 'funding', ...(entry as FundingEntry) };
 
                 return (
                   <EntryListCard

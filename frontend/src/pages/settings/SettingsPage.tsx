@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 import { InstallButton } from '@/components/common/InstallPrompts';
 import AppHeader from '@/components/common/AppHeader';
+import { useCalendar, useCalendarStore } from '@/store/calendar.store';
+import type { CalendarSystem } from '@/lib/calendar';
 import { setAppLanguage } from '@/lib/i18n';
 
 const LANGUAGES = [
@@ -20,6 +22,8 @@ export default function SettingsPage() {
   useDocumentMeta({ titleKey: 'pages.settings', noindex: true });
   const { logout } = useAuth();
   const { mode, setMode } = useTheme();
+  const calendar = useCalendar();
+  const setCalendar = useCalendarStore((st) => st.setCalendar);
 
   return (
     <div className="min-h-screen bg-background pb-28">
@@ -37,6 +41,20 @@ export default function SettingsPage() {
               { value: 'light', label: t('settings.themeLight', 'Light') },
               { value: 'dark', label: t('settings.themeDark', 'Dark') },
               { value: 'system', label: t('settings.themeSystem', 'System') },
+            ]}
+          />
+        </div>
+
+        <div>
+          <p className="text-sm font-medium text-foreground mb-1">{t('settings.calendar')}</p>
+          <p className="text-xs text-muted-foreground mb-3">{t('settings.calendarHelper')}</p>
+          <SegmentedControl
+            name="calendar"
+            value={calendar}
+            onChange={(val) => setCalendar(val as CalendarSystem)}
+            options={[
+              { value: 'ethiopian', label: t('settings.calendarEthiopian') },
+              { value: 'gregorian', label: t('settings.calendarGregorian') },
             ]}
           />
         </div>

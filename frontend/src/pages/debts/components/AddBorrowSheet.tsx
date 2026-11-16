@@ -12,6 +12,7 @@ import FormField from '@/components/common/FormField';
 import PillInput from '@/components/common/PillInput';
 import { useCreateBorrowRecord } from '@/hooks/useDebtCustomerDetail';
 import { todayLocal, isFutureDate } from '@/lib/date';
+import DateSelect from '@/components/common/DateSelect';
 
 interface AddBorrowSheetProps {
   customerId: string;
@@ -90,11 +91,7 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
   };
 
   return (
-    <BottomSheet
-      open={open}
-      onOpenChange={onOpenChange}
-      title={t('debts.addBorrow', 'Add Borrow')}
-    >
+    <BottomSheet open={open} onOpenChange={onOpenChange} title={t('debts.addBorrow', 'Add Borrow')}>
       <form onSubmit={handleSave} className="space-y-4 pt-1">
         <AmountInput
           id="borrow-amount"
@@ -106,17 +103,15 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
           error={amountError}
         />
 
-        <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center justify-between">
-          <label htmlFor="borrow-date" className="text-xs font-semibold text-muted-foreground">
-            {t('entries.dateLabel', 'Date')}
-          </label>
-          <input
+        <div className="bg-card border border-border/40 rounded-xl p-3">
+          <DateSelect
+            label={t('entries.dateLabel', 'Date')}
             id="borrow-date"
-            type="date"
-            max={today}
             value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="text-xs bg-muted/60 text-foreground px-2.5 py-1.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
+            max={today}
+            onChange={(ymd) => {
+              setDate(ymd);
+            }}
           />
         </div>
 
@@ -138,11 +133,7 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
           />
         </FormField>
 
-        <FormField
-          label={t('debts.noteLabel', 'Note')}
-          id="borrow-note"
-          optional
-        >
+        <FormField label={t('debts.noteLabel', 'Note')} id="borrow-note" optional>
           <PillInput
             id="borrow-note"
             value={note}

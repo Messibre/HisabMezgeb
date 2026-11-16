@@ -77,7 +77,11 @@
     "themeLight": "ብርሃን",
     "themeDark": "ጸላም",
     "themeSystem": "ናይ ሲስተም",
-    "toggleTheme": "ተማ ምልዋጥ"
+    "toggleTheme": "ተማ ምልዋጥ",
+    "calendar": "ዓውደ ኣዋርሕ",
+    "calendarEthiopian": "ናይ ኢትዮጵያ",
+    "calendarGregorian": "ግሪጎርያን",
+    "calendarHelper": "ዕለታት ብኸመይ ከም ዝርኣዩን ዝኣትዉን"
   },
   "notFound": {
     "title": "404",
@@ -439,5 +443,10 @@
     "equb": "ዕቑብ",
     "homeNecessities": "ናይ ገዛ ኣድላዪ ነገራት",
     "debtPayment": "ክፍሊት ዕዳ"
+  },
+  "date": {
+    "day": "መዓልቲ",
+    "month": "ወርሒ",
+    "year": "ዓመት"
   }
 }

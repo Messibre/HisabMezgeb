@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import BottomSheet from './BottomSheet';
 import api from '@/lib/axios';
 import { extractFilenameFromHeader } from '@/lib/utils';
+import { useCalendar } from '@/store/calendar.store';
 
 export type ExportDocType = 'report' | 'statement';
 export type ExportDocFormat = 'pdf' | 'docx' | 'csv';
@@ -38,6 +39,7 @@ export default function ExportSheet({
 
   const [format, setFormat] = useState<ExportDocFormat>('pdf');
   const [lang, setLang] = useState<ExportDocLang>(currentLang);
+  const calendar = useCalendar();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
 
@@ -64,10 +66,10 @@ export default function ExportSheet({
 
     if (type === 'report' && reportParams) {
       const { from, to } = reportParams;
-      url = `/reports/export?from=${from}&to=${to}&format=${format}&lang=${lang}`;
+      url = `/reports/export?from=${from}&to=${to}&format=${format}&lang=${lang}&calendar=${calendar}`;
       fallbackFilename = `hisab-report-${from}_to_${to}.${format}`;
     } else if (type === 'statement' && customerId) {
-      url = `/debt-customers/${customerId}/statement?format=${format}&lang=${lang}`;
+      url = `/debt-customers/${customerId}/statement?format=${format}&lang=${lang}&calendar=${calendar}`;
       const safeName = (customerName || 'customer').replace(/[^\w-]/g, '_');
       fallbackFilename = `statement-${safeName}.${format}`;
     } else {

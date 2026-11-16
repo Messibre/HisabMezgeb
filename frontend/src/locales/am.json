@@ -77,7 +77,11 @@
     "themeLight": "ብርሃን",
     "themeDark": "ጨለማ",
     "themeSystem": "የስርዓት",
-    "toggleTheme": "ገጽታ ቀይር"
+    "toggleTheme": "ገጽታ ቀይር",
+    "calendar": "የቀን መቁጠሪያ",
+    "calendarEthiopian": "የኢትዮጵያ",
+    "calendarGregorian": "ግሪጎሪያን",
+    "calendarHelper": "ቀኖች እንዴት እንደሚታዩ እና እንደሚገቡ"
   },
   "notFound": {
     "title": "404",
@@ -439,5 +443,10 @@
     "equb": "ዕቁብ",
     "homeNecessities": "የቤት ፍጆታ",
     "debtPayment": "የዕዳ ክፍያ"
+  },
+  "date": {
+    "day": "ቀን",
+    "month": "ወር",
+    "year": "ዓመት"
   }
 }

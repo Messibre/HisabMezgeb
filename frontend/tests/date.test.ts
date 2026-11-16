@@ -56,7 +56,7 @@ describe('date.ts helpers', () => {
     const yesterday = toApiDate(yesterdayDate);
     expect(formatDate(yesterday)).toBe('Yesterday');
 
-    expect(formatDate('2025-06-15')).toBe('Jun 15, 2025');
+    expect(formatDate('2025-06-15')).toBe('June 15, 2025');
   });
 
   it('isFutureDate correctly identifies past, present, and future dates', () => {

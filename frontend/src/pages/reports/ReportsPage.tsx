@@ -1,6 +1,15 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Download, TrendingUp, TrendingDown, Users, Wallet, ArrowDownRight, ArrowUpRight, FileSpreadsheet } from 'lucide-react';
+import {
+  Download,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Wallet,
+  ArrowDownRight,
+  ArrowUpRight,
+  FileSpreadsheet,
+} from 'lucide-react';
 import AppHeader from '@/components/common/AppHeader';
 import { PeriodPicker, type PeriodType } from '@/components/common/PeriodPicker';
 import StatCard from '@/components/common/StatCard';
@@ -11,8 +20,16 @@ import { useReportSummary } from '@/hooks/useReportSummary';
 import { useDebtsPeriodReport } from '@/hooks/useDebtsPeriodReport';
 import { useExpenseBreakdown } from '@/hooks/useExpenseBreakdown';
 import ExportSheet from '@/components/common/ExportSheet';
-import { todayLocal, startOfWeek, endOfWeek, startOfMonth, endOfMonth, formatDate } from '@/lib/date';
+import {
+  todayLocal,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  formatDate,
+} from '@/lib/date';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
+import DateSelect from '@/components/common/DateSelect';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -76,7 +93,8 @@ export default function ReportsPage() {
     summary.totalPersonalDraws === 0 &&
     summary.totalFundingIn === 0 &&
     summary.totalFundingOut === 0 &&
-    (!debtsPeriod || (debtsPeriod.totalNewlyBorrowed === 0 && debtsPeriod.totalRepaidInPeriod === 0));
+    (!debtsPeriod ||
+      (debtsPeriod.totalNewlyBorrowed === 0 && debtsPeriod.totalRepaidInPeriod === 0));
 
   return (
     <div className="min-h-screen bg-background pb-32">
@@ -87,31 +105,27 @@ export default function ReportsPage() {
           <PeriodPicker value={period} onChange={setPeriod} />
 
           {period === 'custom' && (
-            <div className="grid grid-cols-2 gap-3 rounded-xl border border-outline-variant/40 bg-card p-3">
+            <div className="grid grid-cols-1 gap-3 rounded-xl border border-outline-variant/40 bg-card p-3">
               <div>
-                <label htmlFor="custom-from" className="block text-xs font-medium text-on-surface-variant mb-1">
-                  {t('reports.fromDate', 'From')}
-                </label>
-                <input
+                <DateSelect
+                  label={t('reports.fromDate', 'From')}
                   id="custom-from"
-                  type="date"
                   value={customFrom}
                   max={customTo}
-                  onChange={(e) => setCustomFrom(e.target.value)}
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary"
+                  onChange={(ymd) => {
+                    setCustomFrom(ymd);
+                  }}
                 />
               </div>
               <div>
-                <label htmlFor="custom-to" className="block text-xs font-medium text-on-surface-variant mb-1">
-                  {t('reports.toDate', 'To')}
-                </label>
-                <input
+                <DateSelect
+                  label={t('reports.toDate', 'To')}
                   id="custom-to"
-                  type="date"
                   value={customTo}
                   min={customFrom}
-                  onChange={(e) => setCustomTo(e.target.value)}
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary"
+                  onChange={(ymd) => {
+                    setCustomTo(ymd);
+                  }}
                 />
               </div>
             </div>
@@ -191,7 +205,9 @@ export default function ReportsPage() {
               </h2>
               <CategoryBreakdownList
                 items={expenseBreakdown || []}
-                totalExpenses={(summary?.totalBusinessExpenses ?? 0) + (summary?.totalPersonalDraws ?? 0)}
+                totalExpenses={
+                  (summary?.totalBusinessExpenses ?? 0) + (summary?.totalPersonalDraws ?? 0)
+                }
               />
             </section>
 
@@ -221,9 +237,14 @@ export default function ReportsPage() {
                 data-testid="reports-empty-notice"
               >
                 <FileSpreadsheet className="mx-auto h-8 w-8 text-on-surface-variant/60 mb-2" />
-                <p className="font-medium text-foreground">{t('reports.noData', 'No data for this period yet')}</p>
+                <p className="font-medium text-foreground">
+                  {t('reports.noData', 'No data for this period yet')}
+                </p>
                 <p className="text-xs text-on-surface-variant mt-1">
-                  {t('reports.noDataDescription', 'Transactions entered for this date range will appear here.')}
+                  {t(
+                    'reports.noDataDescription',
+                    'Transactions entered for this date range will appear here.'
+                  )}
                 </p>
               </div>
             )}

@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { Home, Receipt, Users, BarChart3, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/constants';
+import { useCalendar } from '@/store/calendar.store';
 
 const TABS = [
   { to: ROUTES.HOME, icon: Home, labelKey: 'nav.home' },
@@ -13,11 +14,13 @@ const TABS = [
 
 export default function BottomTabLayout() {
   const { t } = useTranslation();
+  // Re-mount the page when the calendar setting changes so every date re-renders.
+  const calendar = useCalendar();
 
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
       <main id="main" tabIndex={-1} className="flex-1 pb-[calc(76px+env(safe-area-inset-bottom,0px)+16px)] focus:outline-none">
-        <Outlet />
+        <Outlet key={calendar} />
       </main>
 
       <nav

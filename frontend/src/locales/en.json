@@ -77,7 +77,11 @@
     "themeLight": "Light",
     "themeDark": "Dark",
     "themeSystem": "System",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "calendar": "Calendar",
+    "calendarEthiopian": "Ethiopian",
+    "calendarGregorian": "Gregorian",
+    "calendarHelper": "How dates are shown and entered"
   },
   "notFound": {
     "title": "404",
@@ -439,5 +443,10 @@
     "equb": "Equb",
     "homeNecessities": "Home Necessities",
     "debtPayment": "Debt payment"
+  },
+  "date": {
+    "day": "Day",
+    "month": "Month",
+    "year": "Year"
   }
 }

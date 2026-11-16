@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import BottomSheet from '@/components/common/BottomSheet';
 import { todayLocal, isFutureDate } from '@/lib/date';
+import DateSelect from '@/components/common/DateSelect';
 
 interface CustomRangeSheetProps {
   open: boolean;
@@ -46,38 +47,30 @@ export function CustomRangeSheet({
       title={t('entries.customRangeTitle', 'Select Custom Range')}
     >
       <form onSubmit={handleApply} className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           <div>
-            <label htmlFor="custom-from" className="block text-xs font-medium text-muted-foreground mb-1">
-              From
-            </label>
-            <input
+            <DateSelect
+              label={t('reports.fromDate', 'From')}
               id="custom-from"
-              type="date"
-              max={today}
               value={from}
-              onChange={(e) => {
-                setFrom(e.target.value);
+              max={today}
+              onChange={(ymd) => {
+                setFrom(ymd);
                 setError('');
               }}
-              className="w-full h-11 px-3 rounded-lg border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div>
-            <label htmlFor="custom-to" className="block text-xs font-medium text-muted-foreground mb-1">
-              To
-            </label>
-            <input
+            <DateSelect
+              label={t('reports.toDate', 'To')}
               id="custom-to"
-              type="date"
-              max={today}
               value={to}
-              onChange={(e) => {
-                setTo(e.target.value);
+              max={today}
+              onChange={(ymd) => {
+                setTo(ymd);
                 setError('');
               }}
-              className="w-full h-11 px-3 rounded-lg border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
