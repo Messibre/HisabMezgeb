@@ -6,6 +6,7 @@ import SegmentedControl from '@/components/common/SegmentedControl';
 import { cn } from '@/lib/utils';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 import { InstallButton } from '@/components/common/InstallPrompts';
+import { setAppLanguage } from '@/lib/i18n';
 
 const LANGUAGES = [
   { code: 'en', nativeLabel: 'English' },
@@ -48,7 +49,7 @@ export default function SettingsPage() {
             <button
               key={lang.code}
               type="button"
-              onClick={() => i18n.changeLanguage(lang.code)}
+              onClick={() => setAppLanguage(lang.code)}
               className={cn(
                 'flex-1 rounded-md border px-3 py-3 text-base',
                 i18n.language === lang.code

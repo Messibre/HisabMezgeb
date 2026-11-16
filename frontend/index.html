@@ -1,7 +1,31 @@
 <!doctype html>
-<html lang="en">
+<html lang="am">
   <head>
     <meta charset="UTF-8" />
+    <!--
+      Sets <html lang> before first paint with the same rules as src/lib/language.ts:
+      saved device choice, else Tigrigna/Amharic device language, else Amharic.
+    -->
+    <script>
+      (function () {
+        var lang = 'am';
+        try {
+          var saved = localStorage.getItem('hisabMezgebLanguage');
+          if (saved === 'am' || saved === 'ti' || saved === 'en') {
+            lang = saved;
+          } else {
+            var langs = navigator.languages || [navigator.language || ''];
+            for (var i = 0; i < langs.length; i++) {
+              var base = String(langs[i]).toLowerCase().split('-')[0];
+              if (base === 'ti' || base === 'am') { lang = base; break; }
+            }
+          }
+        } catch (e) {
+          // Storage blocked: keep Amharic.
+        }
+        document.documentElement.lang = lang;
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Hisab Mezgeb - Simple Money & Debt Tracker</title>
     <meta
