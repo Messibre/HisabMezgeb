@@ -72,7 +72,7 @@ export const listCustomersWithBalance = async (
   accountId: string,
   search?: string,
 ): Promise<CustomerWithBalance[]> => {
-  const where: any = {
+  const where: Prisma.DebtCustomerWhereInput = {
     accountId,
     deletedAt: null,
   };
@@ -86,21 +86,37 @@ export const listCustomersWithBalance = async (
     orderBy: { name: 'asc' },
   });
 
-  // Compute balance for each customer
-  const results: CustomerWithBalance[] = [];
-  for (const customer of customers) {
-    const balance = await calculateCustomerBalance(customer.id);
-    results.push({
+  if (customers.length === 0) return [];
+
+  // Two grouped sums for all customers instead of two queries per customer.
+  const customerIds = customers.map((c) => c.id);
+  const [borrowSums, paymentSums] = await Promise.all([
+    prisma.debtBorrowRecord.groupBy({
+      by: ['customerId'],
+      where: { customerId: { in: customerIds }, deletedAt: null },
+      _sum: { amount: true },
+    }),
+    prisma.debtPayment.groupBy({
+      by: ['customerId'],
+      where: { customerId: { in: customerIds }, deletedAt: null },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const borrowed = new Map(borrowSums.map((r) => [r.customerId, r._sum.amount ?? new Prisma.Decimal(0)]));
+  const paid = new Map(paymentSums.map((r) => [r.customerId, r._sum.amount ?? new Prisma.Decimal(0)]));
+
+  return customers.map((customer) => {
+    const balance = new Prisma.Decimal(borrowed.get(customer.id) ?? 0).minus(paid.get(customer.id) ?? 0);
+    return {
       id: customer.id,
       name: customer.name,
       note: customer.note,
-      balance,
+      balance: balance.isNegative() ? 0 : balance.toNumber(),
       createdAt: customer.createdAt,
       updatedAt: customer.updatedAt,
-    });
-  }
-
-  return results;
+    };
+  });
 };
 
 export const createCustomer = async (

@@ -64,10 +64,12 @@ vi.mock('../../src/config/db.js', () => ({
     debtBorrowRecord: {
       aggregate: vi.fn(),
       findMany: vi.fn(),
+      groupBy: vi.fn(),
     },
     debtPayment: {
       aggregate: vi.fn(),
       findMany: vi.fn(),
+      groupBy: vi.fn(),
     },
   },
 }));
@@ -277,10 +279,16 @@ describe('DebtCustomer Service', () => {
   });
 
   describe('listCustomersWithBalance', () => {
+    const groupSum = (customerId: string, amount: number | null) => [
+      { customerId, _sum: { amount: amount === null ? null : new Decimal(amount) } },
+    ];
+    const mockBorrowGroupBy = prisma.debtBorrowRecord.groupBy as unknown as Mock;
+    const mockPaymentGroupBy = prisma.debtPayment.groupBy as unknown as Mock;
+
     it('should return list of customers with their current balance', async () => {
       mockCustomerFindMany.mockResolvedValue([mockCustomer]);
-      mockBorrowAggregate.mockResolvedValueOnce(createAggregateResult(1500));
-      mockPaymentAggregate.mockResolvedValueOnce(createAggregateResult(800));
+      mockBorrowGroupBy.mockResolvedValueOnce(groupSum(mockCustomer.id, 1500));
+      mockPaymentGroupBy.mockResolvedValueOnce(groupSum(mockCustomer.id, 800));
 
       const result = await listCustomersWithBalance(accountId);
 
@@ -294,10 +302,24 @@ describe('DebtCustomer Service', () => {
       expect(result).toEqual([mockCustomerWithBalance]);
     });
 
+    it('uses two grouped queries for any number of customers (no N+1)', async () => {
+      const many = Array.from({ length: 25 }, (_, i) => ({ ...mockCustomer, id: `c${i}` }));
+      mockCustomerFindMany.mockResolvedValue(many);
+      mockBorrowGroupBy.mockResolvedValueOnce(many.map((c) => ({ customerId: c.id, _sum: { amount: new Decimal(100.3) } })));
+      mockPaymentGroupBy.mockResolvedValueOnce(many.map((c) => ({ customerId: c.id, _sum: { amount: new Decimal(100) } })));
+
+      const result = await listCustomersWithBalance(accountId);
+
+      expect(mockBorrowGroupBy).toHaveBeenCalledTimes(1);
+      expect(mockPaymentGroupBy).toHaveBeenCalledTimes(1);
+      expect(mockBorrowAggregate).not.toHaveBeenCalled();
+      expect(result.every((c) => c.balance === 0.3)).toBe(true);
+    });
+
     it('should filter by search term when provided', async () => {
       mockCustomerFindMany.mockResolvedValue([mockCustomer]);
-      mockBorrowAggregate.mockResolvedValueOnce(createAggregateResult(1500));
-      mockPaymentAggregate.mockResolvedValueOnce(createAggregateResult(800));
+      mockBorrowGroupBy.mockResolvedValueOnce(groupSum(mockCustomer.id, 1500));
+      mockPaymentGroupBy.mockResolvedValueOnce(groupSum(mockCustomer.id, 800));
 
       await listCustomersWithBalance(accountId, 'John');
 
@@ -321,8 +343,8 @@ describe('DebtCustomer Service', () => {
 
     it('should handle customers with zero balance', async () => {
       mockCustomerFindMany.mockResolvedValue([mockCustomer]);
-      mockBorrowAggregate.mockResolvedValueOnce(createAggregateResult(null));
-      mockPaymentAggregate.mockResolvedValueOnce(createAggregateResult(null));
+      (prisma.debtBorrowRecord.groupBy as unknown as Mock).mockResolvedValueOnce([]);
+      (prisma.debtPayment.groupBy as unknown as Mock).mockResolvedValueOnce([]);
 
       const result = await listCustomersWithBalance(accountId);
 
