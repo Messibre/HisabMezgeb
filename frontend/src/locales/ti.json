@@ -259,7 +259,8 @@
     "deleteRecord": "መዝገብ ሰርዝ",
     "deleteRecordTitle": "መዝገብ ይሰረዝ?",
     "deleteRecordMessage": "ነዚ መዝገብ ክትሰርዞ ርግጸኛ ዲኻ?",
-    "itemsRequired": "ዝተወሰዱ ኣቑሑት በጃኹም ግለጹ"
+    "itemsRequired": "ዝተወሰዱ ኣቑሑት በጃኹም ግለጹ",
+    "nameTooLong": "ስም ካብ 100 ፊደላት ክበዝሕ የብሉን"
   },
   "reports": {
     "title": "ጸብጻባት",
@@ -407,5 +408,20 @@
   },
   "money": {
     "owedToYou": "ካብ ዓማዊል ዝጽበ"
+  },
+  "save": {
+    "saved": "{{kind}} ተመዝጊቡ",
+    "failed": "{{kind}} ኣይተመዝገበን",
+    "offline": "ኢንተርኔት የለን። እዚ ገና ክምዝገብ ኣይክእልን።",
+    "dismiss": "ዕጸው",
+    "kinds": {
+      "income": "ኣታዊ",
+      "expense": "ወጻኢ",
+      "funding": "ተወሳኺ ገንዘብ",
+      "borrow": "ልቓሕ",
+      "payment": "ክፍሊት",
+      "customer": "ዓሚል"
+    },
+    "tryAgain": "በጃኹም እንደገና ፈትኑ።"
   }
 }

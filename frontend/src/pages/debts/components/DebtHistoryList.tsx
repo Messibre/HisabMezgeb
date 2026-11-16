@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ShoppingBasket, Banknote, Clock } from 'lucide-react';
 import MoneyText from '@/components/common/MoneyText';
 import { formatDate } from '@/lib/date';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
 import type { DebtHistoryItem } from '@/types/api';
 
 interface DebtHistoryListProps {
@@ -16,6 +17,7 @@ export function DebtHistoryList({
   syncStatus,
 }: DebtHistoryListProps) {
   const { t } = useTranslation();
+  const highlightId = useSaveFeedbackStore((st) => st.highlightId);
 
   return (
     <div className="space-y-3">
@@ -37,8 +39,9 @@ export function DebtHistoryList({
                 key={item.id}
                 type="button"
                 onClick={() => onSelectRecord(item)}
+                data-highlighted={highlightId === item.id || undefined}
                 className={`w-full rounded-xl bg-card hover:bg-muted/40 p-3.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary border border-border/40 border-l-[5px] ${
-                  isBorrow ? 'border-l-money-out' : 'border-l-money-in'
+                  isBorrow ? 'border-l-money-out' : 'border-l-money-in'} ${highlightId === item.id ? 'ring-2 ring-primary' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">

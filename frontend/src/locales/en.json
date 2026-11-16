@@ -259,7 +259,8 @@
     "deleteRecord": "Delete Record",
     "deleteRecordTitle": "Delete Record?",
     "deleteRecordMessage": "Are you sure you want to delete this record?",
-    "itemsRequired": "Please describe what was borrowed"
+    "itemsRequired": "Please describe what was borrowed",
+    "nameTooLong": "Name must be 100 characters or less"
   },
   "reports": {
     "title": "Reports",
@@ -407,5 +408,20 @@
   },
   "money": {
     "owedToYou": "Owed to you"
+  },
+  "save": {
+    "saved": "{{kind}} saved",
+    "failed": "{{kind}} not saved",
+    "offline": "No internet. This cannot be saved yet.",
+    "dismiss": "Dismiss",
+    "kinds": {
+      "income": "Income",
+      "expense": "Expense",
+      "funding": "Funding",
+      "borrow": "Borrowing",
+      "payment": "Payment",
+      "customer": "Customer"
+    },
+    "tryAgain": "Please try again."
   }
 }

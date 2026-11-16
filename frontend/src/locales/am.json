@@ -259,7 +259,8 @@
     "deleteRecord": "መዝገብ ሰርዝ",
     "deleteRecordTitle": "መዝገቡ ይሰረዝ?",
     "deleteRecordMessage": "ይህንን መዝገብ መሰረዝ እርግጠኛ ነዎት?",
-    "itemsRequired": "የተወሰዱትን እቃዎች እባክዎ ይግለጹ"
+    "itemsRequired": "የተወሰዱትን እቃዎች እባክዎ ይግለጹ",
+    "nameTooLong": "ስሙ ከ100 ፊደላት መብለጥ የለበትም"
   },
   "reports": {
     "title": "ሪፖርቶች",
@@ -407,5 +408,20 @@
   },
   "money": {
     "owedToYou": "ከደንበኞች የሚጠበቅ"
+  },
+  "save": {
+    "saved": "{{kind}} ተመዝግቧል",
+    "failed": "{{kind}} አልተመዘገበም",
+    "offline": "ኢንተርኔት የለም። ይህ ገና ሊመዘገብ አይችልም።",
+    "dismiss": "ዝጋ",
+    "kinds": {
+      "income": "ገቢ",
+      "expense": "ወጪ",
+      "funding": "ተጨማሪ ገንዘብ",
+      "borrow": "ብድር",
+      "payment": "ክፍያ",
+      "customer": "ደንበኛ"
+    },
+    "tryAgain": "እባክዎ እንደገና ይሞክሩ።"
   }
 }

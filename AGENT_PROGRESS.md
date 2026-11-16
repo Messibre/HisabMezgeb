@@ -83,3 +83,6 @@ Started 2026-11-16. Decisions from the owner: migrations held until a backup is 
 | WP | Status | Notes |
 |---|---|---|
 | WP1 | done | Audit in docs/security-and-data-audit.md. Fixed: refresh limiter, per-phone/per-account limits, logout only on 401/403, log redaction, deleted-day revive + P2002→409, payment race lock + decimal balance, input limits, prod env warning, npm audit 0/0. Held: Cascade→Restrict migration. NOT VERIFIED: live cookies, DB-backed isolation test (no Docker). |
+| WP2 | done | 'Owed to you' neutral, no minus; sign table in MoneyText; zero never ±; unknown = dash; labels wrap; glossary + translation-review (needs Meseret). |
+| WP3 | partial | Step A done: Save disabled offline with visible reason, shared SaveConfirmation (status/alert, 4 s, repeats kind/date/amount, row highlight 2 s, check on button), ref double-tap guard, sessionStorage drafts cleared on save/logout. HELD: idempotency keys (migration) and therefore step B (offline queue wiring). |
+

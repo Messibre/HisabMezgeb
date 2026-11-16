@@ -9,6 +9,7 @@ import { useTheme } from '@/store/theme.store';
 import { OfflineBanner } from '@/components/common/OfflineBanner';
 import Toaster from '@/components/common/Toaster';
 import { PWAUpdateBanner } from '@/components/common/PWAUpdateBanner';
+import SaveConfirmation from '@/components/common/SaveConfirmation';
 
 /**
  * Whether to enable PWA features.
@@ -29,6 +30,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <OfflineBanner />
         <Toaster />
+        <SaveConfirmation />
         {enablePWA && <PWAUpdateBanner />}
         <RouterProvider router={router} />
       </QueryClientProvider>

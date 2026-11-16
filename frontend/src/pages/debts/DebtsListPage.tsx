@@ -2,9 +2,13 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Search, X, Plus, Users, UserPlus } from 'lucide-react';
-import { toast } from 'sonner';
 import AppHeader from '@/components/common/AppHeader';
 import MoneyText from '@/components/common/MoneyText';
+import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { useSubmitGuard } from '@/hooks/useSubmitGuard';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import { toUserError } from '@/lib/errors';
 import SkeletonRow from '@/components/common/SkeletonRow';
 import EmptyState from '@/components/common/EmptyState';
 import ErrorState from '@/components/common/ErrorState';
@@ -84,6 +88,10 @@ export default function DebtsListPage() {
   const [nameError, setNameError] = useState('');
 
   const createCustomer = useCreateDebtCustomer();
+  const isOnline = useOnlineStatus();
+  const { run: runGuarded, busy: isSubmitting } = useSubmitGuard();
+  const showSaved = useSaveFeedbackStore((st) => st.showSaved);
+  const showFailed = useSaveFeedbackStore((st) => st.showFailed);
 
   const handleOpenNewCustomer = (prefilledName = '') => {
     setNewName(prefilledName);
@@ -92,15 +100,20 @@ export default function DebtsListPage() {
     setIsNewCustomerOpen(true);
   };
 
-  const handleCreateCustomer = async (e: React.FormEvent) => {
+  const handleCreateCustomer = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isOnline) return;
+    void runGuarded(submitCustomer);
+  };
+
+  const submitCustomer = async () => {
     const trimmedName = newName.trim();
     if (!trimmedName) {
       setNameError(t('debts.nameRequired', 'Customer name is required'));
       return;
     }
     if (trimmedName.length > 100) {
-      setNameError('Name must be 100 characters or less');
+      setNameError(t('debts.nameTooLong', 'Name must be 100 characters or less'));
       return;
     }
 
@@ -110,11 +123,11 @@ export default function DebtsListPage() {
         note: newNote.trim() || undefined,
       });
 
-      toast.success(t('common.save', 'Saved'));
+      showSaved({ kind: 'customer', name: trimmedName, recordId: created.id });
       setIsNewCustomerOpen(false);
       navigate(buildDebtCustomerDetailPath(created.id));
-    } catch {
-      toast.error(t('common.error', 'Failed to save customer'));
+    } catch (err) {
+      showFailed({ kind: 'customer', message: t(toUserError(err).messageKey) });
     }
   };
 
@@ -259,13 +272,15 @@ export default function DebtsListPage() {
           <div className="pt-2">
             <button
               type="submit"
-              disabled={createCustomer.isPending}
+              disabled={createCustomer.isPending || isSubmitting || !isOnline}
+              aria-describedby={!isOnline ? 'customer-offline-notice' : undefined}
               className="w-full h-[52px] rounded-full bg-primary text-primary-foreground font-semibold text-base hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
             >
-              {createCustomer.isPending
+              {createCustomer.isPending || isSubmitting
                 ? t('common.loading', 'Loading...')
                 : t('debts.saveCustomer', 'Save Customer')}
             </button>
+            {!isOnline && <OfflineSaveNotice id="customer-offline-notice" />}
           </div>
         </form>
       </BottomSheet>

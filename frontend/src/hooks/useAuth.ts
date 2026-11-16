@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { ROUTES } from '@/constants';
 import type { LoginCredentials, RegisterPayload, Account } from '@/types';
+import { clearAllDrafts } from '@/hooks/useFormDraft';
 
 export function useAuth() {
   const { account, status, setAccount, clearSession } = useAuthStore();
@@ -33,6 +34,7 @@ export function useAuth() {
     // Clear TanStack Query in-memory cache
     queryClient.clear();
     clearSession();
+    clearAllDrafts();
 
     // Cache Storage holds strictly static app files (precached JS/CSS/HTML/fonts/icons).
     // API responses are NetworkOnly and never cached in Cache Storage.

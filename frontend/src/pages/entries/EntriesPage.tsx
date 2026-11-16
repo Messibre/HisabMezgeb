@@ -1,8 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
-import { Save, Calendar, FileText, ChevronDown } from 'lucide-react';
+import { Save, Check, Calendar, FileText, ChevronDown } from 'lucide-react';
 import AppHeader from '@/components/common/AppHeader';
 import SegmentedControl from '@/components/common/SegmentedControl';
 import AmountInput from '@/components/common/AmountInput';
@@ -33,6 +32,12 @@ import { EditEntrySheet } from './components/EditEntrySheet';
 import { CustomRangeSheet } from './components/CustomRangeSheet';
 import type { IncomeEntry, ExpenseWithCategory, FundingEntry } from '@/types/api';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { useSubmitGuard } from '@/hooks/useSubmitGuard';
+import { useFormDraft, clearDraft } from '@/hooks/useFormDraft';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
+import { toUserError } from '@/lib/errors';
 
 type TabType = 'income' | 'expense' | 'funding';
 type PeriodType = 'today' | 'week' | 'month' | 'custom';
@@ -92,6 +97,23 @@ export default function EntriesPage() {
   const updateFunding = useUpdateFunding();
 
   const { data: categories = [] } = useExpenseCategories();
+
+  const isOnline = useOnlineStatus();
+  const { run: runGuarded, busy: isSubmitting, justSaved, markSaved } = useSubmitGuard();
+  const showSaved = useSaveFeedbackStore((s) => s.showSaved);
+  const showFailed = useSaveFeedbackStore((s) => s.showFailed);
+
+  // Unsaved typed fields survive a reload (per tab; edits have their own key).
+  const draftKey = isEditMode && editEntryId ? `entries:${activeTab}:edit:${editEntryId}` : `entries:${activeTab}`;
+  useFormDraft(
+    draftKey,
+    { amount, note, categoryId: activeTab === 'expense' ? categoryId : '' },
+    (draft) => {
+      if (draft.amount) setAmount(draft.amount);
+      if (draft.note) setNote(draft.note);
+      if (draft.categoryId) setCategoryId(draft.categoryId);
+    },
+  );
 
   // Calculate date range for recent entries
   const { fromDate, toDate } = useMemo(() => {
@@ -159,8 +181,14 @@ export default function EntriesPage() {
     updateExpense.isPending ||
     updateFunding.isPending;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Offline, nothing can be saved: never pretend it was.
+    if (!isOnline) return;
+    void runGuarded(submitEntry);
+  };
+
+  const submitEntry = async () => {
     setAmountError('');
     setCategoryError('');
     setServerConflict(null);
@@ -220,31 +248,34 @@ export default function EntriesPage() {
             payload: { amount: parsedAmount, note: note || undefined },
           });
         }
-        toast.success(t('entries.updatedToast', 'Updated'));
+        showSaved({ kind: activeTab, date, amount: parsedAmount, recordId: editEntryId });
       } else {
+        let created: { id: string } | undefined;
         if (activeTab === 'income') {
-          await createIncome.mutateAsync({
+          created = await createIncome.mutateAsync({
             date,
             amount: parsedAmount,
             note: note || undefined,
           });
         } else if (activeTab === 'expense') {
-          await createExpense.mutateAsync({
+          created = await createExpense.mutateAsync({
             date,
             categoryId,
             amount: parsedAmount,
             note: note || undefined,
           });
         } else {
-          await createFunding.mutateAsync({
+          created = await createFunding.mutateAsync({
             date,
             type: fundingType,
             amount: parsedAmount,
             note: note || undefined,
           });
         }
-        toast.success(t('entries.savedToast', 'Saved'));
+        showSaved({ kind: activeTab, date, amount: parsedAmount, recordId: created?.id });
       }
+      markSaved();
+      clearDraft(draftKey);
 
       // Reset form on success (keep date and tab)
       setAmount('');
@@ -260,7 +291,7 @@ export default function EntriesPage() {
           date,
         });
       } else {
-        toast.error(t('common.error', 'Failed to save entry'));
+        showFailed({ kind: activeTab, message: t(toUserError(err).messageKey) });
       }
     }
   };
@@ -507,18 +538,20 @@ export default function EntriesPage() {
           {/* Primary pill save button (52px, full width) */}
           <button
             type="submit"
-            disabled={isSaving}
+            disabled={isSaving || isSubmitting || !isOnline}
+            aria-describedby={!isOnline ? 'entry-offline-notice' : undefined}
             className="w-full h-[52px] rounded-full bg-primary text-primary-foreground font-semibold text-base hover:bg-primary/90 flex items-center justify-center gap-2 transition-colors shadow-sm disabled:opacity-50"
           >
-            <Save className="w-5 h-5" />
+            {justSaved ? <Check className="w-5 h-5" /> : <Save className="w-5 h-5" />}
             <span>
-              {isSaving
+              {isSaving || isSubmitting
                 ? t('common.loading', 'Loading...')
                 : isEditMode
                 ? t('entries.updateEntry', 'Update Entry')
                 : t('entries.saveEntry', 'Save Entry')}
             </span>
           </button>
+          {!isOnline && <OfflineSaveNotice id="entry-offline-notice" />}
         </form>
 
         {/* Recent entries section */}
