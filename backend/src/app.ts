@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { type Request } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import pinoHttp from 'pino-http';
+import { pinoHttp } from 'pino-http';
 import { randomUUID } from 'crypto';
 import type { IncomingMessage } from 'http';
 
@@ -29,9 +29,9 @@ app.use((req, res, next) => {
 });
 
 app.use(
-  (pinoHttp as any)({
+  pinoHttp({
     logger,
-    genReqId: (req: IncomingMessage) => (req as any).id || randomUUID(),
+    genReqId: (req: IncomingMessage) => (req as Request).id || randomUUID(),
   }),
 );
 
@@ -42,10 +42,9 @@ app.use(
     credentials: true,
   }),
 );
-app.use(defaultLimiter);
-
-//  Parse cookies
+// Cookies are parsed before the limiter so signed-in traffic is limited per account.
 app.use(cookieParser());
+app.use(defaultLimiter);
 
 // Body Parsing Configurations
 app.use(express.json({ limit: '10kb' }));
