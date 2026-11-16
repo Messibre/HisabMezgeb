@@ -53,7 +53,7 @@ export default function LandingPage() {
           <Link
             to={ROUTES.LANDING}
             className="flex items-center gap-2.5 font-bold text-foreground text-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded-md p-1 -m-1"
-            aria-label="Hisab Mezgeb"
+            aria-label={t('brand.name')}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@ export default function LandingPage() {
                 <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
               </g>
             </svg>
-            <span className="tracking-tight text-base sm:text-lg">Hisab Mezgeb</span>
+            <span className="tracking-tight text-base sm:text-lg">{t('brand.name')}</span>
           </Link>
 
           {/* Navigation & Controls */}
@@ -104,7 +104,7 @@ export default function LandingPage() {
             {/* Tag Badge */}
             <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary mb-6">
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
-              <span>Hisab Mezgeb</span>
+              <span>{t('brand.name')}</span>
             </div>
 
             {/* ONE H1 */}
@@ -452,7 +452,7 @@ export default function LandingPage() {
                 <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
               </g>
             </svg>
-            <span className="font-semibold text-foreground text-sm">Hisab Mezgeb</span>
+            <span className="font-semibold text-foreground text-sm">{t('brand.name')}</span>
             <span className="text-xs text-muted-foreground hidden sm:inline">—</span>
             <span className="text-xs text-muted-foreground hidden sm:inline">
               {t('landing.footer.tagline', "Your shop's daily money and debt book.")}
@@ -475,7 +475,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Hisab Mezgeb.{' '}
+            © {new Date().getFullYear()} {t('brand.name')}.{' '}
             {t('landing.footer.rights', 'All rights reserved.')}
           </p>
         </div>

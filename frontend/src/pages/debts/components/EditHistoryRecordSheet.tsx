@@ -14,6 +14,7 @@ import {
   useDeletePayment,
 } from '@/hooks/useDebtCustomerDetail';
 import type { DebtHistoryItem } from '@/types/api';
+import { toUserError } from '@/lib/errors';
 
 interface EditHistoryRecordSheetProps {
   customerId: string;
@@ -89,8 +90,8 @@ function EditRecordForm({
 
       toast.success(t('common.save', 'Saved'));
       onClose();
-    } catch {
-      toast.error(t('common.error', 'Failed to update record'));
+    } catch (err) {
+      toast.error(t(toUserError(err).messageKey));
     }
   };
 
@@ -105,8 +106,8 @@ function EditRecordForm({
       toast.success(t('entries.deletedToast', 'Deleted'));
       setShowDeleteConfirm(false);
       onClose();
-    } catch {
-      toast.error(t('common.error', 'Failed to delete record'));
+    } catch (err) {
+      toast.error(t(toUserError(err).messageKey));
     }
   };
 

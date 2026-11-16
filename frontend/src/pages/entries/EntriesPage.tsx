@@ -38,6 +38,7 @@ import { useFormDraft, clearDraft } from '@/hooks/useFormDraft';
 import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
 import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
 import { toUserError } from '@/lib/errors';
+import { categoryLabel } from '@/lib/categories';
 
 type TabType = 'income' | 'expense' | 'funding';
 type PeriodType = 'today' | 'week' | 'month' | 'custom';
@@ -133,6 +134,7 @@ export default function EntriesPage() {
     data: historyData = [],
     isLoading: isLoadingHistory,
     isError: isHistoryError,
+    error: historyError,
     refetch: refetchHistory,
   } = useEntryHistory(activeTab, fromDate, toDate);
 
@@ -410,7 +412,7 @@ export default function EntriesPage() {
                               : 'bg-muted/40 text-foreground border-border hover:bg-muted'
                           }`}
                         >
-                          {cat.name}
+                          {categoryLabel(cat.name, t)}
                         </button>
                       );
                     })}
@@ -443,7 +445,7 @@ export default function EntriesPage() {
                               : 'bg-muted/40 text-foreground border-border hover:bg-muted'
                           }`}
                         >
-                          {cat.name}
+                          {categoryLabel(cat.name, t)}
                         </button>
                       );
                     })}
@@ -629,7 +631,7 @@ export default function EntriesPage() {
             </div>
           ) : isHistoryError ? (
             <ErrorState
-              message={t('common.error', 'Failed to load entries')}
+              message={t(toUserError(historyError).messageKey)}
               onRetry={() => refetchHistory()}
             />
           ) : historyData.length === 0 ? (

@@ -15,6 +15,8 @@ import {
   useDeleteFunding,
 } from '@/hooks/useEntryMutations';
 import type { EntryItem } from './EntryListCard';
+import { categoryLabel, fundingTypeLabel } from '@/lib/categories';
+import { toUserError } from '@/lib/errors';
 
 interface EditEntrySheetProps {
   entry: EntryItem | null;
@@ -95,8 +97,8 @@ function EditEntryForm({ entry, onClose }: EditEntryFormProps) {
 
       toast.success(t('entries.updatedToast', 'Updated'));
       onClose();
-    } catch {
-      toast.error(t('common.error', 'Failed to update entry'));
+    } catch (err) {
+      toast.error(t(toUserError(err).messageKey));
     }
   };
 
@@ -113,8 +115,8 @@ function EditEntryForm({ entry, onClose }: EditEntryFormProps) {
       toast.success(t('entries.deletedToast', 'Deleted'));
       setShowDeleteConfirm(false);
       onClose();
-    } catch {
-      toast.error(t('common.error', 'Failed to delete entry'));
+    } catch (err) {
+      toast.error(t(toUserError(err).messageKey));
     }
   };
 
@@ -194,7 +196,11 @@ export function EditEntrySheet({ entry, open, onOpenChange }: EditEntrySheetProp
       onOpenChange={onOpenChange}
       title={t('entries.editEntry', 'Edit Entry')}
       description={`${formatDate(entry.date)} • ${
-        isExpense ? entry.categoryName : isFunding ? entry.type : t('entries.tabIncome')
+        isExpense
+          ? categoryLabel(entry.categoryName, t)
+          : isFunding
+            ? fundingTypeLabel(entry.type, t)
+            : t('entries.tabIncome')
       }`}
     >
       <EditEntryForm

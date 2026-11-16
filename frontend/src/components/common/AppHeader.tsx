@@ -58,7 +58,7 @@ export default function AppHeader({
           <TitleTag className="text-lg font-bold text-foreground truncate">{title}</TitleTag>
         ) : (
           <span className="text-xl font-bold tracking-tight text-primary">
-            Hisab Mezgeb
+            {t('brand.name')}
           </span>
         )}
       </div>

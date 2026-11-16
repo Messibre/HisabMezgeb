@@ -203,13 +203,31 @@ export const I18N_STRINGS: Record<
  * Format money consistently: 2 decimal places with thousands separator.
  * Floating point rounding errors are avoided by exact rounding to cents.
  */
-export function formatMoney(amount: number, _lang: SupportedLang = 'en'): string {
+const CURRENCY: Record<SupportedLang, string> = { en: 'ETB', am: 'ብር', ti: 'ብር' };
+
+export function formatMoney(amount: number, lang: SupportedLang = 'en'): string {
   const rounded = Math.round(amount * 100) / 100;
   const parts = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(rounded);
-  return `ETB ${parts}`;
+  return `${CURRENCY[lang]} ${parts}`;
+}
+
+/**
+ * Categories created at registration are stored with their English name. They are
+ * shown in the document language; a category the user created or renamed keeps its
+ * own name. Keep in sync with SYSTEM_CATEGORIES in the frontend (src/lib/categories.ts).
+ */
+const SYSTEM_CATEGORY_NAMES: Record<string, Record<SupportedLang, string>> = {
+  'Cost of Goods': { en: 'Cost of Goods', am: 'የዕቃ ግዢ', ti: 'ዕድጊት ኣቑሑ' },
+  Equb: { en: 'Equb', am: 'ዕቁብ', ti: 'ዕቑብ' },
+  'Home Necessities': { en: 'Home Necessities', am: 'የቤት ፍጆታ', ti: 'ናይ ገዛ ኣድላዪ ነገራት' },
+  'Debt payment': { en: 'Debt payment', am: 'የዕዳ ክፍያ', ti: 'ክፍሊት ዕዳ' },
+};
+
+export function displayCategoryName(name: string, lang: SupportedLang): string {
+  return SYSTEM_CATEGORY_NAMES[name]?.[lang] ?? name;
 }
 
 /**

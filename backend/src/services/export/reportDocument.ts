@@ -4,6 +4,7 @@ import {
   ExportFormat,
   I18N_STRINGS,
   formatMoney,
+  displayCategoryName,
   formatDateGregorian,
   DocSection,
   DocTable,
@@ -122,7 +123,7 @@ export function buildReportDocumentModel(
       ],
       rows: activeExpenses.map((exp) => ({
         cells: [
-          exp.categoryName,
+          displayCategoryName(exp.categoryName, lang),
           exp.group === 'business' ? t.businessExpenses : t.personalDraws,
           formatMoney(exp.total, lang),
         ],

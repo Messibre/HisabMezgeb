@@ -52,7 +52,12 @@
     "save": "Save",
     "cancel": "Cancel",
     "tryAgain": "Try Again",
-    "offlineBanner": "Offline — changes will sync automatically"
+    "offlineBanner": "Offline — changes will sync automatically",
+    "back": "Back",
+    "income": "Income",
+    "expense": "Expense",
+    "options": "More options",
+    "skipToContent": "Skip to main content"
   },
   "pages": {
     "home": "Home",
@@ -292,7 +297,8 @@
     "noData": "No data for this period yet",
     "noDataDescription": "Transactions entered for this date range will appear here.",
     "exportSuccess": "Report exported successfully",
-    "exportFailed": "Failed to export report"
+    "exportFailed": "Failed to export report",
+    "period": "Report period"
   },
   "landing": {
     "documentTitle": "Hisab Mezgeb - Your shop's daily money and debt book",
@@ -423,5 +429,14 @@
       "customer": "Customer"
     },
     "tryAgain": "Please try again."
+  },
+  "brand": {
+    "name": "Hisab Mezgeb"
+  },
+  "categories": {
+    "costOfGoods": "Cost of Goods",
+    "equb": "Equb",
+    "homeNecessities": "Home Necessities",
+    "debtPayment": "Debt payment"
   }
 }

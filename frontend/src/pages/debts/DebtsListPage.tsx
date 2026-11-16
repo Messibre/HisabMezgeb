@@ -57,6 +57,7 @@ export default function DebtsListPage() {
     data: customers = [],
     isLoading,
     isError,
+    error,
     refetch,
   } = useDebtCustomers(debouncedQuery.trim() || undefined);
 
@@ -178,7 +179,7 @@ export default function DebtsListPage() {
             </div>
           ) : isError ? (
             <ErrorState
-              message={t('common.error', 'Failed to load debt customers')}
+              message={t(toUserError(error).messageKey)}
               onRetry={() => refetch()}
             />
           ) : sortedCustomers.length === 0 ? (

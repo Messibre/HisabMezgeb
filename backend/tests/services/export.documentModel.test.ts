@@ -92,7 +92,7 @@ describe('Document Model Builders (Pure, Table-Driven)', () => {
           expect(model.title).toBe('የፋይናንስ ሪፖርት');
           expect(model.shopName).toBe('አበበ ሱቅ');
           expect(model.periodText).toBe('ጊዜ፡ ከ 2026-10-15 እስከ 2026-10-15');
-          expect(model.sections[0].items[0].value).toBe('ETB 12,500.00');
+          expect(model.sections[0].items[0].value).toBe('ብር 12,500.00');
           expect(model.sections[1].title).toBe('የዕዳ እንቅስቃሴ (በዚህ ጊዜ)');
           expect(model.sections[2].table?.rows[0].cells[0]).toBe('ዕቃ ግዢ');
           expect(model.notes).toContain(
@@ -223,13 +223,13 @@ describe('Document Model Builders (Pure, Table-Driven)', () => {
         expectedChecks: (model) => {
           expect(model.title).toBe('የደንበኛ ሂሳብ መግለጫ');
           expect(model.entityName).toBe('ወ/ሮ "ማርታ" ታደሰ (መካነ-ኢየሱስ)');
-          expect(model.currentBalanceText).toBe('ወቅታዊ ቀሪ ዕዳ፡ ETB 1,450.75');
+          expect(model.currentBalanceText).toBe('ወቅታዊ ቀሪ ዕዳ፡ ብር 1,450.75');
           expect(model.closingLine).toContain('እባክዎ ቀሪ ዕዳዎን ያጠናቁ');
 
           const table = model.sections[0].table;
           expect(table.rows).toHaveLength(2);
           expect(table.rows[0].cells[1]).toContain('2 ከረጢት ስኳር እና ዘይት');
-          expect(table.rows[1].cells[4]).toBe('ETB 1,450.75');
+          expect(table.rows[1].cells[4]).toBe('ብር 1,450.75');
         },
       },
       {

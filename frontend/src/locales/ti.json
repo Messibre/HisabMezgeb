@@ -52,7 +52,12 @@
     "save": "ኣቐምጥ",
     "cancel": "ስረዝ",
     "tryAgain": "ደጊምካ ፈትን",
-    "offlineBanner": "Offline"
+    "offlineBanner": "ኢንተርኔት የለን",
+    "back": "ተመለስ",
+    "income": "ኣታዊ",
+    "expense": "ወጻኢ",
+    "options": "ተወሳኺ ምርጫታት",
+    "skipToContent": "ናብ ቀንዲ ትሕዝቶ ሕለፍ"
   },
   "pages": {
     "home": "ቤት",
@@ -66,7 +71,7 @@
   },
   "settings": {
     "language": "ቋንቋ",
-    "theme": "ተማ (Theme)",
+    "theme": "ገጽታ",
     "themeHelper": "ብርሃን፣ ጸላም ወይ ናይ መሳርሒኹም ምረጹ",
     "themeLight": "ብርሃን",
     "themeDark": "ጸላም",
@@ -253,7 +258,7 @@
     "fullAmount": "ሙሉእ",
     "partOfIt": "ገሊኡ",
     "paymentAmountHelper": "ነዚ ጥረ ገንዘብ ኣብ ናይ ሎሚ ጠቕላላ ኣታዊ ምእታውካ ኣይትረስዕ።",
-    "paymentMaxError": "ካብቲ ዝድለ መጠን (ETB {{balance}}) ንላዕሊ ክኸውን ኣይኽእልን",
+    "paymentMaxError": "ካብቲ ዝድለ መጠን (ብር {{balance}}) ንላዕሊ ክኸውን ኣይኽእልን",
     "savePayment": "ክፍሊት መዝግብ",
     "editRecord": "መዝገብ ኣመዓራሪ",
     "deleteRecord": "መዝገብ ሰርዝ",
@@ -292,7 +297,8 @@
     "noData": "ኣብዚ እዋን ዝተረኽበ ዳታ የለን",
     "noDataDescription": "ኣብዚ ናይ ዕለት ደረት ዝተመዝገቡ ምንቅስቓሳት ኣብዚ ክረኣዩ እዮም።",
     "exportSuccess": "ጸብጻብ ብትኽክል ተወሪዱ",
-    "exportFailed": "ጸብጻብ ምውራድ ኣይተኻእለን"
+    "exportFailed": "ጸብጻብ ምውራድ ኣይተኻእለን",
+    "period": "ግዜ ጸብጻብ"
   },
   "landing": {
     "documentTitle": "ሂሳብ መዝገብ - ናይ ድኳንኩም ናይ መዓልቲ ገንዘብን ዕዳን መዝገብ",
@@ -423,5 +429,14 @@
       "customer": "ዓሚል"
     },
     "tryAgain": "በጃኹም እንደገና ፈትኑ።"
+  },
+  "brand": {
+    "name": "ሒሳብ መዝገብ"
+  },
+  "categories": {
+    "costOfGoods": "ዕድጊት ኣቑሑ",
+    "equb": "ዕቑብ",
+    "homeNecessities": "ናይ ገዛ ኣድላዪ ነገራት",
+    "debtPayment": "ክፍሊት ዕዳ"
   }
 }

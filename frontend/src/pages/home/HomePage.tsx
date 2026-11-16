@@ -14,6 +14,7 @@ import ErrorState from '@/components/common/ErrorState';
 import { ROUTES } from '@/constants';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 import { InstallBanner, IOSInstallCard } from '@/components/common/InstallPrompts';
+import { toUserError } from '@/lib/errors';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ export default function HomePage() {
     data: todayIncome,
     isLoading: isIncomeLoading,
     isError: isIncomeError,
+    error: incomeError,
     refetch: refetchIncome,
   } = useTodayIncome();
 
@@ -35,6 +37,7 @@ export default function HomePage() {
     data: summary,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
+    error: summaryError,
     refetch: refetchSummary,
   } = useReportSummary(weekStart, today);
 
@@ -74,7 +77,7 @@ export default function HomePage() {
             </div>
           ) : isIncomeError ? (
             <ErrorState
-              message={t('common.errorGeneric', 'Failed to load today’s income.')}
+              message={t(toUserError(incomeError).messageKey)}
               onRetry={() => refetchIncome()}
             />
           ) : todayIncome ? (
@@ -135,7 +138,7 @@ export default function HomePage() {
             </div>
           ) : isSummaryError ? (
             <ErrorState
-              message={t('common.errorGeneric', 'Failed to load week snapshot.')}
+              message={t(toUserError(summaryError).messageKey)}
               onRetry={() => refetchSummary()}
             />
           ) : (

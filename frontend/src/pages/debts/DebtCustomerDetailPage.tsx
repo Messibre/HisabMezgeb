@@ -73,8 +73,8 @@ export default function DebtCustomerDetailPage() {
       await deleteCustomer.mutateAsync(customerId);
       toast.success(t('entries.deletedToast', 'Deleted'));
       navigate('/debts');
-    } catch {
-      toast.error(t('common.error', 'Failed to delete customer'));
+    } catch (err) {
+      toast.error(t(toUserError(err).messageKey));
     }
   };
 

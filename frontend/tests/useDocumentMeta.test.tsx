@@ -53,12 +53,12 @@ describe('useDocumentMeta', () => {
     await act(async () => {
       await i18n.changeLanguage('am');
     });
-    expect(document.title).toBe('ቤት - Hisab Mezgeb');
+    expect(document.title).toBe('ቤት - ሒሳብ መዝገብ');
 
     await act(async () => {
       await i18n.changeLanguage('ti');
     });
-    expect(document.title).toBe('ቤት - Hisab Mezgeb');
+    expect(document.title).toBe('ቤት - ሒሳብ መዝገብ');
   });
 
   it('sets meta[name="description"] when descriptionKey is supplied', () => {

@@ -5,6 +5,7 @@ import BottomSheet from '@/components/common/BottomSheet';
 import FormField from '@/components/common/FormField';
 import PillInput from '@/components/common/PillInput';
 import { useUpdateDebtCustomer } from '@/hooks/useDebtCustomers';
+import { toUserError } from '@/lib/errors';
 
 interface EditCustomerSheetProps {
   customerId: string;
@@ -51,8 +52,8 @@ function EditCustomerForm({
 
       toast.success(t('common.save', 'Saved'));
       onClose();
-    } catch {
-      toast.error(t('common.error', 'Failed to update customer'));
+    } catch (err) {
+      toast.error(t(toUserError(err).messageKey));
     }
   };
 

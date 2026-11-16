@@ -11,8 +11,6 @@ export interface UseDocumentMetaOptions {
   fallbackDescription?: string;
 }
 
-const DEFAULT_TITLE = 'Hisab Mezgeb - Simple Money & Debt Tracker';
-const APP_NAME = 'Hisab Mezgeb';
 
 export function useDocumentMeta({
   titleKey,
@@ -28,6 +26,8 @@ export function useDocumentMeta({
   const descriptionParamsKey = JSON.stringify(descriptionParams);
 
   useEffect(() => {
+    const APP_NAME = t('brand.name');
+    const DEFAULT_TITLE = APP_NAME;
     // 1. Update document.title
     if (titleKey) {
       const translated = t(titleKey, titleParams);

@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { ArrowDown, ArrowUp, Landmark, Clock } from 'lucide-react';
 import MoneyText from '@/components/common/MoneyText';
 import { formatDate } from '@/lib/date';
 import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import { categoryLabel, fundingTypeLabel } from '@/lib/categories';
 import type { IncomeEntry, ExpenseWithCategory, FundingEntry } from '@/types/api';
 
 export type EntryItem =
@@ -16,6 +18,7 @@ interface EntryListCardProps {
 }
 
 export function EntryListCard({ entry, onClick, syncStatus }: EntryListCardProps) {
+  const { t } = useTranslation();
   const isIncome = entry.entryType === 'income';
   const isExpense = entry.entryType === 'expense';
   const isHighlighted = useSaveFeedbackStore((st) => st.highlightId === entry.id);
@@ -24,17 +27,11 @@ export function EntryListCard({ entry, onClick, syncStatus }: EntryListCardProps
     ? entry.note || ''
     : isExpense
     ? entry.note
-      ? `${entry.categoryName} • ${entry.note}`
-      : entry.categoryName
-    : (() => {
-        const typeLabels: Record<string, string> = {
-          salary_injection: 'Salary in',
-          borrowed_in: 'Borrowed in',
-          borrowed_repaid: 'Borrowed repaid',
-        };
-        const label = typeLabels[entry.type] || entry.type;
-        return entry.note ? `${label} • ${entry.note}` : label;
-      })();
+      ? `${categoryLabel(entry.categoryName, t)} • ${entry.note}`
+      : categoryLabel(entry.categoryName, t)
+    : entry.note
+    ? `${fundingTypeLabel(entry.type, t)} • ${entry.note}`
+    : fundingTypeLabel(entry.type, t);
 
   return (
     <button

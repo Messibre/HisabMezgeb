@@ -52,7 +52,12 @@
     "save": "አስቀምጥ",
     "cancel": "ይቅር",
     "tryAgain": "እንደገና ሞክር",
-    "offlineBanner": "offline"
+    "offlineBanner": "ኢንተርኔት የለም",
+    "back": "ተመለስ",
+    "income": "ገቢ",
+    "expense": "ወጪ",
+    "options": "ተጨማሪ አማራጮች",
+    "skipToContent": "ወደ ዋናው ይዘት እለፍ"
   },
   "pages": {
     "home": "ቤት",
@@ -253,7 +258,7 @@
     "fullAmount": "ሙሉውን",
     "partOfIt": "ከፊሉን",
     "paymentAmountHelper": "ይህን ጥሬ ገንዘብ በዛሬው የገቢ ድምር ውስጥ ማካተትዎን ያስታውሱ።",
-    "paymentMaxError": "ከተፈለገው መጠን (ETB {{balance}}) በላይ መሆን አይችልም",
+    "paymentMaxError": "ከተፈለገው መጠን (ብር {{balance}}) በላይ መሆን አይችልም",
     "savePayment": "ክፍያ መዝግብ",
     "editRecord": "መዝገብ አስተካክል",
     "deleteRecord": "መዝገብ ሰርዝ",
@@ -292,7 +297,8 @@
     "noData": "በዚህ ጊዜ ምንም መረጃ የለም",
     "noDataDescription": "በዚህ የቀን ክልል የተመዘገቡ ግብይቶች እዚህ ይታያሉ።",
     "exportSuccess": "ሪፖርቱ በተሳካ ሁኔታ ተልኳል",
-    "exportFailed": "ሪፖርቱን መላክ አልተሳካም"
+    "exportFailed": "ሪፖርቱን መላክ አልተሳካም",
+    "period": "የሪፖርት ጊዜ"
   },
   "landing": {
     "documentTitle": "ሂሳብ መዝገብ - የሱቅዎ የዕለት ገንዘብ እና የብድር መዝገብ",
@@ -423,5 +429,14 @@
       "customer": "ደንበኛ"
     },
     "tryAgain": "እባክዎ እንደገና ይሞክሩ።"
+  },
+  "brand": {
+    "name": "ሒሳብ መዝገብ"
+  },
+  "categories": {
+    "costOfGoods": "የዕቃ ግዢ",
+    "equb": "ዕቁብ",
+    "homeNecessities": "የቤት ፍጆታ",
+    "debtPayment": "የዕዳ ክፍያ"
   }
 }
