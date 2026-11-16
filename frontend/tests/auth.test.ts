@@ -73,6 +73,48 @@ describe('Auth plumbing (cookie-based session)', () => {
     expect(useAuthStore.getState().account).not.toBeNull();
   });
 
+  const unauthorized = (url: string) => {
+    const config = { url, headers: {} } as InternalAxiosRequestConfig;
+    return {
+      config,
+      response: { status: 401, data: {}, statusText: 'Unauthorized', headers: {}, config },
+      name: 'AxiosError',
+      message: 'Unauthorized',
+      isAxiosError: true,
+    } as AxiosError;
+  };
+
+  it.each([429, 500, 503])('keeps the session when refresh fails with %i', async (status) => {
+    useAuthStore.getState().setAccount({ id: 'acc_1', phoneNumber: '0911223344', shopName: 'Shop', createdAt: '' });
+    const clearSpy = vi.spyOn(queryClient, 'clear');
+    vi.spyOn(api, 'post').mockRejectedValue({ response: { status }, isAxiosError: true });
+
+    await expect(handleResponseError(unauthorized('/income'))).rejects.toBeTruthy();
+
+    expect(useAuthStore.getState().account).not.toBeNull();
+    expect(clearSpy).not.toHaveBeenCalled();
+  });
+
+  it('keeps the session when refresh times out or the phone is offline', async () => {
+    useAuthStore.getState().setAccount({ id: 'acc_1', phoneNumber: '0911223344', shopName: 'Shop', createdAt: '' });
+    vi.spyOn(api, 'post').mockRejectedValue({ code: 'ECONNABORTED', message: 'timeout', isAxiosError: true });
+
+    await expect(handleResponseError(unauthorized('/income'))).rejects.toBeTruthy();
+
+    expect(useAuthStore.getState().account).not.toBeNull();
+  });
+
+  it.each([401, 403])('logs out when refresh is rejected with %i', async (status) => {
+    useAuthStore.getState().setAccount({ id: 'acc_1', phoneNumber: '0911223344', shopName: 'Shop', createdAt: '' });
+    const clearSpy = vi.spyOn(queryClient, 'clear');
+    vi.spyOn(api, 'post').mockRejectedValue({ response: { status }, isAxiosError: true });
+
+    await expect(handleResponseError(unauthorized('/income'))).rejects.toBeTruthy();
+
+    expect(useAuthStore.getState().account).toBeNull();
+    expect(clearSpy).toHaveBeenCalled();
+  });
+
   it('no refresh loop for /auth/* URLs', async () => {
     const postSpy = vi.spyOn(api, 'post');
     const reqConfig = { url: '/auth/login', headers: {} } as InternalAxiosRequestConfig;

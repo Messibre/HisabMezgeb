@@ -33,6 +33,11 @@ export async function executeRefresh(): Promise<Account> {
   return refreshPromise;
 }
 
+function isSessionRejected(error: unknown): boolean {
+  const status = (error as AxiosError | undefined)?.response?.status;
+  return status === 401 || status === 403;
+}
+
 export async function handleResponseError(error: AxiosError) {
   const originalRequest = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
 
@@ -52,6 +57,7 @@ export async function handleResponseError(error: AxiosError) {
   if (status === 401) {
     if (isAuthRoute) {
       if (url.includes('/auth/refresh')) {
+        // The refresh token itself was rejected: the session is over.
         useAuthStore.getState().clearSession();
         queryClient.clear();
       }
@@ -65,10 +71,12 @@ export async function handleResponseError(error: AxiosError) {
         await executeRefresh();
         return api(originalRequest);
       } catch (refreshErr) {
-        // Session expired: Clear auth session, but do NOT wipe unsynced offline entries.
-        // When the offline queue exists, it must survive a logout caused by an expired session.
-        useAuthStore.getState().clearSession();
-        queryClient.clear();
+        // Only a definite "session is gone" answer logs out. A 429, 5xx, timeout or
+        // offline refresh keeps the session; the original request just fails as usual.
+        if (isSessionRejected(refreshErr)) {
+          useAuthStore.getState().clearSession();
+          queryClient.clear();
+        }
         return Promise.reject(refreshErr);
       }
     }
