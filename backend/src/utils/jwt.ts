@@ -13,7 +13,8 @@ export const verifyAccessToken = (token: string): object => {
 };
 
 export const generateRefreshToken = (payload: object): string => {
-  return jwt.sign(payload, env.JWT_REFRESH_SECRET, {
+  // jti makes every token unique, even two issued in the same second.
+  return jwt.sign({ ...payload, jti: crypto.randomUUID() }, env.JWT_REFRESH_SECRET, {
     expiresIn: env.JWT_REFRESH_EXPIRES_IN as jwt.SignOptions['expiresIn'],
   });
 };

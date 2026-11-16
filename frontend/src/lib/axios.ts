@@ -13,22 +13,60 @@ const api = axios.create({
 
 let refreshPromise: Promise<Account> | null = null;
 
+const REFRESH_LOCK = 'hisab-auth-refresh';
+const REFRESHED_AT_KEY = 'hisab-refreshed-at';
+/** Another tab refreshed this recently: the shared cookies are already fresh. */
+const RECENT_REFRESH_MS = 10_000;
+
 export function resetRefreshPromise() {
   refreshPromise = null;
 }
 
+function refreshedRecently(): boolean {
+  try {
+    const at = Number(localStorage.getItem(REFRESHED_AT_KEY));
+    return Number.isFinite(at) && Date.now() - at < RECENT_REFRESH_MS;
+  } catch {
+    return false;
+  }
+}
+
+function markRefreshed() {
+  try {
+    localStorage.setItem(REFRESHED_AT_KEY, String(Date.now()));
+  } catch {
+    // Storage unavailable: the server's grace window still covers a parallel refresh.
+  }
+}
+
+async function postRefresh(): Promise<Account> {
+  const res = await api.post<Account>('/auth/refresh', {}, { withCredentials: true });
+  markRefreshed();
+  useAuthStore.getState().setAccount(res.data);
+  return res.data;
+}
+
+/**
+ * One refresh at a time: requests in this tab share one promise, and tabs take
+ * turns through the Web Locks API. A tab that gets the lock right after another
+ * tab refreshed reuses that result instead of calling the server again.
+ */
+async function refreshAcrossTabs(): Promise<Account> {
+  const locks = typeof navigator !== 'undefined' ? navigator.locks : undefined;
+  if (!locks?.request) return postRefresh();
+
+  return locks.request(REFRESH_LOCK, async () => {
+    const account = useAuthStore.getState().account;
+    if (account && refreshedRecently()) return account;
+    return postRefresh();
+  });
+}
+
 export async function executeRefresh(): Promise<Account> {
   if (!refreshPromise) {
-    refreshPromise = api
-      .post<Account>('/auth/refresh', {}, { withCredentials: true })
-      .then((res) => {
-        const account = res.data;
-        useAuthStore.getState().setAccount(account);
-        return account;
-      })
-      .finally(() => {
-        refreshPromise = null;
-      });
+    refreshPromise = refreshAcrossTabs().finally(() => {
+      refreshPromise = null;
+    });
   }
   return refreshPromise;
 }
