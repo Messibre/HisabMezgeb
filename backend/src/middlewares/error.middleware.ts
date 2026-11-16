@@ -53,7 +53,7 @@ const hasStatusCode = (err: Error): err is ApiError =>
 
 const errorMiddleware = (err: Error, req: Request, res: Response, _next: NextFunction) => {
   const requestId =
-    req.id ||
+    (req.id ? String(req.id) : undefined) ||
     (req.headers['x-request-id'] as string | undefined) ||
     (res.getHeader('x-request-id') as string | undefined) ||
     (res.getHeader('X-Request-Id') as string | undefined);
