@@ -4,7 +4,8 @@
     "entries": "Entries",
     "debts": "Debts",
     "reports": "Reports",
-    "settings": "Settings"
+    "settings": "Settings",
+    "sidebar": "Main navigation"
   },
   "auth": {
     "loginTitle": "Log In",
@@ -270,7 +271,8 @@
     "deleteRecordTitle": "Delete Record?",
     "deleteRecordMessage": "Are you sure you want to delete this record?",
     "itemsRequired": "Please describe what was borrowed",
-    "nameTooLong": "Name must be 100 characters or less"
+    "nameTooLong": "Name must be 100 characters or less",
+    "selectCustomer": "Choose a customer to see their ledger."
   },
   "reports": {
     "title": "Reports",

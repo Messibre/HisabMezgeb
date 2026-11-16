@@ -319,7 +319,8 @@ export default function EntriesPage() {
     <div className="min-h-screen bg-background pb-24">
       <AppHeader title={t('pages.entries', 'Entries')} />
 
-      <div className="max-w-md mx-auto px-4 py-3 space-y-4">
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 py-3 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10 lg:space-y-0">
+        <div className="space-y-4">
         <SegmentedControl
           name="entry-type"
           value={activeTab}
@@ -560,8 +561,9 @@ export default function EntriesPage() {
           </button>
           {!isOnline && <OfflineSaveNotice id="entry-offline-notice" />}
         </form>
+        </div>
 
-        <section className="pt-4 space-y-3">
+        <section className="pt-4 space-y-3 lg:pt-0">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-foreground">
               {t('entries.recentEntries', 'Recent Entries')}

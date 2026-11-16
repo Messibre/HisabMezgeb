@@ -4,7 +4,8 @@
     "entries": "መዝገባት",
     "debts": "ዕዳታት",
     "reports": "ጸብጻባት",
-    "settings": "ቅጥዕታት"
+    "settings": "ቅጥዕታት",
+    "sidebar": "ቀንዲ መምርሒ"
   },
   "auth": {
     "loginTitle": "እቶ",
@@ -270,7 +271,8 @@
     "deleteRecordTitle": "መዝገብ ይሰረዝ?",
     "deleteRecordMessage": "ነዚ መዝገብ ክትሰርዞ ርግጸኛ ዲኻ?",
     "itemsRequired": "ዝተወሰዱ ኣቑሑት በጃኹም ግለጹ",
-    "nameTooLong": "ስም ካብ 100 ፊደላት ክበዝሕ የብሉን"
+    "nameTooLong": "ስም ካብ 100 ፊደላት ክበዝሕ የብሉን",
+    "selectCustomer": "ሒሳብ መዝገቡ ንምርኣይ ዓሚል ምረጹ።"
   },
   "reports": {
     "title": "ጸብጻባት",

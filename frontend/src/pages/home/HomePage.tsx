@@ -50,7 +50,7 @@ export default function HomePage() {
       <InstallBanner />
       <IOSInstallCard />
 
-      <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 pt-4 space-y-6">
         <section className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {shopName
@@ -125,10 +125,10 @@ export default function HomePage() {
           </div>
 
           {isSummaryLoading ? (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               <SkeletonBlock className="h-24 rounded-xl" />
               <SkeletonBlock className="h-24 rounded-xl" />
-              <SkeletonBlock className="h-24 col-span-2 rounded-xl" />
+              <SkeletonBlock className="h-24 col-span-2 rounded-xl lg:col-span-1" />
             </div>
           ) : isSummaryError ? (
             <ErrorState
@@ -136,7 +136,7 @@ export default function HomePage() {
               onRetry={() => refetchSummary()}
             />
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               <StatCard
                 label={t('home.thisWeeksIncome', "This Week's Income")}
                 amount={summary?.totalIncome ?? null}
@@ -156,7 +156,7 @@ export default function HomePage() {
                 size="lg"
                 icon={<Users className="h-5 w-5" />}
                 onClick={() => navigate(ROUTES.DEBTS)}
-                className="col-span-2"
+                className="col-span-2 lg:col-span-1"
               />
             </div>
           )}

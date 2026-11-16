@@ -28,7 +28,7 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-background pb-28">
       <AppHeader title={t('pages.settings')} />
-      <div className="mx-auto max-w-md px-4 pt-4 flex flex-col gap-6">
+      <div className="mx-auto max-w-md sm:max-w-xl px-4 pt-4 flex flex-col gap-6">
         <div>
           <p className="text-sm font-medium text-foreground mb-1">{t('settings.theme', 'Theme')}</p>
           <p className="text-xs text-muted-foreground mb-3">

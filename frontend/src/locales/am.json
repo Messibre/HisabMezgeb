@@ -4,7 +4,8 @@
     "entries": "ምዝገባዎች",
     "debts": "ዕዳዎች",
     "reports": "ሪፖርቶች",
-    "settings": "ቅንብሮች"
+    "settings": "ቅንብሮች",
+    "sidebar": "ዋና ማውጫ"
   },
   "auth": {
     "loginTitle": "ግባ",
@@ -270,7 +271,8 @@
     "deleteRecordTitle": "መዝገቡ ይሰረዝ?",
     "deleteRecordMessage": "ይህንን መዝገብ መሰረዝ እርግጠኛ ነዎት?",
     "itemsRequired": "የተወሰዱትን እቃዎች እባክዎ ይግለጹ",
-    "nameTooLong": "ስሙ ከ100 ፊደላት መብለጥ የለበትም"
+    "nameTooLong": "ስሙ ከ100 ፊደላት መብለጥ የለበትም",
+    "selectCustomer": "የሂሳብ መዝገቡን ለማየት ደንበኛ ይምረጡ።"
   },
   "reports": {
     "title": "ሪፖርቶች",

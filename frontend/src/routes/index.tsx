@@ -15,8 +15,7 @@ const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 const LandingPage = lazy(() => import('@/pages/landing/LandingPage'));
 const HomePage = lazy(() => import('@/pages/home/HomePage'));
 const EntriesPage = lazy(() => import('@/pages/entries/EntriesPage'));
-const DebtsListPage = lazy(() => import('@/pages/debts/DebtsListPage'));
-const DebtCustomerDetailPage = lazy(() => import('@/pages/debts/DebtCustomerDetailPage'));
+const DebtsLayout = lazy(() => import('@/pages/debts/DebtsLayout'));
 const ReportsPage = lazy(() => import('@/pages/reports/ReportsPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
@@ -63,10 +62,10 @@ const router = createBrowserRouter([
             children: [
               { path: ROUTES.HOME, element: withSuspense(<HomePage />) },
               { path: ROUTES.ENTRIES, element: withSuspense(<EntriesPage />) },
-              { path: ROUTES.DEBTS, element: withSuspense(<DebtsListPage />) },
+              { path: ROUTES.DEBTS, element: withSuspense(<DebtsLayout />) },
               {
                 path: ROUTES.DEBT_CUSTOMER_DETAIL,
-                element: withSuspense(<DebtCustomerDetailPage />),
+                element: withSuspense(<DebtsLayout />),
               },
               { path: ROUTES.REPORTS, element: withSuspense(<ReportsPage />) },
               { path: ROUTES.SETTINGS, element: withSuspense(<SettingsPage />) },

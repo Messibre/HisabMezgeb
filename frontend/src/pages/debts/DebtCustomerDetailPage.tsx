@@ -86,7 +86,7 @@ export default function DebtCustomerDetailPage() {
           title={t('debts.ledgerTitle', 'Ledger')}
           onBack={() => navigate('/debts')}
         />
-        <div className="max-w-md mx-auto p-4 pt-12">
+        <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] p-4 pt-12">
           <EmptyState
             icon={<AlertTriangle className="w-8 h-8 text-destructive" />}
             title={t('debts.customerNotFound', 'Customer not found')}
@@ -109,7 +109,7 @@ export default function DebtCustomerDetailPage() {
           title={t('debts.ledgerTitle', 'Ledger')}
           onBack={() => navigate('/debts')}
         />
-        <div className="max-w-md mx-auto p-4">
+        <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] p-4">
           <ErrorState
             message={t(userError?.messageKey || 'errors.server.message')}
             requestId={userError?.requestId}
@@ -193,7 +193,7 @@ export default function DebtCustomerDetailPage() {
         }
       />
 
-      <div className="max-w-md mx-auto px-4 py-4 space-y-5">
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 py-4 space-y-5">
         {isLoading ? (
           <div className="space-y-4">
             <div className="flex flex-col items-center gap-2">

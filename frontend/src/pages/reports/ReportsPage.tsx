@@ -100,7 +100,7 @@ export default function ReportsPage() {
     <div className="min-h-screen bg-background pb-32">
       <AppHeader title={t('reports.title', 'Reports')} />
 
-      <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 pt-4 space-y-6">
         <section className="space-y-3">
           <PeriodPicker value={period} onChange={setPeriod} />
 
@@ -138,7 +138,7 @@ export default function ReportsPage() {
 
         {isLoading ? (
           <div className="space-y-4" data-testid="reports-skeleton">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               <SkeletonBlock className="h-24 w-full" />
               <SkeletonBlock className="h-24 w-full" />
               <SkeletonBlock className="h-24 w-full" />
@@ -159,7 +159,7 @@ export default function ReportsPage() {
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.overview', 'Overview')}
               </h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                 <StatCard
                   label={t('reports.totalIncome', 'Total Income')}
                   amount={summary?.totalIncome ?? null}
@@ -215,7 +215,7 @@ export default function ReportsPage() {
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.debtActivity', 'Debt Activity (This Period)')}
               </h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                 <StatCard
                   label={t('reports.newlyBorrowed', 'Newly Borrowed')}
                   amount={debtsPeriod?.totalNewlyBorrowed ?? null}

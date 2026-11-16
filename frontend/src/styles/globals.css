@@ -368,3 +368,7 @@
   }
 }
 
+/* No layout shift on desktop when a page becomes scrollable. */
+html {
+  scrollbar-gutter: stable;
+}

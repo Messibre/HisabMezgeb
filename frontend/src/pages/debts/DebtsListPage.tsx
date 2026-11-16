@@ -132,7 +132,7 @@ export default function DebtsListPage() {
     <div className="min-h-screen bg-background pb-28">
       <AppHeader title={t('pages.debts', 'Debts')} />
 
-      <div className="max-w-md mx-auto px-4 py-3 space-y-4">
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 py-3 space-y-4">
         <div role="search" className="relative">
           <div className="relative flex items-center">
             <Search className="absolute left-3.5 w-4 h-4 text-muted-foreground pointer-events-none" />
@@ -219,7 +219,7 @@ export default function DebtsListPage() {
         type="button"
         onClick={() => handleOpenNewCustomer('')}
         aria-label={t('debts.addCustomerAria', 'Add customer')}
-        className="fixed bottom-20 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="fixed bottom-20 right-4 z-40 lg:bottom-8 lg:right-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Plus className="w-6 h-6" aria-hidden="true" />
       </button>
