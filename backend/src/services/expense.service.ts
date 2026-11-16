@@ -145,7 +145,20 @@ export const createExpense = async (
     );
   }
 
-  // 3. Build create data – only include note if provided (matches test expectation)
+  // The unique key (accountId, date, categoryId) also covers soft-deleted rows,
+  // so a deleted entry for the same day and category is revived.
+  const deleted = await prisma.dailyExpense.findFirst({
+    where: { accountId, date, categoryId, deletedAt: { not: null } },
+  });
+
+  if (deleted) {
+    const revived = await prisma.dailyExpense.update({
+      where: { id: deleted.id },
+      data: { deletedAt: null, amount: new Prisma.Decimal(amount), note: note ?? null },
+    });
+    return toExpenseResponse(revived);
+  }
+
   const data: {
     accountId: string;
     date: Date;

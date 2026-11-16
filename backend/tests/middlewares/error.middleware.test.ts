@@ -4,6 +4,7 @@ import errorMiddleware from '../../src/middlewares/error.middleware.js';
 import ApiError from '../../src/utils/ApiError.js';
 import { ERROR_CODES, HTTP_STATUS } from '../../src/constants/index.js';
 import logger from '../../src/utils/logger.js';
+import { Prisma } from '@prisma/client';
 
 vi.mock('../../src/utils/logger.js', () => ({
   default: {
@@ -150,5 +151,26 @@ describe('Error Middleware', () => {
     expect(JSON.stringify(sentResponse)).not.toContain('prisma');
     expect(JSON.stringify(sentResponse)).not.toContain('Unique constraint');
     expect(JSON.stringify(sentResponse)).not.toContain('hisab');
+  });
+
+  const prismaKnown = (code: string) =>
+    new Prisma.PrismaClientKnownRequestError(
+      'Unique constraint failed on the fields: (`accountId`,`date`) in schema `hisab`',
+      { code, clientVersion: 'test' },
+    );
+
+  it('maps a Prisma unique violation (P2002) to 409 without leaking the SQL message', () => {
+    errorMiddleware(prismaKnown('P2002'), req as Request, res as Response, next);
+
+    expect(statusMock).toHaveBeenCalledWith(409);
+    const sent = jsonMock.mock.calls[0][0];
+    expect(sent.code).toBe(ERROR_CODES.DUPLICATE_ENTRY);
+    expect(JSON.stringify(sent)).not.toContain('Unique constraint');
+  });
+
+  it('maps a Prisma out-of-range value (P2020) to 400', () => {
+    errorMiddleware(prismaKnown('P2020'), req as Request, res as Response, next);
+    expect(statusMock).toHaveBeenCalledWith(400);
+    expect(jsonMock.mock.calls[0][0].code).toBe(ERROR_CODES.VALIDATION_FAILED);
   });
 });

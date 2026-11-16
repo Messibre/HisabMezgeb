@@ -76,7 +76,20 @@ export const createIncome = async (
     );
   }
 
-  // ✅ Only include note if provided – matches test expectation
+  // The unique key (accountId, date) also covers soft-deleted rows, so a day whose
+  // entry was deleted must be revived instead of inserted again.
+  const deleted = await prisma.dailyIncome.findFirst({
+    where: { accountId, date, deletedAt: { not: null } },
+  });
+
+  if (deleted) {
+    const revived = await prisma.dailyIncome.update({
+      where: { id: deleted.id },
+      data: { deletedAt: null, amount: new Prisma.Decimal(amount), note: note ?? null },
+    });
+    return toSafeIncome(revived);
+  }
+
   const data: {
     accountId: string;
     date: Date;

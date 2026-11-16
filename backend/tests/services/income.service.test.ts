@@ -139,6 +139,23 @@ describe('Income Service', () => {
   });
 
   describe('createIncome', () => {
+    it('revives a soft-deleted entry for the same date instead of inserting a duplicate', async () => {
+      mockFindFirst.mockResolvedValueOnce(null).mockResolvedValueOnce(rawDeletedIncome);
+      mockUpdate.mockResolvedValue({ ...rawIncome, amount: new Decimal(900), note: null });
+
+      const result = await createIncome(accountId, mockDate, 900);
+
+      expect(mockFindFirst).toHaveBeenNthCalledWith(2, {
+        where: { accountId, date: mockDate, deletedAt: { not: null } },
+      });
+      expect(mockCreate).not.toHaveBeenCalled();
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: incomeId },
+        data: { deletedAt: null, amount: new Decimal(900), note: null },
+      });
+      expect(result.amount).toBe(900);
+    });
+
     it('should create income entry successfully', async () => {
       mockFindFirst.mockResolvedValue(null);
       mockCreate.mockResolvedValue(rawIncome);

@@ -190,6 +190,25 @@ describe('Expense Service', () => {
   });
 
   describe('createExpense', () => {
+    it('revives a soft-deleted entry for the same date and category instead of inserting', async () => {
+      mockCategoryFindUnique.mockResolvedValue(mockCategory);
+      mockFindFirst
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({ ...mockPrismaExpense, deletedAt: new Date() });
+      mockUpdate.mockResolvedValue({ ...mockPrismaExpense, note: 'again' });
+
+      await createExpense(accountId, mockDate, categoryId, 1500.5, 'again');
+
+      expect(mockFindFirst).toHaveBeenNthCalledWith(2, {
+        where: { accountId, date: mockDate, categoryId, deletedAt: { not: null } },
+      });
+      expect(mockCreate).not.toHaveBeenCalled();
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: mockPrismaExpense.id },
+        data: { deletedAt: null, amount: new Decimal(1500.5), note: 'again' },
+      });
+    });
+
     it('should create expense successfully', async () => {
       mockCategoryFindUnique.mockResolvedValue(mockCategory); // returns full category object
       mockFindFirst.mockResolvedValue(null);
