@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { ExpenseBreakdownItem } from '@/types/api';
 import MoneyText from './MoneyText';
+import { categoryLabel } from '@/lib/categories';
 
 interface CategoryBreakdownListProps {
   items: ExpenseBreakdownItem[];
@@ -13,8 +14,7 @@ export default function CategoryBreakdownList({
 }: CategoryBreakdownListProps) {
   const { t } = useTranslation();
 
-  // Filter out zero-amount items to only display categories that had spending,
-  // or sort them descending by amount
+  // Sorted by amount, largest first; only categories with spending are listed.
   const sortedItems = [...items].sort((a, b) => b.total - a.total);
   const activeItems = sortedItems.filter((item) => item.total > 0);
 
@@ -41,7 +41,7 @@ export default function CategoryBreakdownList({
           <div key={item.categoryId} className="space-y-1.5" data-testid={`category-breakdown-${item.categoryId}`}>
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-foreground">{item.categoryName}</span>
+                <span className="font-medium text-foreground">{categoryLabel(item.categoryName, t)}</span>
                 <span
                   className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
                     isPersonal
@@ -60,7 +60,6 @@ export default function CategoryBreakdownList({
               </div>
             </div>
 
-            {/* Horizontal progress bar */}
             <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container-high/60">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${
@@ -71,7 +70,7 @@ export default function CategoryBreakdownList({
                 aria-valuenow={percentage}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                aria-label={item.categoryName}
+                aria-label={categoryLabel(item.categoryName, t)}
               />
             </div>
           </div>

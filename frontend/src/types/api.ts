@@ -1,11 +1,9 @@
-// ── Account ──
 export interface Account {
   id: string;
   phoneNumber: string;
   shopName: string | null;
 }
 
-// ── Auth ──
 export interface LoginCredentials {
   phoneNumber: string;
   password: string;
@@ -17,7 +15,6 @@ export interface RegisterPayload {
   shopName?: string;
 }
 
-// ── Settings ──
 export interface Settings {
   language: 'en' | 'am' | 'ti';
   notificationsEnabled: boolean;
@@ -28,7 +25,6 @@ export interface UpdateSettingsPayload {
   notificationsEnabled?: boolean;
 }
 
-// ── Income ──
 export interface IncomeEntry {
   id: string;
   date: string;
@@ -47,7 +43,6 @@ export interface UpdateIncomePayload {
   note?: string;
 }
 
-// ── Expense Category ──
 export interface ExpenseCategory {
   id: string;
   name: string;
@@ -65,7 +60,6 @@ export interface UpdateCategoryPayload {
   isActive?: boolean;
 }
 
-// ── Expense ──
 export interface ExpenseWithCategory {
   id: string;
   date: string;
@@ -87,7 +81,6 @@ export interface UpdateExpensePayload {
   note?: string;
 }
 
-// ── Funding ──
 export interface FundingEntry {
   id: string;
   date: string;
@@ -108,7 +101,6 @@ export interface UpdateFundingPayload {
   note?: string;
 }
 
-// ── Debt Customer ──
 export interface DebtCustomer {
   id: string;
   name: string;
@@ -138,7 +130,6 @@ export interface DebtCustomerDetail extends DebtCustomer {
   history: DebtHistoryItem[];
 }
 
-// ── Borrow Record ──
 export interface BorrowRecord {
   id: string;
   customerId: string;
@@ -161,7 +152,6 @@ export interface UpdateBorrowPayload {
   note?: string;
 }
 
-// ── Payment ──
 export interface PaymentRecord {
   id: string;
   customerId: string;
@@ -186,7 +176,6 @@ export interface PaymentResult {
   newBalance: number;
 }
 
-// ── Reports ──
 export interface ReportSummary {
   totalIncome: number;
   totalBusinessExpenses: number;

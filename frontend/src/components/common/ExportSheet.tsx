@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import BottomSheet from './BottomSheet';
 import api from '@/lib/axios';
 import { extractFilenameFromHeader } from '@/lib/utils';
+import { useCalendar } from '@/store/calendar.store';
 
 export type ExportDocType = 'report' | 'statement';
 export type ExportDocFormat = 'pdf' | 'docx' | 'csv';
@@ -38,6 +39,7 @@ export default function ExportSheet({
 
   const [format, setFormat] = useState<ExportDocFormat>('pdf');
   const [lang, setLang] = useState<ExportDocLang>(currentLang);
+  const calendar = useCalendar();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
 
@@ -64,10 +66,10 @@ export default function ExportSheet({
 
     if (type === 'report' && reportParams) {
       const { from, to } = reportParams;
-      url = `/reports/export?from=${from}&to=${to}&format=${format}&lang=${lang}`;
+      url = `/reports/export?from=${from}&to=${to}&format=${format}&lang=${lang}&calendar=${calendar}`;
       fallbackFilename = `hisab-report-${from}_to_${to}.${format}`;
     } else if (type === 'statement' && customerId) {
-      url = `/debt-customers/${customerId}/statement?format=${format}&lang=${lang}`;
+      url = `/debt-customers/${customerId}/statement?format=${format}&lang=${lang}&calendar=${calendar}`;
       const safeName = (customerName || 'customer').replace(/[^\w-]/g, '_');
       fallbackFilename = `statement-${safeName}.${format}`;
     } else {
@@ -92,7 +94,6 @@ export default function ExportSheet({
     try {
       const { blob, filename } = await executeFetch();
 
-      // Trigger temporary download URL and revoke
       const objectUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = objectUrl;
@@ -192,7 +193,6 @@ export default function ExportSheet({
   return (
     <BottomSheet open={open} onOpenChange={onOpenChange} title={title}>
       <div className="space-y-5 pt-2">
-        {/* Offline Warning Banner */}
         {!isOnline && (
           <div
             role="alert"
@@ -203,7 +203,6 @@ export default function ExportSheet({
           </div>
         )}
 
-        {/* Format Selector */}
         <div>
           <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
             {t('export.format', 'Format')}
@@ -306,7 +305,6 @@ export default function ExportSheet({
           )}
         </div>
 
-        {/* Language Selector */}
         <div>
           <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
             {t('export.language', 'Language')}
@@ -335,7 +333,6 @@ export default function ExportSheet({
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex items-center gap-3 pt-2">
           {canSystemShare && (
             <button

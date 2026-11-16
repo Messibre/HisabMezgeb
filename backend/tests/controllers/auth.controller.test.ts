@@ -167,6 +167,23 @@ describe('Auth Controller', () => {
       );
     });
 
+    it('sets the rotated refresh cookie (30 days) when a new refresh token was issued', async () => {
+      req.cookies = { refresh_token: 'valid-refresh' };
+      (authService.refreshAccessToken as Mock).mockResolvedValue({
+        account: mockAccount,
+        accessToken: 'new-access',
+        refreshToken: 'rotated-refresh',
+      });
+
+      await refresh(req as Request, res as Response, next);
+
+      expect(res.cookie).toHaveBeenCalledWith(
+        'refresh_token',
+        'rotated-refresh',
+        expect.objectContaining({ httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000, path: '/api/v1' }),
+      );
+    });
+
     it('should throw 401 if no refresh token cookie', async () => {
       req.cookies = {};
       await refresh(req as Request, res as Response, next);

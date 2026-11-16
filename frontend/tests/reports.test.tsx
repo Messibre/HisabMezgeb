@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ReportsPage from '@/pages/reports/ReportsPage';
 import CategoryBreakdownList from '@/components/common/CategoryBreakdownList';
@@ -121,7 +121,7 @@ describe('Reports Feature & Page', () => {
       expect(screen.getByRole('radio', { name: 'Today' })).toBeInTheDocument();
       expect(screen.getByRole('radio', { name: 'This Week' })).toBeInTheDocument();
       expect(screen.getByRole('radio', { name: 'This Month' })).toBeInTheDocument();
-      expect(screen.getByRole('radio', { name: 'Custom' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Custom range' })).toBeInTheDocument();
     });
 
     it('displays summary overview cards with formatted amounts', () => {
@@ -135,8 +135,8 @@ describe('Reports Feature & Page', () => {
       expect(screen.getByText('Personal / Family Draws')).toBeInTheDocument();
       expect(screen.getAllByText(/4,000/).length).toBeGreaterThanOrEqual(1);
 
-      expect(screen.getByText('Total Owed by Customers')).toBeInTheDocument();
-      expect(screen.getByText(/8,500/)).toBeInTheDocument();
+      expect(screen.getByText('Owed to you')).toBeInTheDocument();
+      expect(screen.getByText(/8,500/).textContent).not.toMatch(/[-−]/);
     });
 
     it('displays debt activity for the period', () => {
@@ -186,18 +186,18 @@ describe('Reports Feature & Page', () => {
 
     it('supports switching to custom period and selecting dates', () => {
       renderReportsPage();
-      const customBtn = screen.getByRole('radio', { name: 'Custom' });
+      const customBtn = screen.getByRole('radio', { name: 'Custom range' });
       fireEvent.click(customBtn);
 
-      const fromInput = screen.getByLabelText(/^from$/i);
-      const toInput = screen.getByLabelText(/^to$/i);
-      expect(fromInput).toBeInTheDocument();
-      expect(toInput).toBeInTheDocument();
+      const fromGroup = screen.getByRole('group', { name: 'From' });
+      const toGroup = screen.getByRole('group', { name: 'To' });
+      expect(fromGroup).toBeInTheDocument();
+      expect(toGroup).toBeInTheDocument();
 
-      fireEvent.change(fromInput, { target: { value: '2026-10-01' } });
-      fireEvent.change(toInput, { target: { value: '2026-10-15' } });
-      expect((fromInput as HTMLInputElement).value).toBe('2026-10-01');
-      expect((toInput as HTMLInputElement).value).toBe('2026-10-15');
+      // Each is a Day / Month / Year picker; choosing day 1 moves the start of the range.
+      const fromDay = within(fromGroup).getByLabelText('Day') as HTMLSelectElement;
+      fireEvent.change(fromDay, { target: { value: '1' } });
+      expect(fromDay.value).toBe('1');
     });
   });
 });

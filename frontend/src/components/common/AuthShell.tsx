@@ -1,5 +1,6 @@
 import React from 'react';
 import { Wallet } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface AuthShellProps {
   subtitle: string;
@@ -7,6 +8,7 @@ export interface AuthShellProps {
 }
 
 export default function AuthShell({ subtitle, children }: AuthShellProps) {
+  const { t } = useTranslation();
   return (
     <div className="mx-auto flex w-full max-w-md flex-col items-center px-4 py-8 text-center">
       <div
@@ -17,7 +19,7 @@ export default function AuthShell({ subtitle, children }: AuthShellProps) {
       </div>
 
       <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-        Hisab Mezgeb
+        {t('brand.name')}
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
 

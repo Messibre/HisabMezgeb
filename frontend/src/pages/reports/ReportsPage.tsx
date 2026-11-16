@@ -1,6 +1,15 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Download, TrendingUp, TrendingDown, Users, Wallet, ArrowDownRight, ArrowUpRight, FileSpreadsheet } from 'lucide-react';
+import {
+  Download,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Wallet,
+  ArrowDownRight,
+  ArrowUpRight,
+  FileSpreadsheet,
+} from 'lucide-react';
 import AppHeader from '@/components/common/AppHeader';
 import { PeriodPicker, type PeriodType } from '@/components/common/PeriodPicker';
 import StatCard from '@/components/common/StatCard';
@@ -11,8 +20,16 @@ import { useReportSummary } from '@/hooks/useReportSummary';
 import { useDebtsPeriodReport } from '@/hooks/useDebtsPeriodReport';
 import { useExpenseBreakdown } from '@/hooks/useExpenseBreakdown';
 import ExportSheet from '@/components/common/ExportSheet';
-import { todayLocal, startOfWeek, endOfWeek, startOfMonth, endOfMonth, formatDate } from '@/lib/date';
+import {
+  todayLocal,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  formatDate,
+} from '@/lib/date';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
+import DateSelect from '@/components/common/DateSelect';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -39,7 +56,6 @@ export default function ReportsPage() {
     }
   }, [period, customFrom, customTo]);
 
-  // Fetch report data
   const {
     data: summary,
     isLoading: isSummaryLoading,
@@ -77,43 +93,39 @@ export default function ReportsPage() {
     summary.totalPersonalDraws === 0 &&
     summary.totalFundingIn === 0 &&
     summary.totalFundingOut === 0 &&
-    (!debtsPeriod || (debtsPeriod.totalNewlyBorrowed === 0 && debtsPeriod.totalRepaidInPeriod === 0));
+    (!debtsPeriod ||
+      (debtsPeriod.totalNewlyBorrowed === 0 && debtsPeriod.totalRepaidInPeriod === 0));
 
   return (
     <div className="min-h-screen bg-background pb-32">
       <AppHeader title={t('reports.title', 'Reports')} />
 
-      <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
-        {/* Period Selector */}
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 pt-4 space-y-6">
         <section className="space-y-3">
           <PeriodPicker value={period} onChange={setPeriod} />
 
           {period === 'custom' && (
-            <div className="grid grid-cols-2 gap-3 rounded-xl border border-outline-variant/40 bg-card p-3">
+            <div className="grid grid-cols-1 gap-3 rounded-xl border border-outline-variant/40 bg-card p-3">
               <div>
-                <label htmlFor="custom-from" className="block text-xs font-medium text-on-surface-variant mb-1">
-                  {t('reports.fromDate', 'From')}
-                </label>
-                <input
+                <DateSelect
+                  label={t('reports.fromDate', 'From')}
                   id="custom-from"
-                  type="date"
                   value={customFrom}
                   max={customTo}
-                  onChange={(e) => setCustomFrom(e.target.value)}
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary"
+                  onChange={(ymd) => {
+                    setCustomFrom(ymd);
+                  }}
                 />
               </div>
               <div>
-                <label htmlFor="custom-to" className="block text-xs font-medium text-on-surface-variant mb-1">
-                  {t('reports.toDate', 'To')}
-                </label>
-                <input
+                <DateSelect
+                  label={t('reports.toDate', 'To')}
                   id="custom-to"
-                  type="date"
                   value={customTo}
                   min={customFrom}
-                  onChange={(e) => setCustomTo(e.target.value)}
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary"
+                  onChange={(ymd) => {
+                    setCustomTo(ymd);
+                  }}
                 />
               </div>
             </div>
@@ -124,10 +136,9 @@ export default function ReportsPage() {
           </div>
         </section>
 
-        {/* Content body based on loading/error/data states */}
         {isLoading ? (
           <div className="space-y-4" data-testid="reports-skeleton">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               <SkeletonBlock className="h-24 w-full" />
               <SkeletonBlock className="h-24 w-full" />
               <SkeletonBlock className="h-24 w-full" />
@@ -144,98 +155,100 @@ export default function ReportsPage() {
           />
         ) : (
           <>
-            {/* Summary Metrics Cards */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.overview', 'Overview')}
               </h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                 <StatCard
                   label={t('reports.totalIncome', 'Total Income')}
-                  amount={summary?.totalIncome ?? 0}
+                  amount={summary?.totalIncome ?? null}
                   tone="in"
                   icon={<TrendingUp className="h-4 w-4 text-money-in" />}
                 />
                 <StatCard
                   label={t('reports.businessExpenses', 'Shop Expenses')}
-                  amount={summary?.totalBusinessExpenses ?? 0}
+                  amount={summary?.totalBusinessExpenses ?? null}
                   tone="out"
                   icon={<TrendingDown className="h-4 w-4 text-money-out" />}
                 />
                 <StatCard
                   label={t('reports.personalDraws', 'Personal Draws')}
-                  amount={summary?.totalPersonalDraws ?? 0}
+                  amount={summary?.totalPersonalDraws ?? null}
                   tone="neutral"
                   icon={<Wallet className="h-4 w-4 text-money-neutral" />}
                 />
                 <StatCard
-                  label={t('reports.totalOwed', 'Total Debt Owed')}
-                  amount={summary?.totalOwedByCustomers ?? 0}
-                  tone="neutral"
+                  label={t('money.owedToYou', 'Owed to you')}
+                  amount={summary?.totalOwedByCustomers ?? null}
+                  tone="owed"
                   icon={<Users className="h-4 w-4 text-money-neutral" />}
                 />
                 <StatCard
                   label={t('reports.fundingIn', 'Funding In')}
-                  amount={summary?.totalFundingIn ?? 0}
+                  amount={summary?.totalFundingIn ?? null}
                   tone="in"
                   icon={<ArrowDownRight className="h-4 w-4 text-money-in" />}
                 />
                 <StatCard
                   label={t('reports.fundingOut', 'Funding Out')}
-                  amount={summary?.totalFundingOut ?? 0}
+                  amount={summary?.totalFundingOut ?? null}
                   tone="out"
                   icon={<ArrowUpRight className="h-4 w-4 text-money-out" />}
                 />
               </div>
             </section>
 
-            {/* Expense Breakdown Section */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.expenseBreakdown', 'Expense Breakdown')}
               </h2>
               <CategoryBreakdownList
                 items={expenseBreakdown || []}
-                totalExpenses={(summary?.totalBusinessExpenses ?? 0) + (summary?.totalPersonalDraws ?? 0)}
+                totalExpenses={
+                  (summary?.totalBusinessExpenses ?? 0) + (summary?.totalPersonalDraws ?? 0)
+                }
               />
             </section>
 
-            {/* Debts Activity This Period */}
             <section className="space-y-3">
               <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                 {t('reports.debtActivity', 'Debt Activity (This Period)')}
               </h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                 <StatCard
                   label={t('reports.newlyBorrowed', 'Newly Borrowed')}
-                  amount={debtsPeriod?.totalNewlyBorrowed ?? 0}
+                  amount={debtsPeriod?.totalNewlyBorrowed ?? null}
                   tone="neutral"
                   size="md"
                 />
                 <StatCard
                   label={t('reports.repaid', 'Repaid')}
-                  amount={debtsPeriod?.totalRepaidInPeriod ?? 0}
+                  amount={debtsPeriod?.totalRepaidInPeriod ?? null}
                   tone="in"
                   size="md"
                 />
               </div>
             </section>
 
-            {/* Empty state notice if period had zero activity */}
             {isAllZero && (
               <div
                 className="rounded-xl border border-outline-variant/40 bg-card p-6 text-center text-sm text-on-surface-variant"
                 data-testid="reports-empty-notice"
               >
                 <FileSpreadsheet className="mx-auto h-8 w-8 text-on-surface-variant/60 mb-2" />
-                <p className="font-medium text-foreground">{t('reports.noData', 'No data for this period yet')}</p>
+                <p className="font-medium text-foreground">
+                  {t('reports.noData', 'No data for this period yet')}
+                </p>
                 <p className="text-xs text-on-surface-variant mt-1">
-                  {t('reports.noDataDescription', 'Transactions entered for this date range will appear here.')}
+                  {t(
+                    'reports.noDataDescription',
+                    'Transactions entered for this date range will appear here.'
+                  )}
                 </p>
               </div>
             )}
 
-            {/* Export Button */}
             <section className="pt-2">
               <button
                 type="button"
@@ -250,7 +263,6 @@ export default function ReportsPage() {
         )}
       </div>
 
-      {/* Export Options BottomSheet */}
       <ExportSheet
         open={showExportSheet}
         onOpenChange={setShowExportSheet}

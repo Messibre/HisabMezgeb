@@ -78,13 +78,17 @@ export const refresh = asyncHandler(async (req: AuthRequest, res: Response) => {
     throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'No refresh token provided');
   }
 
-  const { account, accessToken } = await refreshAccessToken(refreshToken);
+  const { account, accessToken, refreshToken: rotatedRefreshToken } =
+    await refreshAccessToken(refreshToken);
 
-  const options = getCookieOptions();
-  res.cookie('access_token', accessToken, {
-    ...options,
-    maxAge: 15 * 60 * 1000,
-  });
+  if (rotatedRefreshToken) {
+    setAuthCookies(res, accessToken, rotatedRefreshToken);
+  } else {
+    res.cookie('access_token', accessToken, {
+      ...getCookieOptions(),
+      maxAge: 15 * 60 * 1000,
+    });
+  }
 
   res
     .status(HTTP_STATUS.OK)

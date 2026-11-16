@@ -30,10 +30,17 @@ export type CustomerDetail = {
   updatedAt: Date;
 };
 
-// ── Shared Balance Helper ──
+type BalanceClient = Pick<Prisma.TransactionClient, 'debtBorrowRecord' | 'debtPayment'>;
 
-export const calculateCustomerBalance = async (customerId: string): Promise<number> => {
-  const borrows = await prisma.debtBorrowRecord.aggregate({
+/**
+ * Balance is always computed, never stored. Sums are subtracted as decimals so a
+ * full payment of e.g. 0.30 is never refused because of floating point drift.
+ */
+export const calculateCustomerBalance = async (
+  customerId: string,
+  client: BalanceClient = prisma,
+): Promise<number> => {
+  const borrows = await client.debtBorrowRecord.aggregate({
     where: {
       customerId,
       deletedAt: null,
@@ -41,7 +48,7 @@ export const calculateCustomerBalance = async (customerId: string): Promise<numb
     _sum: { amount: true },
   });
 
-  const payments = await prisma.debtPayment.aggregate({
+  const payments = await client.debtPayment.aggregate({
     where: {
       customerId,
       deletedAt: null,
@@ -49,20 +56,19 @@ export const calculateCustomerBalance = async (customerId: string): Promise<numb
     _sum: { amount: true },
   });
 
-  const totalBorrowed = borrows._sum.amount?.toNumber() ?? 0;
-  const totalPaid = payments._sum.amount?.toNumber() ?? 0;
+  const totalBorrowed = borrows._sum.amount ?? new Prisma.Decimal(0);
+  const totalPaid = payments._sum.amount ?? new Prisma.Decimal(0);
+  const balance = new Prisma.Decimal(totalBorrowed).minus(totalPaid);
 
   // Clamp at 0 – should never be negative, but defensive
-  return Math.max(0, totalBorrowed - totalPaid);
+  return balance.isNegative() ? 0 : balance.toNumber();
 };
-
-// ── Service Functions ──
 
 export const listCustomersWithBalance = async (
   accountId: string,
   search?: string,
 ): Promise<CustomerWithBalance[]> => {
-  const where: any = {
+  const where: Prisma.DebtCustomerWhereInput = {
     accountId,
     deletedAt: null,
   };
@@ -76,21 +82,37 @@ export const listCustomersWithBalance = async (
     orderBy: { name: 'asc' },
   });
 
-  // Compute balance for each customer
-  const results: CustomerWithBalance[] = [];
-  for (const customer of customers) {
-    const balance = await calculateCustomerBalance(customer.id);
-    results.push({
+  if (customers.length === 0) return [];
+
+  // Two grouped sums for all customers instead of two queries per customer.
+  const customerIds = customers.map((c) => c.id);
+  const [borrowSums, paymentSums] = await Promise.all([
+    prisma.debtBorrowRecord.groupBy({
+      by: ['customerId'],
+      where: { customerId: { in: customerIds }, deletedAt: null },
+      _sum: { amount: true },
+    }),
+    prisma.debtPayment.groupBy({
+      by: ['customerId'],
+      where: { customerId: { in: customerIds }, deletedAt: null },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const borrowed = new Map(borrowSums.map((r) => [r.customerId, r._sum.amount ?? new Prisma.Decimal(0)]));
+  const paid = new Map(paymentSums.map((r) => [r.customerId, r._sum.amount ?? new Prisma.Decimal(0)]));
+
+  return customers.map((customer) => {
+    const balance = new Prisma.Decimal(borrowed.get(customer.id) ?? 0).minus(paid.get(customer.id) ?? 0);
+    return {
       id: customer.id,
       name: customer.name,
       note: customer.note,
-      balance,
+      balance: balance.isNegative() ? 0 : balance.toNumber(),
       createdAt: customer.createdAt,
       updatedAt: customer.updatedAt,
-    });
-  }
-
-  return results;
+    };
+  });
 };
 
 export const createCustomer = async (
@@ -100,7 +122,6 @@ export const createCustomer = async (
     note?: string;
   },
 ): Promise<CustomerWithBalance> => {
-  // Build data object conditionally
   const createData: {
     accountId: string;
     name: string;
@@ -144,7 +165,6 @@ export const getCustomerWithHistory = async (
     throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Debt customer not found', [], ERROR_CODES.CUSTOMER_NOT_FOUND);
   }
 
-  // Fetch borrows and payments separately
   const borrows = await prisma.debtBorrowRecord.findMany({
     where: {
       customerId,

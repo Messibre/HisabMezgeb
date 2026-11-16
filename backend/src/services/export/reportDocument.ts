@@ -4,7 +4,9 @@ import {
   ExportFormat,
   I18N_STRINGS,
   formatMoney,
-  formatDateGregorian,
+  displayCategoryName,
+  formatDocDate,
+  type DocCalendar,
   DocSection,
   DocTable,
 } from './documentModel.js';
@@ -38,6 +40,7 @@ export interface ReportDataInput {
 
 export interface ReportDocOptions {
   lang?: SupportedLang;
+  calendar?: DocCalendar;
   format?: ExportFormat;
 }
 
@@ -49,17 +52,17 @@ export function buildReportDocumentModel(
   options: ReportDocOptions = {},
 ): DocumentModel {
   const lang = options.lang ?? 'en';
+  const calendar = options.calendar;
   const format = options.format ?? 'pdf';
   const t = I18N_STRINGS[lang] ?? I18N_STRINGS.en;
 
-  const fromStr = formatDateGregorian(data.from, lang);
-  const toStr = formatDateGregorian(data.to, lang);
+  const fromStr = formatDocDate(data.from, lang, calendar);
+  const toStr = formatDocDate(data.to, lang, calendar);
   const generatedAt = data.generatedAt ?? new Date();
-  const genDateStr = formatDateGregorian(generatedAt, lang);
+  const genDateStr = formatDocDate(generatedAt, lang, calendar);
 
   const sections: DocSection[] = [];
 
-  // Section 1: Financial Summary
   sections.push({
     title: t.financialSummary,
     items: [
@@ -93,7 +96,6 @@ export function buildReportDocumentModel(
     note: t.totalOwedNote,
   });
 
-  // Section 2: Debt Activity during this period (if available)
   if (data.debtsPeriod) {
     sections.push({
       title: t.debtsSummary,
@@ -110,7 +112,6 @@ export function buildReportDocumentModel(
     });
   }
 
-  // Section 3: Expense Breakdown by Category
   const activeExpenses = data.expenseBreakdown.filter((e) => e.total > 0);
   if (activeExpenses.length > 0) {
     const table: DocTable = {
@@ -122,7 +123,7 @@ export function buildReportDocumentModel(
       ],
       rows: activeExpenses.map((exp) => ({
         cells: [
-          exp.categoryName,
+          displayCategoryName(exp.categoryName, lang),
           exp.group === 'business' ? t.businessExpenses : t.personalDraws,
           formatMoney(exp.total, lang),
         ],

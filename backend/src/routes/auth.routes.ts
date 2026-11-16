@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import validate from '../middlewares/validate.middleware.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
-import { authLimiter } from '../middlewares/rateLimiter.middleware.js';
+import { authLimiter, refreshLimiter } from '../middlewares/rateLimiter.middleware.js';
 import {
   registerSchema,
   loginSchema,
@@ -18,12 +18,10 @@ import {
 
 const router = Router();
 
-// Public routes (rate-limited)
 router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
-router.post('/refresh', authLimiter, validate(refreshTokenSchema), refresh);
+router.post('/refresh', refreshLimiter, validate(refreshTokenSchema), refresh);
 
-// Protected routes
 router.post('/logout', authMiddleware, logout);
 router.patch('/password', authMiddleware, validate(changePasswordSchema), changePassword);
 

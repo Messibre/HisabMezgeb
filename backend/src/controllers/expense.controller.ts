@@ -14,7 +14,6 @@ export const listExpensesHandler = asyncHandler(async (req: AuthRequest, res: Re
   const accountId = req.accountId!;
   const { from, to, categoryId } = req.query as { from: string; to: string; categoryId?: string };
 
-  // ✅ Cast categoryId to string if provided
   const entries = await listExpenses(
     accountId,
     new Date(from),
@@ -41,7 +40,6 @@ export const updateExpenseHandler = asyncHandler(async (req: AuthRequest, res: R
   const { id } = req.params;
   const { amount, note } = req.body;
 
-  // ✅ Cast id to string
   const entry = await updateExpense(accountId, id as string, { amount, note });
 
   res.status(HTTP_STATUS.OK).json(new SuccessResponse(HTTP_STATUS.OK, 'Expense updated', entry));

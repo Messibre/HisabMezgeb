@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { setAppLanguage } from '@/lib/i18n';
 
 const LANGUAGES = [
   { code: 'en', nativeLabel: 'English', label: 'English' },
@@ -21,7 +22,7 @@ export default function LanguageSwitcher({ className = '' }: LanguageSwitcherPro
   const groupRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = (code: string) => {
-    i18n.changeLanguage(code);
+    setAppLanguage(code);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {

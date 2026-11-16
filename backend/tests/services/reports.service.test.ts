@@ -129,6 +129,22 @@ describe('Reports Service', () => {
       });
     });
 
+    it('owed counts only customers that still exist, so it matches the Debts list', async () => {
+      mockIncomeAggregate.mockResolvedValueOnce(createAggregateResult(0));
+      mockExpenseAggregate.mockResolvedValueOnce(createAggregateResult(0)).mockResolvedValueOnce(createAggregateResult(0));
+      mockFundingAggregate.mockResolvedValueOnce(createAggregateResult(0)).mockResolvedValueOnce(createAggregateResult(0));
+      mockBorrowAggregate.mockResolvedValueOnce(createAggregateResult(1000.3));
+      mockPaymentAggregate.mockResolvedValueOnce(createAggregateResult(1000));
+
+      const result = await buildSummary(accountId, from, to);
+
+      expect(mockBorrowAggregate).toHaveBeenCalledWith({
+        where: { accountId, deletedAt: null, customer: { deletedAt: null } },
+        _sum: { amount: true },
+      });
+      expect(result.totalOwedByCustomers).toBe(0.3);
+    });
+
     it('should handle null sums (no data) gracefully', async () => {
       mockIncomeAggregate.mockResolvedValueOnce(createAggregateResult(null));
       mockExpenseAggregate.mockResolvedValueOnce(createAggregateResult(null));

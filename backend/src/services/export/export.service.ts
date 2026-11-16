@@ -6,7 +6,7 @@ import {
   generateCsvExport,
 } from '../reports.service.js';
 import * as debtCustomerService from '../debtCustomer.service.js';
-import { SupportedLang, ExportFormat, formatDateGregorian } from './documentModel.js';
+import { SupportedLang, ExportFormat, DocCalendar, formatDateGregorian } from './documentModel.js';
 import { buildReportDocumentModel } from './reportDocument.js';
 import { buildStatementDocumentModel } from './statementDocument.js';
 import { renderDocumentToPdf } from './pdfRenderer.js';
@@ -54,6 +54,7 @@ export async function exportReport(
   to: Date,
   format: ExportFormat = 'pdf',
   lang: SupportedLang = 'en',
+  calendar?: DocCalendar,
 ): Promise<ExportResult> {
   const fromStr = formatDateGregorian(from, 'en');
   const toStr = formatDateGregorian(to, 'en');
@@ -85,7 +86,7 @@ export async function exportReport(
       debtsPeriod,
       expenseBreakdown,
     },
-    { lang, format },
+    { lang, format, calendar },
   );
 
   if (format === 'pdf') {
@@ -115,6 +116,7 @@ export async function exportCustomerStatement(
   customerId: string,
   format: 'pdf' | 'docx' = 'pdf',
   lang: SupportedLang = 'en',
+  calendar?: DocCalendar,
 ): Promise<ExportResult> {
   const [shopName, customerDetail] = await Promise.all([
     getAccountShopName(accountId),
@@ -131,7 +133,7 @@ export async function exportCustomerStatement(
       balance: customerDetail.balance,
       history: customerDetail.history,
     },
-    { lang, format },
+    { lang, format, calendar },
   );
 
   if (format === 'pdf') {

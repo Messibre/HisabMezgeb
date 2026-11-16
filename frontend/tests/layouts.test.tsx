@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import AppHeader from '@/components/common/AppHeader';
 import BottomTabLayout from '@/components/layouts/BottomTabLayout';
@@ -41,10 +41,11 @@ describe('Layout and Header components (M4)', () => {
       </MemoryRouter>
     );
 
-    const nav = screen.getByRole('navigation');
+    const nav = screen.getByRole('navigation', { name: 'Bottom Navigation' });
     expect(nav).toBeInTheDocument();
+    expect(nav.className).toContain('lg:hidden');
 
-    const links = screen.getAllByRole('link');
+    const links = within(nav).getAllByRole('link');
     expect(links.length).toBe(5);
 
     links.forEach((link) => {
@@ -52,8 +53,22 @@ describe('Layout and Header components (M4)', () => {
       expect(link.className).toContain('min-w-0');
     });
 
-    const homeLink = screen.getByRole('link', { name: /home/i });
+    const homeLink = within(nav).getByRole('link', { name: /home/i });
     expect(homeLink).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('BottomTabLayout has a desktop sidebar with the same 5 destinations, shown only from 1024px', () => {
+    render(
+      <MemoryRouter initialEntries={[ROUTES.REPORTS]}>
+        <BottomTabLayout />
+      </MemoryRouter>
+    );
+    const sidebar = screen.getByRole('complementary', { name: 'Main navigation' });
+    expect(sidebar.className.split(' ')).toContain('hidden');
+    expect(sidebar.className).toContain('lg:flex');
+    const links = within(sidebar).getAllByRole('link');
+    expect(links.map((l) => l.getAttribute('href'))).toEqual(['/home', '/entries', '/debts', '/reports', '/settings']);
+    expect(within(sidebar).getByRole('link', { name: /reports/i })).toHaveAttribute('aria-current', 'page');
   });
 
   it('AuthShell renders wallet logo, Hisab Mezgeb title, and subtitle', () => {

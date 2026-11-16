@@ -1,6 +1,8 @@
 import i18n from '@/lib/i18n';
+import { formatDate as formatCalendarDate, monthRange } from '@/lib/calendar';
+import { currentCalendar } from '@/store/calendar.store';
 
-// 1 = Monday, following the pre-approved spec decision
+// 1 = Monday
 export const WEEK_STARTS_ON = 1;
 
 export function parseLocalDate(input: Date | string): Date {
@@ -50,18 +52,18 @@ export function endOfWeek(date?: Date | string): string {
   return toApiDate(sunday);
 }
 
+/** First day of the current month in the user's calendar (an Ethiopian month when that calendar is on). */
 export function startOfMonth(date?: Date | string): string {
-  const d = date ? parseLocalDate(date) : parseLocalDate(todayLocal());
-  const firstDay = new Date(d.getFullYear(), d.getMonth(), 1);
-  return toApiDate(firstDay);
+  const ymd = date ? toApiDate(date) : todayLocal();
+  return monthRange(ymd, currentCalendar()).from;
 }
 
 export function endOfMonth(date?: Date | string): string {
-  const d = date ? parseLocalDate(date) : parseLocalDate(todayLocal());
-  const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-  return toApiDate(lastDay);
+  const ymd = date ? toApiDate(date) : todayLocal();
+  return monthRange(ymd, currentCalendar()).to;
 }
 
+/** "Today" / "Yesterday", otherwise the date in the user's calendar ("ኅዳር 5, 2019 ዓ.ም"). */
 export function formatDate(date: Date | string, lang?: string): string {
   const apiDate = toApiDate(date);
   const today = todayLocal();
@@ -71,21 +73,13 @@ export function formatDate(date: Date | string, lang?: string): string {
   }
 
   const now = new Date();
-  const yesterdayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-  const yesterday = toApiDate(yesterdayDate);
+  const yesterday = toApiDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1));
 
   if (apiDate === yesterday) {
     return i18n.t('common.yesterday', { defaultValue: 'Yesterday' });
   }
 
-  const d = parseLocalDate(date);
-  const activeLang = lang || i18n.language || 'en';
-
-  return new Intl.DateTimeFormat(activeLang, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(d);
+  return formatCalendarDate(apiDate, lang || i18n.language || 'en', currentCalendar());
 }
 
 export function isFutureDate(date: Date | string): boolean {

@@ -90,7 +90,6 @@ export const registerAccount = async (phoneNumber: string, password: string, sho
   const saltRounds = parseInt(env.BCRYPT_SALT_ROUNDS, 10);
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  // ── Transaction: account + settings + categories ──
   let account: AccountWithSafeFields;
 
   try {
@@ -181,12 +180,28 @@ export const loginAccount = async (phoneNumber: string, password: string) => {
   };
 };
 
-export const refreshAccessToken = async (refreshToken: string) => {
+/**
+ * How long a just-rotated refresh token is still accepted. Two tabs, or a slow
+ * retry, can send the previous cookie right after another request rotated it.
+ */
+export const REFRESH_GRACE_MS = 30 * 1000;
+
+const invalidRefresh = () =>
+  new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token', [], ERROR_CODES.SESSION_EXPIRED);
+
+/**
+ * Sliding session: every refresh replaces the refresh token with a new one valid
+ * for another JWT_REFRESH_EXPIRES_IN, so a daily user is never logged out.
+ * Returns `refreshToken` only when a new one was issued.
+ */
+export const refreshAccessToken = async (
+  refreshToken: string,
+): Promise<{ account: SafeAccount; accessToken: string; refreshToken?: string }> => {
   let payload: { accountId: string };
   try {
     payload = verifyRefreshToken(refreshToken) as { accountId: string };
   } catch {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token', [], ERROR_CODES.SESSION_EXPIRED);
+    throw invalidRefresh();
   }
 
   const { accountId } = payload;
@@ -196,7 +211,6 @@ export const refreshAccessToken = async (refreshToken: string) => {
     where: {
       accountId,
       token: hashedToken,
-      revokedAt: null,
       expiresAt: { gt: new Date() },
     },
     include: {
@@ -207,14 +221,37 @@ export const refreshAccessToken = async (refreshToken: string) => {
   });
 
   if (!storedToken) {
-    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Invalid or expired refresh token', [], ERROR_CODES.SESSION_EXPIRED);
+    throw invalidRefresh();
   }
 
-  const newAccessToken = generateAccessToken({ accountId });
+  const account = toSafeAccount(storedToken.account);
+
+  if (storedToken.revokedAt) {
+    const age = Date.now() - storedToken.revokedAt.getTime();
+    if (age <= REFRESH_GRACE_MS) {
+      // Rotated a moment ago by a parallel request: the browser already has the new cookie.
+      return { account, accessToken: generateAccessToken({ accountId }) };
+    }
+    logger.warn({ accountId, tokenId: storedToken.id }, 'Rejected reuse of a revoked refresh token');
+    throw invalidRefresh();
+  }
+
+  // Only the request that actually revokes the old token issues the replacement.
+  const { count } = await prisma.refreshToken.updateMany({
+    where: { id: storedToken.id, revokedAt: null },
+    data: { revokedAt: new Date() },
+  });
+
+  if (count === 0) {
+    return { account, accessToken: generateAccessToken({ accountId }) };
+  }
+
+  const { refreshToken: newRefreshToken } = await issueAndStoreRefreshToken(accountId);
 
   return {
-    account: toSafeAccount(storedToken.account),
-    accessToken: newAccessToken,
+    account,
+    accessToken: generateAccessToken({ accountId }),
+    refreshToken: newRefreshToken,
   };
 };
 
@@ -229,8 +266,7 @@ export const logoutAccount = async (refreshToken: string) => {
       data: { revokedAt: new Date() },
     });
   } catch (error) {
-    // Silently ignore – the client is logging out anyway.
-    // Log at debug level for observability.
+    // Ignore: the client is logging out anyway.
     logger.debug({ error }, 'Logout: failed to revoke refresh token (may already be revoked)');
   }
 };

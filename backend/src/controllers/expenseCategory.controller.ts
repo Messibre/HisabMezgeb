@@ -31,7 +31,6 @@ export const updateCategoryHandler = asyncHandler(async (req: AuthRequest, res: 
   const { id } = req.params;
   const { name, isActive } = req.body;
 
-  // ✅ Cast id to string
   const category = await updateCategory(accountId, id as string, { name, isActive });
 
   res

@@ -1,17 +1,10 @@
-// src/utils/ApiResponse.ts
 
-/**
- * Core contract definition for all API network payloads
- */
 interface IApiResponse {
   statusCode: number;
   success: boolean;
   message: string;
 }
 
-/**
- * 🟢 Standardized wrapper for successful actions
- */
 export class SuccessResponse<T = any> implements IApiResponse {
   statusCode: number;
   success: boolean = true; // Always true
@@ -25,9 +18,6 @@ export class SuccessResponse<T = any> implements IApiResponse {
   }
 }
 
-/**
- * 🔴 Standardized wrapper for error actions
- */
 export class ErrorResponse<E = any> implements IApiResponse {
   statusCode: number;
   success: boolean = false; // Always false

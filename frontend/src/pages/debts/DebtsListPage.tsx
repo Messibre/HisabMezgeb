@@ -2,9 +2,13 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Search, X, Plus, Users, UserPlus } from 'lucide-react';
-import { toast } from 'sonner';
 import AppHeader from '@/components/common/AppHeader';
 import MoneyText from '@/components/common/MoneyText';
+import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { useSubmitGuard } from '@/hooks/useSubmitGuard';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import { toUserError } from '@/lib/errors';
 import SkeletonRow from '@/components/common/SkeletonRow';
 import EmptyState from '@/components/common/EmptyState';
 import ErrorState from '@/components/common/ErrorState';
@@ -43,15 +47,16 @@ export default function DebtsListPage() {
     return () => clearTimeout(timer);
   }, [searchValue, setSearchParams]);
 
-  // Queries
   const today = todayLocal();
   const { data: reportData } = useReportSummary(today, today);
-  const totalOwed = reportData?.totalOwedByCustomers ?? 0;
+  // Unknown (loading or failed) stays null and renders a dash, never 0.
+  const totalOwed = reportData?.totalOwedByCustomers ?? null;
 
   const {
     data: customers = [],
     isLoading,
     isError,
+    error,
     refetch,
   } = useDebtCustomers(debouncedQuery.trim() || undefined);
 
@@ -64,25 +69,26 @@ export default function DebtsListPage() {
       if (aSettled && !bSettled) return 1;
       if (!aSettled && bSettled) return -1;
 
-      // Both unsettled: highest balance first
       if (!aSettled && !bSettled) {
         if (b.balance !== a.balance) {
           return b.balance - a.balance;
         }
       }
 
-      // If balances equal or both settled: sort alphabetically by name
       return a.name.localeCompare(b.name);
     });
   }, [customers]);
 
-  // New Customer BottomSheet state
   const [isNewCustomerOpen, setIsNewCustomerOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newNote, setNewNote] = useState('');
   const [nameError, setNameError] = useState('');
 
   const createCustomer = useCreateDebtCustomer();
+  const isOnline = useOnlineStatus();
+  const { run: runGuarded, busy: isSubmitting } = useSubmitGuard();
+  const showSaved = useSaveFeedbackStore((st) => st.showSaved);
+  const showFailed = useSaveFeedbackStore((st) => st.showFailed);
 
   const handleOpenNewCustomer = (prefilledName = '') => {
     setNewName(prefilledName);
@@ -91,15 +97,20 @@ export default function DebtsListPage() {
     setIsNewCustomerOpen(true);
   };
 
-  const handleCreateCustomer = async (e: React.FormEvent) => {
+  const handleCreateCustomer = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isOnline) return;
+    void runGuarded(submitCustomer);
+  };
+
+  const submitCustomer = async () => {
     const trimmedName = newName.trim();
     if (!trimmedName) {
       setNameError(t('debts.nameRequired', 'Customer name is required'));
       return;
     }
     if (trimmedName.length > 100) {
-      setNameError('Name must be 100 characters or less');
+      setNameError(t('debts.nameTooLong', 'Name must be 100 characters or less'));
       return;
     }
 
@@ -109,11 +120,11 @@ export default function DebtsListPage() {
         note: newNote.trim() || undefined,
       });
 
-      toast.success(t('common.save', 'Saved'));
+      showSaved({ kind: 'customer', name: trimmedName, recordId: created.id });
       setIsNewCustomerOpen(false);
       navigate(buildDebtCustomerDetailPath(created.id));
-    } catch {
-      toast.error(t('common.error', 'Failed to save customer'));
+    } catch (err) {
+      showFailed({ kind: 'customer', message: t(toUserError(err).messageKey) });
     }
   };
 
@@ -121,8 +132,7 @@ export default function DebtsListPage() {
     <div className="min-h-screen bg-background pb-28">
       <AppHeader title={t('pages.debts', 'Debts')} />
 
-      <div className="max-w-md mx-auto px-4 py-3 space-y-4">
-        {/* Search Bar */}
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 py-3 space-y-4">
         <div role="search" className="relative">
           <div className="relative flex items-center">
             <Search className="absolute left-3.5 w-4 h-4 text-muted-foreground pointer-events-none" />
@@ -146,15 +156,13 @@ export default function DebtsListPage() {
           </div>
         </div>
 
-        {/* Total Owed Hero Card */}
         <div className="bg-card border border-border/40 rounded-2xl p-5 text-center shadow-[0px_2px_12px_rgba(0,0,0,0.04)]">
           <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-            {t('debts.totalOwed', 'Total Owed')}
+            {t('money.owedToYou', 'Owed to you')}
           </span>
-          <MoneyText amount={totalOwed} tone="out" size="xl" />
+          <MoneyText amount={totalOwed} tone="owed" size="xl" />
         </div>
 
-        {/* Customers List Section */}
         <div className="space-y-2.5">
           {isLoading ? (
             <div className="space-y-2">
@@ -164,12 +172,11 @@ export default function DebtsListPage() {
             </div>
           ) : isError ? (
             <ErrorState
-              message={t('common.error', 'Failed to load debt customers')}
+              message={t(toUserError(error).messageKey)}
               onRetry={() => refetch()}
             />
           ) : sortedCustomers.length === 0 ? (
             debouncedQuery.trim() ? (
-              /* Search Empty State */
               <div className="flex flex-col items-center justify-center p-8 text-center rounded-2xl bg-card/60 border border-border/30">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
                   <Search className="w-6 h-6" />
@@ -195,7 +202,6 @@ export default function DebtsListPage() {
                 </button>
               </div>
             ) : (
-              /* No Customers at all */
               <EmptyState
                 icon={<Users className="w-8 h-8" />}
                 title={t('debts.noCustomers', 'No customers yet. Tap + to add one.')}
@@ -209,17 +215,15 @@ export default function DebtsListPage() {
         </div>
       </div>
 
-      {/* Floating Action Button (+) */}
       <button
         type="button"
         onClick={() => handleOpenNewCustomer('')}
         aria-label={t('debts.addCustomerAria', 'Add customer')}
-        className="fixed bottom-20 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="fixed bottom-20 right-4 z-40 lg:bottom-8 lg:right-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Plus className="w-6 h-6" aria-hidden="true" />
       </button>
 
-      {/* New Customer BottomSheet */}
       <BottomSheet
         open={isNewCustomerOpen}
         onOpenChange={setIsNewCustomerOpen}
@@ -258,13 +262,15 @@ export default function DebtsListPage() {
           <div className="pt-2">
             <button
               type="submit"
-              disabled={createCustomer.isPending}
+              disabled={createCustomer.isPending || isSubmitting || !isOnline}
+              aria-describedby={!isOnline ? 'customer-offline-notice' : undefined}
               className="w-full h-[52px] rounded-full bg-primary text-primary-foreground font-semibold text-base hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
             >
-              {createCustomer.isPending
+              {createCustomer.isPending || isSubmitting
                 ? t('common.loading', 'Loading...')
                 : t('debts.saveCustomer', 'Save Customer')}
             </button>
+            {!isOnline && <OfflineSaveNotice id="customer-offline-notice" />}
           </div>
         </form>
       </BottomSheet>

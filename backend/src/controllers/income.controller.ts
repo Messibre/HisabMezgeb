@@ -37,7 +37,6 @@ export const updateIncomeHandler = asyncHandler(async (req: AuthRequest, res: Re
   const { id } = req.params;
   const { amount, note } = req.body;
 
-  // ✅ Cast id to string – it's a single value in our route
   const entry = await updateIncome(accountId, id as string, { amount, note });
 
   res.status(HTTP_STATUS.OK).json(new SuccessResponse(HTTP_STATUS.OK, 'Income updated', entry));

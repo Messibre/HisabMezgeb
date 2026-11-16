@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import BottomSheet from '@/components/common/BottomSheet';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { useSubmitGuard } from '@/hooks/useSubmitGuard';
+import { useFormDraft, clearDraft } from '@/hooks/useFormDraft';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
+import { toUserError } from '@/lib/errors';
 import AmountInput from '@/components/common/AmountInput';
 import FormField from '@/components/common/FormField';
 import PillInput from '@/components/common/PillInput';
 import { useCreateBorrowRecord } from '@/hooks/useDebtCustomerDetail';
 import { todayLocal, isFutureDate } from '@/lib/date';
+import DateSelect from '@/components/common/DateSelect';
 
 interface AddBorrowSheetProps {
   customerId: string;
@@ -25,9 +31,24 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
   const [itemsError, setItemsError] = useState('');
 
   const createBorrow = useCreateBorrowRecord();
+  const isOnline = useOnlineStatus();
+  const { run: runGuarded, busy: isSubmitting } = useSubmitGuard();
+  const showSaved = useSaveFeedbackStore((st) => st.showSaved);
+  const showFailed = useSaveFeedbackStore((st) => st.showFailed);
+  const draftKey = `borrow:${customerId}`;
+  useFormDraft(draftKey, { amount, itemsDescription, note }, (draft) => {
+    if (draft.amount) setAmount(draft.amount);
+    if (draft.itemsDescription) setItemsDescription(draft.itemsDescription);
+    if (draft.note) setNote(draft.note);
+  });
 
-  const handleSave = async (e: React.FormEvent) => {
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isOnline) return;
+    void runGuarded(submit);
+  };
+
+  const submit = async () => {
     setAmountError('');
     setItemsError('');
 
@@ -48,7 +69,7 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
     }
 
     try {
-      await createBorrow.mutateAsync({
+      const created = await createBorrow.mutateAsync({
         customerId,
         payload: {
           date,
@@ -58,22 +79,19 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
         },
       });
 
-      toast.success(t('common.save', 'Saved'));
+      showSaved({ kind: 'borrow', date, amount: parsedAmount, recordId: created?.id });
+      clearDraft(draftKey);
       setAmount('');
       setItemsDescription('');
       setNote('');
       onOpenChange(false);
-    } catch {
-      toast.error(t('common.error', 'Failed to save borrow record'));
+    } catch (err) {
+      showFailed({ kind: 'borrow', message: t(toUserError(err).messageKey) });
     }
   };
 
   return (
-    <BottomSheet
-      open={open}
-      onOpenChange={onOpenChange}
-      title={t('debts.addBorrow', 'Add Borrow')}
-    >
+    <BottomSheet open={open} onOpenChange={onOpenChange} title={t('debts.addBorrow', 'Add Borrow')}>
       <form onSubmit={handleSave} className="space-y-4 pt-1">
         <AmountInput
           id="borrow-amount"
@@ -85,17 +103,15 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
           error={amountError}
         />
 
-        <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center justify-between">
-          <label htmlFor="borrow-date" className="text-xs font-semibold text-muted-foreground">
-            {t('entries.dateLabel', 'Date')}
-          </label>
-          <input
+        <div className="bg-card border border-border/40 rounded-xl p-3">
+          <DateSelect
+            label={t('entries.dateLabel', 'Date')}
             id="borrow-date"
-            type="date"
-            max={today}
             value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="text-xs bg-muted/60 text-foreground px-2.5 py-1.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary"
+            max={today}
+            onChange={(ymd) => {
+              setDate(ymd);
+            }}
           />
         </div>
 
@@ -117,11 +133,7 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
           />
         </FormField>
 
-        <FormField
-          label={t('debts.noteLabel', 'Note')}
-          id="borrow-note"
-          optional
-        >
+        <FormField label={t('debts.noteLabel', 'Note')} id="borrow-note" optional>
           <PillInput
             id="borrow-note"
             value={note}
@@ -133,13 +145,15 @@ export function AddBorrowSheet({ customerId, open, onOpenChange }: AddBorrowShee
         <div className="pt-2">
           <button
             type="submit"
-            disabled={createBorrow.isPending}
+            disabled={createBorrow.isPending || isSubmitting || !isOnline}
+            aria-describedby={!isOnline ? 'borrow-offline-notice' : undefined}
             className="w-full h-[52px] rounded-full bg-primary text-primary-foreground font-semibold text-base hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
           >
-            {createBorrow.isPending
+            {createBorrow.isPending || isSubmitting
               ? t('common.loading', 'Loading...')
               : t('debts.saveBorrow', 'Save Borrow')}
           </button>
+          {!isOnline && <OfflineSaveNotice id="borrow-offline-notice" />}
         </div>
       </form>
     </BottomSheet>

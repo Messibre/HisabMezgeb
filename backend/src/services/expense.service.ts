@@ -3,8 +3,6 @@ import { prisma } from '../config/db.js';
 import ApiError from '../utils/ApiError.js';
 import { HTTP_STATUS, ERROR_CODES } from '../constants/index.js';
 
-// ── Return Types ──
-
 export type ExpenseWithCategory = {
   id: string;
   accountId: string;
@@ -27,8 +25,6 @@ export type ExpenseResponse = {
   createdAt: Date;
   updatedAt: Date;
 };
-
-// ── Helpers ──
 
 function toExpenseWithCategory(raw: {
   id: string;
@@ -76,8 +72,6 @@ function toExpenseResponse(raw: {
   };
 }
 
-// ── Service Functions ──
-
 export const listExpenses = async (
   accountId: string,
   from: Date,
@@ -117,7 +111,6 @@ export const createExpense = async (
   amount: number,
   note?: string,
 ): Promise<ExpenseResponse> => {
-  // 1. Verify category exists and belongs to account
   const category = await prisma.expenseCategory.findUnique({
     where: { id: categoryId, accountId },
   });
@@ -126,7 +119,6 @@ export const createExpense = async (
     throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found', [], ERROR_CODES.CATEGORY_NOT_FOUND);
   }
 
-  // 2. Check if an active entry already exists for this date + category
   const existing = await prisma.dailyExpense.findFirst({
     where: {
       accountId,
@@ -145,7 +137,20 @@ export const createExpense = async (
     );
   }
 
-  // 3. Build create data – only include note if provided (matches test expectation)
+  // The unique key (accountId, date, categoryId) also covers soft-deleted rows,
+  // so a deleted entry for the same day and category is revived.
+  const deleted = await prisma.dailyExpense.findFirst({
+    where: { accountId, date, categoryId, deletedAt: { not: null } },
+  });
+
+  if (deleted) {
+    const revived = await prisma.dailyExpense.update({
+      where: { id: deleted.id },
+      data: { deletedAt: null, amount: new Prisma.Decimal(amount), note: note ?? null },
+    });
+    return toExpenseResponse(revived);
+  }
+
   const data: {
     accountId: string;
     date: Date;

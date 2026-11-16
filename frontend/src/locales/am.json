@@ -4,7 +4,8 @@
     "entries": "ምዝገባዎች",
     "debts": "ዕዳዎች",
     "reports": "ሪፖርቶች",
-    "settings": "ቅንብሮች"
+    "settings": "ቅንብሮች",
+    "sidebar": "ዋና ማውጫ"
   },
   "auth": {
     "loginTitle": "ግባ",
@@ -52,7 +53,13 @@
     "save": "አስቀምጥ",
     "cancel": "ይቅር",
     "tryAgain": "እንደገና ሞክር",
-    "offlineBanner": "offline"
+    "offlineBanner": "ኢንተርኔት የለም። ኢንተርኔት እስኪመለስ ድረስ መመዝገብ አይቻልም።",
+    "back": "ተመለስ",
+    "income": "ገቢ",
+    "expense": "ወጪ",
+    "options": "ተጨማሪ አማራጮች",
+    "skipToContent": "ወደ ዋናው ይዘት እለፍ",
+    "backOnline": "ኢንተርኔት ተመልሷል"
   },
   "pages": {
     "home": "ቤት",
@@ -71,11 +78,15 @@
     "themeLight": "ብርሃን",
     "themeDark": "ጨለማ",
     "themeSystem": "የስርዓት",
-    "toggleTheme": "ገጽታ ቀይር"
+    "toggleTheme": "ገጽታ ቀይር",
+    "calendar": "የቀን መቁጠሪያ",
+    "calendarEthiopian": "የኢትዮጵያ",
+    "calendarGregorian": "ግሪጎሪያን",
+    "calendarHelper": "ቀኖች እንዴት እንደሚታዩ እና እንደሚገቡ"
   },
   "notFound": {
     "title": "404",
-    "documentTitle": "ገጹ አልተገኘም - ሂሳብ መዝገብ",
+    "documentTitle": "ገጹ አልተገኘም - ሒሳብ መዝገብ",
     "heading": "ገጹ አልተገኘም",
     "message": "የፈለጉትን ገጽ ማግኘት አልቻልንም።",
     "goHome": "ወደ መነሻ ገጽ",
@@ -176,7 +187,7 @@
   "entries": {
     "tabIncome": "ገቢ",
     "tabExpense": "ወጪ",
-    "tabFunding": "የገንዘብ ድጋፍ",
+    "tabFunding": "ተጨማሪ ገንዘብ",
     "incomeAmountHelper": "ዛሬ የተቀበሉት ጠቅላላ ጥሬ ገንዘብ፡ ሽያጭ እና የደንበኞች ክፍያዎች አንድ ላይ።",
     "dateLabel": "ቀን",
     "noteLabel": "ማስታወሻ",
@@ -184,7 +195,7 @@
     "categoryLabel": "ምድብ",
     "businessGroup": "ንግድ",
     "personalGroup": "የግል / ቤተሰብ",
-    "fundingTypeLabel": "የድጋፍ አይነት",
+    "fundingTypeLabel": "የተጨማሪ ገንዘብ አይነት",
     "salaryIn": "የደመወዝ ገቢ",
     "borrowedIn": "ብድር የተወሰደ",
     "borrowedRepaid": "ብድር የተመለሰ",
@@ -212,7 +223,7 @@
     "errorAmountRequired": "መጠን ያስገቡ",
     "errorAmountPositive": "መጠኑ ከ 0 በላይ መሆን አለበት",
     "errorCategoryRequired": "እባክዎ ምድብ ይምረጡ",
-    "errorFundingTypeRequired": "እባክዎ የድጋፍ አይነት ይምረጡ",
+    "errorFundingTypeRequired": "እባክዎ የተጨማሪ ገንዘብ አይነት ይምረጡ",
     "errorFutureDate": "የወደፊት ቀን መሆን አይችልም"
   },
   "debts": {
@@ -253,13 +264,15 @@
     "fullAmount": "ሙሉውን",
     "partOfIt": "ከፊሉን",
     "paymentAmountHelper": "ይህን ጥሬ ገንዘብ በዛሬው የገቢ ድምር ውስጥ ማካተትዎን ያስታውሱ።",
-    "paymentMaxError": "ከተፈለገው መጠን (ETB {{balance}}) በላይ መሆን አይችልም",
+    "paymentMaxError": "ከተፈለገው መጠን (ብር {{balance}}) በላይ መሆን አይችልም",
     "savePayment": "ክፍያ መዝግብ",
     "editRecord": "መዝገብ አስተካክል",
     "deleteRecord": "መዝገብ ሰርዝ",
     "deleteRecordTitle": "መዝገቡ ይሰረዝ?",
     "deleteRecordMessage": "ይህንን መዝገብ መሰረዝ እርግጠኛ ነዎት?",
-    "itemsRequired": "የተወሰዱትን እቃዎች እባክዎ ይግለጹ"
+    "itemsRequired": "የተወሰዱትን እቃዎች እባክዎ ይግለጹ",
+    "nameTooLong": "ስሙ ከ100 ፊደላት መብለጥ የለበትም",
+    "selectCustomer": "የሂሳብ መዝገቡን ለማየት ደንበኛ ይምረጡ።"
   },
   "reports": {
     "title": "ሪፖርቶች",
@@ -268,7 +281,7 @@
     "today": "ዛሬ",
     "thisWeek": "በዚህ ሳምንት",
     "thisMonth": "በዚህ ወር",
-    "custom": "ብጁ",
+    "custom": "የተወሰነ ጊዜ",
     "fromDate": "ከ",
     "toDate": "እስከ",
     "apply": "ተግብር",
@@ -291,16 +304,17 @@
     "noData": "በዚህ ጊዜ ምንም መረጃ የለም",
     "noDataDescription": "በዚህ የቀን ክልል የተመዘገቡ ግብይቶች እዚህ ይታያሉ።",
     "exportSuccess": "ሪፖርቱ በተሳካ ሁኔታ ተልኳል",
-    "exportFailed": "ሪፖርቱን መላክ አልተሳካም"
+    "exportFailed": "ሪፖርቱን መላክ አልተሳካም",
+    "period": "የሪፖርት ጊዜ"
   },
   "landing": {
-    "documentTitle": "ሂሳብ መዝገብ - የሱቅዎ የዕለት ገንዘብ እና የብድር መዝገብ",
+    "documentTitle": "ሒሳብ መዝገብ - የሱቅዎ የዕለት ገንዘብ እና የብድር መዝገብ",
     "metaDescription": "ለአነስተኛ ሱቆች የተሰራ የገንዘብ እና የብድር መዝገብ። የቀን ገቢ እና ወጪ ይመዝግቡ፣ የደንበኞችን ብድር ይከታተሉ፣ ቀላል ሪፖርቶችን በአማርኛ፣ በትግርኛ እና በእንግሊዝኛ ይመልከቱ።",
     "skipToContent": "ወደ ዋናው ይዘት ይለፉ",
     "header": {
       "login": "ይግቡ",
       "language": "ቋንቋ",
-      "brand": "ሂሳብ መዝገብ"
+      "brand": "ሒሳብ መዝገብ"
     },
     "hero": {
       "title": "የሱቅዎ የዕለት ገንዘብ እና የብድር መዝገብ።",
@@ -404,5 +418,37 @@
     "install": "ጫን",
     "iosInstallTitle": "ይህን መተግበሪያ ጫን",
     "iosInstallInstructions": "የማጋሪያ ምልክቱን (□↑) ይጫኑ፣ ከዚያ \"Add to Home Screen\" ይምረጡ"
+  },
+  "money": {
+    "owedToYou": "ከደንበኞች የሚጠበቅ"
+  },
+  "save": {
+    "saved": "{{kind}} ተመዝግቧል",
+    "failed": "{{kind}} አልተመዘገበም",
+    "offline": "ኢንተርኔት የለም። ይህ ገና ሊመዘገብ አይችልም።",
+    "dismiss": "ዝጋ",
+    "kinds": {
+      "income": "ገቢ",
+      "expense": "ወጪ",
+      "funding": "ተጨማሪ ገንዘብ",
+      "borrow": "ብድር",
+      "payment": "ክፍያ",
+      "customer": "ደንበኛ"
+    },
+    "tryAgain": "እባክዎ እንደገና ይሞክሩ።"
+  },
+  "brand": {
+    "name": "ሒሳብ መዝገብ"
+  },
+  "categories": {
+    "costOfGoods": "የዕቃ ግዢ",
+    "equb": "ዕቁብ",
+    "homeNecessities": "የቤት ፍጆታ",
+    "debtPayment": "የዕዳ ክፍያ"
+  },
+  "date": {
+    "day": "ቀን",
+    "month": "ወር",
+    "year": "ዓመት"
   }
 }

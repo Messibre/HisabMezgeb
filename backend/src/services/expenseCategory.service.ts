@@ -75,7 +75,6 @@ export const updateCategory = async (
     throw new ApiError(HTTP_STATUS.NOT_FOUND, 'Category not found', [], ERROR_CODES.CATEGORY_NOT_FOUND);
   }
 
-  // If updating name, check for duplicate (excluding the current category)
   if (data.name !== undefined && data.name !== existing.name) {
     const duplicate = await prisma.expenseCategory.findUnique({
       where: {
@@ -86,7 +85,6 @@ export const updateCategory = async (
       },
     });
 
-    // ✅ CRITICAL: Only throw if a DIFFERENT category already has this name
     if (duplicate && duplicate.id !== categoryId) {
       throw new ApiError(HTTP_STATUS.CONFLICT, 'This category already exists', [], ERROR_CODES.DUPLICATE_CATEGORY);
     }

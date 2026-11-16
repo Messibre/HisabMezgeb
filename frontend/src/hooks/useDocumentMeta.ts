@@ -11,9 +11,6 @@ export interface UseDocumentMetaOptions {
   fallbackDescription?: string;
 }
 
-const DEFAULT_TITLE = 'Hisab Mezgeb - Simple Money & Debt Tracker';
-const APP_NAME = 'Hisab Mezgeb';
-
 export function useDocumentMeta({
   titleKey,
   descriptionKey,
@@ -28,7 +25,8 @@ export function useDocumentMeta({
   const descriptionParamsKey = JSON.stringify(descriptionParams);
 
   useEffect(() => {
-    // 1. Update document.title
+    const APP_NAME = t('brand.name');
+    const DEFAULT_TITLE = APP_NAME;
     if (titleKey) {
       const translated = t(titleKey, titleParams);
       if (translated && translated !== titleKey) {
@@ -48,7 +46,6 @@ export function useDocumentMeta({
       document.title = DEFAULT_TITLE;
     }
 
-    // 2. Update meta[name="description"] if descriptionKey or fallbackDescription is provided
     let previousDescription: string | null = null;
     let descriptionMeta = document.querySelector('meta[name="description"]');
 
@@ -69,7 +66,6 @@ export function useDocumentMeta({
       }
     }
 
-    // 3. Handle noindex for robots meta
     let robotsMeta = document.querySelector('meta[name="robots"]');
     const createdRobots = !robotsMeta;
 

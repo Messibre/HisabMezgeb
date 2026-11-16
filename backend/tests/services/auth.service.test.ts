@@ -224,11 +224,90 @@ describe('Auth Service', () => {
         revokedAt: null,
       });
       (generateAccessToken as Mock).mockReturnValue('new-access-token');
+      (prisma.refreshToken.updateMany as Mock).mockResolvedValue({ count: 1 });
+      (generateRefreshToken as Mock).mockReturnValue('rotated-refresh');
+      (prisma.refreshToken.create as Mock).mockResolvedValue({});
 
       const result = await refreshAccessToken('valid-refresh');
 
       expect(result.account).toEqual(mockAccount);
       expect(result.accessToken).toBe('new-access-token');
+    });
+
+    it('rotates: revokes the presented token and issues a new 30-day one (sliding session)', async () => {
+      (verifyRefreshToken as Mock).mockReturnValue({ accountId: 'acc-123' });
+      (hashToken as Mock).mockReturnValue('hashed-refresh');
+      (prisma.refreshToken.findFirst as Mock).mockResolvedValue({
+        id: 'rt-1',
+        account: mockAccount,
+        expiresAt: future,
+        revokedAt: null,
+      });
+      (prisma.refreshToken.updateMany as Mock).mockResolvedValue({ count: 1 });
+      (generateRefreshToken as Mock).mockReturnValue('rotated-refresh');
+      (generateAccessToken as Mock).mockReturnValue('new-access-token');
+      (prisma.refreshToken.create as Mock).mockResolvedValue({});
+
+      const before = Date.now();
+      const result = await refreshAccessToken('valid-refresh');
+
+      expect(prisma.refreshToken.updateMany).toHaveBeenCalledWith({
+        where: { id: 'rt-1', revokedAt: null },
+        data: { revokedAt: expect.any(Date) },
+      });
+      expect(result.refreshToken).toBe('rotated-refresh');
+      const created = (prisma.refreshToken.create as Mock).mock.calls[0][0].data;
+      expect(created.expiresAt.getTime()).toBeGreaterThanOrEqual(before + 30 * 24 * 3600 * 1000 - 1000);
+    });
+
+    it('a token rotated less than 30 s ago still works once more, without issuing another', async () => {
+      (verifyRefreshToken as Mock).mockReturnValue({ accountId: 'acc-123' });
+      (hashToken as Mock).mockReturnValue('hashed-refresh');
+      (prisma.refreshToken.findFirst as Mock).mockResolvedValue({
+        id: 'rt-1',
+        account: mockAccount,
+        expiresAt: future,
+        revokedAt: new Date(Date.now() - 5_000),
+      });
+      (generateAccessToken as Mock).mockReturnValue('new-access-token');
+
+      const result = await refreshAccessToken('previous-refresh');
+
+      expect(result.accessToken).toBe('new-access-token');
+      expect(result.refreshToken).toBeUndefined();
+      expect(prisma.refreshToken.create).not.toHaveBeenCalled();
+    });
+
+    it('rejects reuse of a token revoked more than 30 s ago', async () => {
+      (verifyRefreshToken as Mock).mockReturnValue({ accountId: 'acc-123' });
+      (hashToken as Mock).mockReturnValue('hashed-refresh');
+      (prisma.refreshToken.findFirst as Mock).mockResolvedValue({
+        id: 'rt-1',
+        account: mockAccount,
+        expiresAt: future,
+        revokedAt: new Date(Date.now() - 60_000),
+      });
+
+      await expect(refreshAccessToken('stolen-refresh')).rejects.toMatchObject({ statusCode: 401 });
+      expect(prisma.refreshToken.create).not.toHaveBeenCalled();
+    });
+
+    it('when a parallel request already rotated it, returns an access token only', async () => {
+      (verifyRefreshToken as Mock).mockReturnValue({ accountId: 'acc-123' });
+      (hashToken as Mock).mockReturnValue('hashed-refresh');
+      (prisma.refreshToken.findFirst as Mock).mockResolvedValue({
+        id: 'rt-1',
+        account: mockAccount,
+        expiresAt: future,
+        revokedAt: null,
+      });
+      (prisma.refreshToken.updateMany as Mock).mockResolvedValue({ count: 0 });
+      (generateAccessToken as Mock).mockReturnValue('new-access-token');
+
+      const result = await refreshAccessToken('valid-refresh');
+
+      expect(result.refreshToken).toBeUndefined();
+      expect(prisma.refreshToken.create).not.toHaveBeenCalled();
     });
 
     it('should throw 401 if refresh token JWT verification fails', async () => {

@@ -14,8 +14,6 @@ export type BorrowRecord = {
   updatedAt: Date;
 };
 
-// ── Helper ──
-
 function toBorrowRecord(raw: {
   id: string;
   customerId: string;
@@ -38,8 +36,6 @@ function toBorrowRecord(raw: {
   };
 }
 
-// ── Service Functions ──
-
 export const createBorrowRecord = async (
   accountId: string,
   customerId: string,
@@ -48,7 +44,6 @@ export const createBorrowRecord = async (
   itemsDescription: string,
   note?: string,
 ): Promise<BorrowRecord> => {
-  // Verify customer exists and belongs to account
   const customer = await prisma.debtCustomer.findUnique({
     where: {
       id: customerId,

@@ -4,7 +4,8 @@
     "entries": "መዝገባት",
     "debts": "ዕዳታት",
     "reports": "ጸብጻባት",
-    "settings": "ቅጥዕታት"
+    "settings": "ቅጥዕታት",
+    "sidebar": "ቀንዲ መምርሒ"
   },
   "auth": {
     "loginTitle": "እቶ",
@@ -52,7 +53,13 @@
     "save": "ኣቐምጥ",
     "cancel": "ስረዝ",
     "tryAgain": "ደጊምካ ፈትን",
-    "offlineBanner": "Offline"
+    "offlineBanner": "ኢንተርኔት የለን። ኢንተርኔት ክሳዕ ዝምለስ ምምዝጋብ ኣይከኣልን።",
+    "back": "ተመለስ",
+    "income": "ኣታዊ",
+    "expense": "ወጻኢ",
+    "options": "ተወሳኺ ምርጫታት",
+    "skipToContent": "ናብ ቀንዲ ትሕዝቶ ሕለፍ",
+    "backOnline": "ኢንተርኔት ተመሊሱ"
   },
   "pages": {
     "home": "ቤት",
@@ -66,12 +73,16 @@
   },
   "settings": {
     "language": "ቋንቋ",
-    "theme": "ተማ (Theme)",
+    "theme": "ገጽታ",
     "themeHelper": "ብርሃን፣ ጸላም ወይ ናይ መሳርሒኹም ምረጹ",
     "themeLight": "ብርሃን",
     "themeDark": "ጸላም",
     "themeSystem": "ናይ ሲስተም",
-    "toggleTheme": "ተማ ምልዋጥ"
+    "toggleTheme": "ተማ ምልዋጥ",
+    "calendar": "ዓውደ ኣዋርሕ",
+    "calendarEthiopian": "ናይ ኢትዮጵያ",
+    "calendarGregorian": "ግሪጎርያን",
+    "calendarHelper": "ዕለታት ብኸመይ ከም ዝርኣዩን ዝኣትዉን"
   },
   "notFound": {
     "title": "404",
@@ -176,7 +187,7 @@
   "entries": {
     "tabIncome": "ኣታዊ",
     "tabExpense": "ወጻኢ",
-    "tabFunding": "ናይ ገንዘብ ደገፍ",
+    "tabFunding": "ተወሳኺ ገንዘብ",
     "incomeAmountHelper": "ሎሚ ዝተቐበልካዮ ጠቕላላ ጥረ ገንዘብ፡ መሸጣን ናይ ዓማዊል ክፍሊትን ሓቢሩ።",
     "dateLabel": "ዕለት",
     "noteLabel": "መተሓሳሰቢ",
@@ -184,7 +195,7 @@
     "categoryLabel": "ምድብ",
     "businessGroup": "ንግዲ",
     "personalGroup": "ውልቃዊ / ስድራ",
-    "fundingTypeLabel": "ዓይነት ደገፍ",
+    "fundingTypeLabel": "ዓይነት ተወሳኺ ገንዘብ",
     "salaryIn": "ናይ ደሞዝ ኣታዊ",
     "borrowedIn": "ልቓሕ ዝተወሰደ",
     "borrowedRepaid": "ልቓሕ ዝተመልሰ",
@@ -212,7 +223,7 @@
     "errorAmountRequired": "መጠን የእቱ",
     "errorAmountPositive": "መጠኑ ካብ 0 ንላዕሊ ክኸውን ኣለዎ",
     "errorCategoryRequired": "በጃኹም ምድብ ምረጹ",
-    "errorFundingTypeRequired": "በጃኹም ዓይነት ደገፍ ምረጹ",
+    "errorFundingTypeRequired": "በጃኹም ዓይነት ተወሳኺ ገንዘብ ምረጹ",
     "errorFutureDate": "ናይ መጻኢ ዕለት ክኸውን ኣይኽእልን"
   },
   "debts": {
@@ -253,13 +264,15 @@
     "fullAmount": "ሙሉእ",
     "partOfIt": "ገሊኡ",
     "paymentAmountHelper": "ነዚ ጥረ ገንዘብ ኣብ ናይ ሎሚ ጠቕላላ ኣታዊ ምእታውካ ኣይትረስዕ።",
-    "paymentMaxError": "ካብቲ ዝድለ መጠን (ETB {{balance}}) ንላዕሊ ክኸውን ኣይኽእልን",
+    "paymentMaxError": "ካብቲ ዝድለ መጠን (ብር {{balance}}) ንላዕሊ ክኸውን ኣይኽእልን",
     "savePayment": "ክፍሊት መዝግብ",
     "editRecord": "መዝገብ ኣመዓራሪ",
     "deleteRecord": "መዝገብ ሰርዝ",
     "deleteRecordTitle": "መዝገብ ይሰረዝ?",
     "deleteRecordMessage": "ነዚ መዝገብ ክትሰርዞ ርግጸኛ ዲኻ?",
-    "itemsRequired": "ዝተወሰዱ ኣቑሑት በጃኹም ግለጹ"
+    "itemsRequired": "ዝተወሰዱ ኣቑሑት በጃኹም ግለጹ",
+    "nameTooLong": "ስም ካብ 100 ፊደላት ክበዝሕ የብሉን",
+    "selectCustomer": "ሒሳብ መዝገቡ ንምርኣይ ዓሚል ምረጹ።"
   },
   "reports": {
     "title": "ጸብጻባት",
@@ -268,15 +281,15 @@
     "today": "ሎሚ",
     "thisWeek": "ናይዚ ሰሙን",
     "thisMonth": "ናይዚ ወርሒ",
-    "custom": "ፍሉይ",
+    "custom": "ዝተወሰነ ግዜ",
     "fromDate": "ካብ",
     "toDate": "ክሳብ",
     "apply": "ኣተግብር",
     "totalIncome": "ጠቕላላ ኣታዊ",
     "businessExpenses": "ወጻኢታት ድኳን",
     "personalDraws": "ናይ ውልቂ/ስድራ ወጻኢታት",
-    "fundingIn": "ዝኣተወ ወፍሪ",
-    "fundingOut": "ዝተመልሰ ወፍሪ",
+    "fundingIn": "ዝኣተወ ተወሳኺ ገንዘብ",
+    "fundingOut": "ዝተመልሰ ተወሳኺ ገንዘብ",
     "totalOwed": "ብዓማዊል ዘሎ ጠቕላላ ዕዳ",
     "expenseBreakdown": "ዝርዝር ወጻኢታት",
     "groupBusiness": "ናይ ድኳን",
@@ -291,16 +304,17 @@
     "noData": "ኣብዚ እዋን ዝተረኽበ ዳታ የለን",
     "noDataDescription": "ኣብዚ ናይ ዕለት ደረት ዝተመዝገቡ ምንቅስቓሳት ኣብዚ ክረኣዩ እዮም።",
     "exportSuccess": "ጸብጻብ ብትኽክል ተወሪዱ",
-    "exportFailed": "ጸብጻብ ምውራድ ኣይተኻእለን"
+    "exportFailed": "ጸብጻብ ምውራድ ኣይተኻእለን",
+    "period": "ግዜ ጸብጻብ"
   },
   "landing": {
-    "documentTitle": "ሂሳብ መዝገብ - ናይ ድኳንኩም ናይ መዓልቲ ገንዘብን ዕዳን መዝገብ",
+    "documentTitle": "ሒሳብ መዝገብ - ናይ ድኳንኩም ናይ መዓልቲ ገንዘብን ዕዳን መዝገብ",
     "metaDescription": "ንደቀቕቲ ድኳናት ዝተሰርሐ ናይ ገንዘብን ዕዳን መዝገብ። ናይ መዓልቲ ኣታዊን ወጻእን መዝግቡ፣ ናይ ዓማዊል ዕዳ ተኸታተሉ፣ ቀለልቲ ጸብጻባት ብትግርኛ፣ ብኣምሓርኛን ብእንግሊዝኛን ርኣዩ።",
     "skipToContent": "ናብቲ ቀንዲ ትሕዝቶ ሕለፍ",
     "header": {
       "login": "እተዉ",
       "language": "ቋንቋ",
-      "brand": "ሂሳብ መዝገብ"
+      "brand": "ሒሳብ መዝገብ"
     },
     "hero": {
       "title": "ናይ ድኳንኩም ናይ መዓልቲ ገንዘብን ዕዳን መዝገብ።",
@@ -404,5 +418,37 @@
     "install": "ጽዓን",
     "iosInstallTitle": "እዚ መተግበሪ ጽዓን",
     "iosInstallInstructions": "ናይ ምክፋል ምልክት (□↑) ጠውቑ፣ ድሕሪኡ \"Add to Home Screen\" ጠውቑ"
+  },
+  "money": {
+    "owedToYou": "ካብ ዓማዊል ዝጽበ"
+  },
+  "save": {
+    "saved": "{{kind}} ተመዝጊቡ",
+    "failed": "{{kind}} ኣይተመዝገበን",
+    "offline": "ኢንተርኔት የለን። እዚ ገና ክምዝገብ ኣይክእልን።",
+    "dismiss": "ዕጸው",
+    "kinds": {
+      "income": "ኣታዊ",
+      "expense": "ወጻኢ",
+      "funding": "ተወሳኺ ገንዘብ",
+      "borrow": "ልቓሕ",
+      "payment": "ክፍሊት",
+      "customer": "ዓሚል"
+    },
+    "tryAgain": "በጃኹም እንደገና ፈትኑ።"
+  },
+  "brand": {
+    "name": "ሒሳብ መዝገብ"
+  },
+  "categories": {
+    "costOfGoods": "ዕድጊት ኣቑሑ",
+    "equb": "ዕቑብ",
+    "homeNecessities": "ናይ ገዛ ኣድላዪ ነገራት",
+    "debtPayment": "ክፍሊት ዕዳ"
+  },
+  "date": {
+    "day": "መዓልቲ",
+    "month": "ወርሒ",
+    "year": "ዓመት"
   }
 }

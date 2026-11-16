@@ -3,7 +3,8 @@ import MoneyText, { type MoneyTone, type MoneySize } from './MoneyText';
 
 export interface StatCardProps {
   label: string;
-  amount: string | number;
+  /** null means unknown (failed or not loaded) and shows a dash. */
+  amount: string | number | null | undefined;
   tone?: MoneyTone;
   size?: MoneySize;
   accentBarColor?: string;
@@ -48,7 +49,7 @@ export default function StatCard({
         />
       )}
       <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="text-xs font-medium text-on-surface-variant truncate">
+        <span className="min-w-0 text-xs font-medium text-on-surface-variant line-clamp-2 break-words">
           {label}
         </span>
         {icon && (
@@ -57,7 +58,7 @@ export default function StatCard({
           </div>
         )}
       </div>
-      <div>
+      <div className="min-w-0">
         <MoneyText amount={amount} tone={tone} size={size} showSign={tone === 'in' || tone === 'out'} />
       </div>
     </CardWrapper>

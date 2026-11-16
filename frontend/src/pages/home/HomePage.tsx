@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Receipt, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Receipt, Users, ArrowRight } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { useTodayIncome } from '@/hooks/useTodayIncome';
 import { useReportSummary } from '@/hooks/useReportSummary';
@@ -14,6 +14,7 @@ import ErrorState from '@/components/common/ErrorState';
 import { ROUTES } from '@/constants';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 import { InstallBanner, IOSInstallCard } from '@/components/common/InstallPrompts';
+import { toUserError } from '@/lib/errors';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ export default function HomePage() {
     data: todayIncome,
     isLoading: isIncomeLoading,
     isError: isIncomeError,
+    error: incomeError,
     refetch: refetchIncome,
   } = useTodayIncome();
 
@@ -35,6 +37,7 @@ export default function HomePage() {
     data: summary,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
+    error: summaryError,
     refetch: refetchSummary,
   } = useReportSummary(weekStart, today);
 
@@ -44,12 +47,10 @@ export default function HomePage() {
     <div className="min-h-screen bg-background pb-28">
       <AppHeader />
 
-      {/* PWA Install prompts (Android banner & iOS instructions card) */}
       <InstallBanner />
       <IOSInstallCard />
 
-      <div className="mx-auto max-w-md px-4 pt-4 space-y-6">
-        {/* Greeting Section */}
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 pt-4 space-y-6">
         <section className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {shopName
@@ -61,7 +62,6 @@ export default function HomePage() {
           </p>
         </section>
 
-        {/* Today's Income Card */}
         <section>
           {isIncomeLoading ? (
             <div
@@ -74,11 +74,10 @@ export default function HomePage() {
             </div>
           ) : isIncomeError ? (
             <ErrorState
-              message={t('common.errorGeneric', 'Failed to load today’s income.')}
+              message={t(toUserError(incomeError).messageKey)}
               onRetry={() => refetchIncome()}
             />
           ) : todayIncome ? (
-            /* Entered state */
             <div className="rounded-2xl bg-card border border-border/40 p-5 shadow-xs flex items-center justify-between">
               <div className="space-y-1">
                 <span className="text-xs font-medium text-on-surface-variant block">
@@ -94,7 +93,6 @@ export default function HomePage() {
               </Link>
             </div>
           ) : (
-            /* Not entered state */
             <div className="rounded-2xl bg-card border border-border/40 p-6 text-center shadow-xs space-y-4">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Receipt className="h-7 w-7" aria-hidden="true" />
@@ -112,7 +110,6 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* Week Snapshot Section */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-foreground">
@@ -128,39 +125,38 @@ export default function HomePage() {
           </div>
 
           {isSummaryLoading ? (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               <SkeletonBlock className="h-24 rounded-xl" />
               <SkeletonBlock className="h-24 rounded-xl" />
-              <SkeletonBlock className="h-24 col-span-2 rounded-xl" />
+              <SkeletonBlock className="h-24 col-span-2 rounded-xl lg:col-span-1" />
             </div>
           ) : isSummaryError ? (
             <ErrorState
-              message={t('common.errorGeneric', 'Failed to load week snapshot.')}
+              message={t(toUserError(summaryError).messageKey)}
               onRetry={() => refetchSummary()}
             />
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               <StatCard
                 label={t('home.thisWeeksIncome', "This Week's Income")}
-                amount={summary?.totalIncome ?? 0}
+                amount={summary?.totalIncome ?? null}
                 tone="in"
                 size="lg"
               />
               <StatCard
                 label={t('home.shopExpenses', 'Shop Expenses')}
-                amount={summary?.totalBusinessExpenses ?? 0}
+                amount={summary?.totalBusinessExpenses ?? null}
                 tone="out"
                 size="lg"
               />
               <StatCard
-                label={t('home.customerDebts', 'Customer Debts')}
-                amount={summary?.totalOwedByCustomers ?? 0}
-                tone="out"
+                label={t('money.owedToYou', 'Owed to you')}
+                amount={summary?.totalOwedByCustomers ?? null}
+                tone="owed"
                 size="lg"
-                accentBarColor="var(--money-out)"
-                icon={<AlertTriangle className="h-5 w-5 text-[var(--money-out)]" />}
+                icon={<Users className="h-5 w-5" />}
                 onClick={() => navigate(ROUTES.DEBTS)}
-                className="col-span-2"
+                className="col-span-2 lg:col-span-1"
               />
             </div>
           )}

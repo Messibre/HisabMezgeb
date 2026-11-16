@@ -1,19 +1,17 @@
-import express from 'express';
+import express, { type Request } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import pinoHttp from 'pino-http';
+import { pinoHttp } from 'pino-http';
 import { randomUUID } from 'crypto';
 import type { IncomingMessage } from 'http';
 
-// Utilities & Configs
 import { env } from './config/env.js';
 import logger from './utils/logger.js';
 import ApiError from './utils/ApiError.js';
 import { SuccessResponse } from './utils/ApiResponse.js';
 import { HTTP_STATUS } from './constants/index.js';
 
-// Middlewares & Routes
 import { defaultLimiter } from './middlewares/rateLimiter.middleware.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 import router from './routes/index.js';
@@ -29,9 +27,9 @@ app.use((req, res, next) => {
 });
 
 app.use(
-  (pinoHttp as any)({
+  pinoHttp({
     logger,
-    genReqId: (req: IncomingMessage) => (req as any).id || randomUUID(),
+    genReqId: (req: IncomingMessage) => (req as Request).id || randomUUID(),
   }),
 );
 
@@ -42,12 +40,10 @@ app.use(
     credentials: true,
   }),
 );
+// Cookies are parsed before the limiter so signed-in traffic is limited per account.
+app.use(cookieParser());
 app.use(defaultLimiter);
 
-//  Parse cookies
-app.use(cookieParser());
-
-// Body Parsing Configurations
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 

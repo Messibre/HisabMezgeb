@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ShoppingBasket, Banknote, Clock } from 'lucide-react';
 import MoneyText from '@/components/common/MoneyText';
 import { formatDate } from '@/lib/date';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
 import type { DebtHistoryItem } from '@/types/api';
 
 interface DebtHistoryListProps {
@@ -16,6 +17,7 @@ export function DebtHistoryList({
   syncStatus,
 }: DebtHistoryListProps) {
   const { t } = useTranslation();
+  const highlightId = useSaveFeedbackStore((st) => st.highlightId);
 
   return (
     <div className="space-y-3">
@@ -37,10 +39,16 @@ export function DebtHistoryList({
                 key={item.id}
                 type="button"
                 onClick={() => onSelectRecord(item)}
-                className={`w-full rounded-xl bg-card hover:bg-muted/40 p-3.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary border border-border/40 border-l-[5px] ${
-                  isBorrow ? 'border-l-money-out' : 'border-l-money-in'
+                data-highlighted={highlightId === item.id || undefined}
+                className={`relative w-full overflow-hidden rounded-xl bg-card hover:bg-muted/40 py-3.5 pl-5 pr-3.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary border border-border/40 ${
+                  highlightId === item.id ? 'ring-2 ring-primary' : ''
                 }`}
               >
+                <span
+                  aria-hidden="true"
+                  data-testid="history-accent-bar"
+                  className={`absolute inset-y-0 left-0 w-1.5 ${isBorrow ? 'bg-money-out' : 'bg-money-in'}`}
+                />
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0">
                     <div
@@ -83,7 +91,6 @@ export function DebtHistoryList({
                   </div>
                 </div>
 
-                {/* Items description for borrows */}
                 {isBorrow && item.itemsDescription && (
                   <div className="mt-2.5 pt-2 border-t border-border/40 text-xs text-muted-foreground">
                     {item.itemsDescription}

@@ -17,7 +17,6 @@ if (typeof window !== 'undefined') {
     reportError(event.reason, { type: 'unhandledrejection' });
   });
 
-  // ── Development same-site check ──
   // Warn if VITE_API_URL is on a different origin than the page.
   // In production the frontend and API are already on different domains,
   // but in development this can cause CORS/cookie issues during testing.

@@ -1,8 +1,6 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import api from './axios';
 
-// ── Types ──
-
 export interface QueueItem {
   id: string;
   endpoint: string;
@@ -17,8 +15,6 @@ export interface QueueItem {
 const DB_NAME = 'HisabMezgebOffline';
 const STORE_NAME = 'queue';
 const MAX_RETRIES = 5;
-
-// ── Database connection ──
 
 let dbPromise: Promise<IDBPDatabase<unknown>> | null = null;
 
@@ -36,8 +32,6 @@ async function getDB() {
   }
   return dbPromise;
 }
-
-// ── Public API ──
 
 export async function addToQueue(
   endpoint: string,
@@ -114,14 +108,10 @@ export async function clearSyncedItems(): Promise<void> {
   }
 }
 
-// ── Helper to get item by id ──
-
 async function getItemById(id: string): Promise<QueueItem | undefined> {
   const db = await getDB();
   return db.get(STORE_NAME, id);
 }
-
-// ── Sync Engine ──
 
 type ApiError = {
   response?: {

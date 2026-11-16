@@ -18,7 +18,8 @@ describe('HTML metadata and local asset integrity', () => {
     expect(titleMatch).not.toBeNull();
     const title = titleMatch![1].trim();
     expect(title.length).toBeLessThan(60);
-    expect(title).toBe('Hisab Mezgeb - Simple Money & Debt Tracker');
+    // Link previews (WhatsApp, Telegram) do not run JS: Amharic first, then English.
+    expect(title).toBe('ሒሳብ መዝገብ – የገቢና የዕዳ መዝገብ | Hisab Mezgeb');
 
     const descMatch = htmlContent.match(
       /<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i
@@ -58,7 +59,8 @@ describe('HTML metadata and local asset integrity', () => {
     expect(htmlContent).toMatch(
       /<meta[^>]*property=["']og:image:height["'][^>]*content=["']630["']/i
     );
-    expect(htmlContent).toMatch(/<meta[^>]*property=["']og:locale["'][^>]*content=["']en_US["']/i);
+    expect(htmlContent).toMatch(/<meta[^>]*property=["']og:locale["'][^>]*content=["']am_ET["']/i);
+    expect(htmlContent).toMatch(/<meta[^>]*property=["']og:locale:alternate["'][^>]*content=["']en_US["']/i);
     expect(htmlContent).toMatch(
       /<meta[^>]*name=["']twitter:card["'][^>]*content=["']summary_large_image["']/i
     );

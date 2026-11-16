@@ -24,8 +24,8 @@ type MockPayment = {
 };
 
 // ── Mock Prisma ──
-vi.mock('../../src/config/db.js', () => ({
-  prisma: {
+vi.mock('../../src/config/db.js', () => {
+  const prisma: Record<string, unknown> = {
     debtPayment: {
       create: vi.fn(),
       update: vi.fn(),
@@ -37,8 +37,11 @@ vi.mock('../../src/config/db.js', () => ({
     dailyIncome: {
       create: vi.fn(),
     },
-  },
-}));
+    $queryRaw: vi.fn(),
+  };
+  prisma.$transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(prisma));
+  return { prisma };
+});
 
 vi.mock('../../src/services/debtCustomer.service.js', () => ({
   calculateCustomerBalance: vi.fn(),
@@ -110,7 +113,7 @@ describe('DebtPayment Service', () => {
           deletedAt: null,
         },
       });
-      expect(mockCalculateBalance).toHaveBeenCalledWith(customerId);
+      expect(mockCalculateBalance).toHaveBeenCalledWith(customerId, expect.anything());
       expect(mockPaymentCreate).toHaveBeenCalledWith({
         data: {
           customerId,
@@ -130,6 +133,19 @@ describe('DebtPayment Service', () => {
         updatedAt: expect.any(Date),
       });
       expect(result.newBalance).toBe(500); // 1000 - 500
+    });
+
+    it('locks the customer row inside a transaction before checking the balance', async () => {
+      mockCustomerFindUnique.mockResolvedValue(mockCustomer);
+      mockCalculateBalance.mockResolvedValue(1000);
+      mockPaymentCreate.mockResolvedValue(mockPayment);
+
+      await createPayment(accountId, customerId, mockDate, 500);
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      const lockOrder = (prisma.$queryRaw as unknown as Mock).mock.invocationCallOrder[0];
+      const balanceOrder = mockCalculateBalance.mock.invocationCallOrder[0];
+      expect(lockOrder).toBeLessThan(balanceOrder);
     });
 
     it('should allow payment exactly equal to balance', async () => {
@@ -229,7 +245,7 @@ describe('DebtPayment Service', () => {
         },
       });
       // Balance is checked BEFORE updating the payment
-      expect(mockCalculateBalance).toHaveBeenCalledWith(customerId);
+      expect(mockCalculateBalance).toHaveBeenCalledWith(customerId, expect.anything());
       expect(mockPaymentUpdate).toHaveBeenCalledWith({
         where: { id: paymentId },
         data: {

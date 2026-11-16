@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/auth.store';
-import api from '@/lib/axios';
-import type { Account } from '@/types';
+import { executeRefresh } from '@/lib/axios';
 
 export function useAuthBootstrap() {
   const { status, account, setAccount, setStatus, clearSession } = useAuthStore();
@@ -19,7 +18,9 @@ export function useAuthBootstrap() {
 
     async function bootstrap() {
       try {
-        const { data } = await api.post<Account>('/auth/refresh');
+        // Shared single-flight refresh: StrictMode's double effect and any 401
+        // handled at the same time all wait for this one request.
+        const data = await executeRefresh();
         if (isMounted) {
           setAccount(data);
         }
@@ -27,7 +28,7 @@ export function useAuthBootstrap() {
         if (!isMounted) return;
 
         const error = err as { response?: { status?: number } };
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
           clearSession();
         } else {
           // Network error or timeout: if persisted account exists, remain authenticated offline

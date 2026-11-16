@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { ArrowDown, ArrowUp, Landmark, Clock } from 'lucide-react';
 import MoneyText from '@/components/common/MoneyText';
 import { formatDate } from '@/lib/date';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import { categoryLabel, fundingTypeLabel } from '@/lib/categories';
 import type { IncomeEntry, ExpenseWithCategory, FundingEntry } from '@/types/api';
 
 export type EntryItem =
@@ -15,30 +18,29 @@ interface EntryListCardProps {
 }
 
 export function EntryListCard({ entry, onClick, syncStatus }: EntryListCardProps) {
+  const { t } = useTranslation();
   const isIncome = entry.entryType === 'income';
   const isExpense = entry.entryType === 'expense';
+  const isHighlighted = useSaveFeedbackStore((st) => st.highlightId === entry.id);
 
   const subtitle = isIncome
     ? entry.note || ''
     : isExpense
     ? entry.note
-      ? `${entry.categoryName} • ${entry.note}`
-      : entry.categoryName
-    : (() => {
-        const typeLabels: Record<string, string> = {
-          salary_injection: 'Salary in',
-          borrowed_in: 'Borrowed in',
-          borrowed_repaid: 'Borrowed repaid',
-        };
-        const label = typeLabels[entry.type] || entry.type;
-        return entry.note ? `${label} • ${entry.note}` : label;
-      })();
+      ? `${categoryLabel(entry.categoryName, t)} • ${entry.note}`
+      : categoryLabel(entry.categoryName, t)
+    : entry.note
+    ? `${fundingTypeLabel(entry.type, t)} • ${entry.note}`
+    : fundingTypeLabel(entry.type, t);
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full bg-card hover:bg-muted/50 border border-border rounded-xl p-3.5 flex items-center justify-between text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[56px]"
+      data-highlighted={isHighlighted || undefined}
+      className={`w-full bg-card hover:bg-muted/50 border border-border rounded-xl p-3.5 flex items-center justify-between text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[56px] ${
+        isHighlighted ? 'ring-2 ring-primary bg-primary/5' : ''
+      }`}
     >
       <div className="flex items-center gap-3 min-w-0">
         <div

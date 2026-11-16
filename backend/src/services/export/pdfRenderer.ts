@@ -50,24 +50,20 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
       doc.registerFont('Latin', fontPaths.latinRegular);
       doc.registerFont('Latin-Bold', fontPaths.latinBold);
 
-      // Default font
       doc.font('Ethiopic').fontSize(10);
 
       const margin = 40;
       const pageWidth = doc.page.width;
       const contentWidth = pageWidth - margin * 2;
 
-      // ── Header ──
       if (model.shopName) {
         doc.font('Ethiopic-Bold').fontSize(13).fillColor('#4B5563').text(model.shopName);
         doc.moveDown(0.2);
       }
 
-      // Title
       doc.font('Ethiopic-Bold').fontSize(20).fillColor('#111827').text(model.title);
       doc.moveDown(0.3);
 
-      // Subhead metadata
       doc.font('Ethiopic').fontSize(10).fillColor('#4B5563');
       if (model.entityName) {
         doc.font('Ethiopic-Bold').fontSize(13).fillColor('#1F2937').text(model.entityName);
@@ -78,7 +74,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
       }
       doc.text(model.generatedDateText);
 
-      // Current balance highlight badge (for statements)
       if (model.currentBalanceText) {
         doc.moveDown(0.5);
         const badgeY = doc.y;
@@ -87,14 +82,11 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
         doc.y = badgeY + 36;
       }
 
-      // Divider line
       doc.moveDown(0.5);
       doc.strokeColor('#E5E7EB').lineWidth(1).moveTo(margin, doc.y).lineTo(pageWidth - margin, doc.y).stroke();
       doc.moveDown(0.8);
 
-      // ── Sections ──
       for (const section of model.sections) {
-        // Check page overflow
         if (doc.y > doc.page.height - 120) {
           doc.addPage();
         }
@@ -102,7 +94,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
         doc.font('Ethiopic-Bold').fontSize(13).fillColor('#111827').text(section.title);
         doc.moveDown(0.3);
 
-        // Key-value items
         if (section.items && section.items.length > 0) {
           for (const item of section.items) {
             if (doc.y > doc.page.height - 60) {
@@ -123,13 +114,11 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
           }
         }
 
-        // Table
         if (section.table) {
           const { columns, rows } = section.table;
           const totalRatio = columns.reduce((acc, c) => acc + (c.widthRatio ?? 1), 0);
           const colWidths = columns.map((c) => ((c.widthRatio ?? 1) / totalRatio) * contentWidth);
 
-          // Table Header
           let tableY = doc.y + 4;
           if (tableY > doc.page.height - 80) {
             doc.addPage();
@@ -152,7 +141,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
 
           let currentY = tableY + headerHeight;
 
-          // Table Rows
           for (let rIdx = 0; rIdx < rows.length; rIdx++) {
             const row = rows[rIdx];
             const rowHeight = 20;
@@ -180,7 +168,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
               x += w;
             }
 
-            // Divider line below each row
             doc.strokeColor('#E5E7EB').lineWidth(0.5).moveTo(margin, currentY + rowHeight).lineTo(pageWidth - margin, currentY + rowHeight).stroke();
 
             currentY += rowHeight;
@@ -189,7 +176,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
           doc.y = currentY + 8;
         }
 
-        // Section note
         if (section.note) {
           doc.font('Ethiopic').fontSize(8.5).fillColor('#6B7280').text(section.note, { width: contentWidth });
           doc.moveDown(0.3);
@@ -198,7 +184,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
         doc.moveDown(0.6);
       }
 
-      // ── Notes & Closing ──
       if (doc.y > doc.page.height - 90) {
         doc.addPage();
       }
@@ -216,7 +201,6 @@ export async function renderDocumentToPdf(model: DocumentModel): Promise<Buffer>
         }
       }
 
-      // Page numbers footer
       const range = doc.bufferedPageRange();
       for (let i = range.start; i < range.start + range.count; i++) {
         doc.switchToPage(i);

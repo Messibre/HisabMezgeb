@@ -72,9 +72,10 @@ export const deleteCustomerHandler = asyncHandler(async (req: AuthRequest, res: 
 export const getCustomerStatementHandler = asyncHandler(async (req: AuthRequest, res: Response) => {
   const accountId = req.accountId!;
   const { id } = req.params;
-  const { format, lang } = req.query as {
+  const { format, lang, calendar } = req.query as {
     format?: 'pdf' | 'docx';
     lang?: SupportedLang;
+    calendar?: 'ethiopian' | 'gregorian';
   };
 
   const result = await exportCustomerStatement(
@@ -82,6 +83,7 @@ export const getCustomerStatementHandler = asyncHandler(async (req: AuthRequest,
     id as string,
     format ?? 'pdf',
     lang ?? 'en',
+    calendar,
   );
 
   res.setHeader('Content-Type', result.contentType);

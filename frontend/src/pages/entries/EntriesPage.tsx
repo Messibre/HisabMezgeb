@@ -1,8 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
-import { Save, Calendar, FileText, ChevronDown } from 'lucide-react';
+import { Save, Check, Calendar, FileText, ChevronDown } from 'lucide-react';
 import AppHeader from '@/components/common/AppHeader';
 import SegmentedControl from '@/components/common/SegmentedControl';
 import AmountInput from '@/components/common/AmountInput';
@@ -12,11 +11,7 @@ import ErrorState from '@/components/common/ErrorState';
 import { useCreateIncome } from '@/hooks/useCreateIncome';
 import { useCreateExpense } from '@/hooks/useCreateExpense';
 import { useCreateFunding } from '@/hooks/useCreateFunding';
-import {
-  useUpdateIncome,
-  useUpdateExpense,
-  useUpdateFunding,
-} from '@/hooks/useEntryMutations';
+import { useUpdateIncome, useUpdateExpense, useUpdateFunding } from '@/hooks/useEntryMutations';
 import { useEntryHistory } from '@/hooks/useEntryHistory';
 import { useExpenseCategories } from '@/hooks/useExpenseCategories';
 import {
@@ -33,6 +28,14 @@ import { EditEntrySheet } from './components/EditEntrySheet';
 import { CustomRangeSheet } from './components/CustomRangeSheet';
 import type { IncomeEntry, ExpenseWithCategory, FundingEntry } from '@/types/api';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { useSubmitGuard } from '@/hooks/useSubmitGuard';
+import { useFormDraft, clearDraft } from '@/hooks/useFormDraft';
+import { useSaveFeedbackStore } from '@/store/saveFeedback.store';
+import OfflineSaveNotice from '@/components/common/OfflineSaveNotice';
+import { toUserError } from '@/lib/errors';
+import { categoryLabel } from '@/lib/categories';
+import DateSelect from '@/components/common/DateSelect';
 
 type TabType = 'income' | 'expense' | 'funding';
 type PeriodType = 'today' | 'week' | 'month' | 'custom';
@@ -44,8 +47,7 @@ export default function EntriesPage() {
 
   // Tab from URL ?type=
   const urlType = searchParams.get('type') as TabType | null;
-  const activeTab: TabType =
-    urlType === 'expense' || urlType === 'funding' ? urlType : 'income';
+  const activeTab: TabType = urlType === 'expense' || urlType === 'funding' ? urlType : 'income';
 
   const handleTabChange = (newTab: string) => {
     setSearchParams({ type: newTab });
@@ -57,7 +59,6 @@ export default function EntriesPage() {
     setEditEntryId(null);
   };
 
-  // Form states
   const today = todayLocal();
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(today);
@@ -65,25 +66,22 @@ export default function EntriesPage() {
   const [categoryId, setCategoryId] = useState('');
   const [fundingType, setFundingType] = useState<FundingEntry['type']>('salary_injection');
 
-  // Edit mode
   const [isEditMode, setIsEditMode] = useState(false);
   const [editEntryId, setEditEntryId] = useState<string | null>(null);
 
-  // Errors
   const [amountError, setAmountError] = useState('');
   const [categoryError, setCategoryError] = useState('');
-  const [serverConflict, setServerConflict] = useState<{ amount: number; date: string } | null>(null);
+  const [serverConflict, setServerConflict] = useState<{ amount: number; date: string } | null>(
+    null
+  );
 
-  // Period filter
   const [period, setPeriod] = useState<PeriodType>('week');
   const [customRange, setCustomRange] = useState({ from: today, to: today });
   const [showCustomRangeSheet, setShowCustomRangeSheet] = useState(false);
   const [showPeriodMenu, setShowPeriodMenu] = useState(false);
 
-  // Selected entry for BottomSheet edit
   const [selectedEntry, setSelectedEntry] = useState<EntryItem | null>(null);
 
-  // Queries & Mutations
   const createIncome = useCreateIncome();
   const createExpense = useCreateExpense();
   const createFunding = useCreateFunding();
@@ -92,6 +90,24 @@ export default function EntriesPage() {
   const updateFunding = useUpdateFunding();
 
   const { data: categories = [] } = useExpenseCategories();
+
+  const isOnline = useOnlineStatus();
+  const { run: runGuarded, busy: isSubmitting, justSaved, markSaved } = useSubmitGuard();
+  const showSaved = useSaveFeedbackStore((s) => s.showSaved);
+  const showFailed = useSaveFeedbackStore((s) => s.showFailed);
+
+  // Unsaved typed fields survive a reload (per tab; edits have their own key).
+  const draftKey =
+    isEditMode && editEntryId ? `entries:${activeTab}:edit:${editEntryId}` : `entries:${activeTab}`;
+  useFormDraft(
+    draftKey,
+    { amount, note, categoryId: activeTab === 'expense' ? categoryId : '' },
+    (draft) => {
+      if (draft.amount) setAmount(draft.amount);
+      if (draft.note) setNote(draft.note);
+      if (draft.categoryId) setCategoryId(draft.categoryId);
+    }
+  );
 
   // Calculate date range for recent entries
   const { fromDate, toDate } = useMemo(() => {
@@ -111,6 +127,7 @@ export default function EntriesPage() {
     data: historyData = [],
     isLoading: isLoadingHistory,
     isError: isHistoryError,
+    error: historyError,
     refetch: refetchHistory,
   } = useEntryHistory(activeTab, fromDate, toDate);
 
@@ -121,26 +138,39 @@ export default function EntriesPage() {
         (item) => item.date === date && (!isEditMode || item.id !== editEntryId)
       );
       if (existing) {
-        return { id: existing.id, amount: existing.amount, date: existing.date, note: existing.note };
+        return {
+          id: existing.id,
+          amount: existing.amount,
+          date: existing.date,
+          note: existing.note,
+        };
       }
     } else if (activeTab === 'expense' && categoryId) {
       const existing = (historyData as ExpenseWithCategory[]).find(
-        (item) => item.date === date && item.categoryId === categoryId && (!isEditMode || item.id !== editEntryId)
+        (item) =>
+          item.date === date &&
+          item.categoryId === categoryId &&
+          (!isEditMode || item.id !== editEntryId)
       );
       if (existing) {
-        return { id: existing.id, amount: existing.amount, date: existing.date, note: existing.note };
+        return {
+          id: existing.id,
+          amount: existing.amount,
+          date: existing.date,
+          note: existing.note,
+        };
       }
     }
     return null;
   }, [activeTab, historyData, date, categoryId, isEditMode, editEntryId]);
 
-  const activeConflict = cachedConflict || (serverConflict ? { id: '', amount: serverConflict.amount, date: serverConflict.date, note: null } : null);
+  const activeConflict =
+    cachedConflict ||
+    (serverConflict
+      ? { id: '', amount: serverConflict.amount, date: serverConflict.date, note: null }
+      : null);
 
-  // Group active categories by business and personal
-  const activeCategories = useMemo(
-    () => categories.filter((cat) => cat.isActive),
-    [categories]
-  );
+  const activeCategories = useMemo(() => categories.filter((cat) => cat.isActive), [categories]);
   const businessCategories = useMemo(
     () => activeCategories.filter((cat) => cat.group === 'business'),
     [activeCategories]
@@ -150,7 +180,6 @@ export default function EntriesPage() {
     [activeCategories]
   );
 
-  // Form submit handler
   const isSaving =
     createIncome.isPending ||
     createExpense.isPending ||
@@ -159,13 +188,18 @@ export default function EntriesPage() {
     updateExpense.isPending ||
     updateFunding.isPending;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Offline, nothing can be saved: never pretend it was.
+    if (!isOnline) return;
+    void runGuarded(submitEntry);
+  };
+
+  const submitEntry = async () => {
     setAmountError('');
     setCategoryError('');
     setServerConflict(null);
 
-    // Validate amount
     const parsedAmount = parseFloat(amount);
     if (amount === '' || isNaN(parsedAmount)) {
       setAmountError(t('entries.errorAmountRequired', 'Enter an amount'));
@@ -187,7 +221,6 @@ export default function EntriesPage() {
       return;
     }
 
-    // Validate date
     if (!date) {
       return;
     }
@@ -196,7 +229,6 @@ export default function EntriesPage() {
       return;
     }
 
-    // Validate category for expense
     if (activeTab === 'expense' && !categoryId) {
       setCategoryError(t('entries.errorCategoryRequired', 'Please select a category'));
       return;
@@ -220,31 +252,34 @@ export default function EntriesPage() {
             payload: { amount: parsedAmount, note: note || undefined },
           });
         }
-        toast.success(t('entries.updatedToast', 'Updated'));
+        showSaved({ kind: activeTab, date, amount: parsedAmount, recordId: editEntryId });
       } else {
+        let created: { id: string } | undefined;
         if (activeTab === 'income') {
-          await createIncome.mutateAsync({
+          created = await createIncome.mutateAsync({
             date,
             amount: parsedAmount,
             note: note || undefined,
           });
         } else if (activeTab === 'expense') {
-          await createExpense.mutateAsync({
+          created = await createExpense.mutateAsync({
             date,
             categoryId,
             amount: parsedAmount,
             note: note || undefined,
           });
         } else {
-          await createFunding.mutateAsync({
+          created = await createFunding.mutateAsync({
             date,
             type: fundingType,
             amount: parsedAmount,
             note: note || undefined,
           });
         }
-        toast.success(t('entries.savedToast', 'Saved'));
+        showSaved({ kind: activeTab, date, amount: parsedAmount, recordId: created?.id });
       }
+      markSaved();
+      clearDraft(draftKey);
 
       // Reset form on success (keep date and tab)
       setAmount('');
@@ -253,14 +288,15 @@ export default function EntriesPage() {
       setEditEntryId(null);
       setServerConflict(null);
     } catch (err: unknown) {
-      const errorResponse = (err as { response?: { status?: number; data?: { message?: string } } })?.response;
+      const errorResponse = (err as { response?: { status?: number; data?: { message?: string } } })
+        ?.response;
       if (errorResponse?.status === 409) {
         setServerConflict({
           amount: parsedAmount,
           date,
         });
       } else {
-        toast.error(t('common.error', 'Failed to save entry'));
+        showFailed({ kind: activeTab, message: t(toUserError(err).messageKey) });
       }
     }
   };
@@ -283,8 +319,8 @@ export default function EntriesPage() {
     <div className="min-h-screen bg-background pb-24">
       <AppHeader title={t('pages.entries', 'Entries')} />
 
-      <div className="max-w-md mx-auto px-4 py-3 space-y-4">
-        {/* Segmented control */}
+      <div className="mx-auto max-w-md sm:max-w-2xl lg:max-w-[1100px] px-4 py-3 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10 lg:space-y-0">
+        <div className="space-y-4">
         <SegmentedControl
           name="entry-type"
           value={activeTab}
@@ -296,9 +332,7 @@ export default function EntriesPage() {
           ]}
         />
 
-        {/* Entry form */}
         <form onSubmit={handleSubmit} className="space-y-3">
-          {/* Amount input hero card */}
           <AmountInput
             id="entry-amount"
             value={amount}
@@ -318,36 +352,31 @@ export default function EntriesPage() {
             error={amountError}
           />
 
-          {/* Date row */}
-          <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-card border border-border/40 rounded-xl p-3 space-y-2.5">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
                 <Calendar className="w-4 h-4" />
               </div>
               <div>
-                <label htmlFor="entry-date" className="block text-xs text-muted-foreground">
+                <span id="entry-date-label" className="block text-xs text-muted-foreground">
                   {t('entries.dateLabel', 'Date')}
-                </label>
+                </span>
                 <span className="text-sm font-medium text-foreground">
                   {date === today ? t('common.today', 'Today') : formatDate(date)}
                 </span>
               </div>
             </div>
-
-            <input
+            <DateSelect
               id="entry-date"
-              type="date"
-              max={today}
               value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
+              max={today}
+              onChange={(ymd) => {
+                setDate(ymd);
                 setServerConflict(null);
               }}
-              className="text-xs bg-muted/60 text-foreground px-2.5 py-1.5 rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
             />
           </div>
 
-          {/* Extra field: Expense Category Chips */}
           {activeTab === 'expense' && (
             <div className="bg-card border border-border/40 rounded-xl p-3.5 space-y-2.5">
               <label className="block text-xs font-semibold text-muted-foreground">
@@ -359,7 +388,11 @@ export default function EntriesPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">
                     {t('entries.businessGroup', 'Business')}
                   </span>
-                  <div role="radiogroup" aria-label="Business categories" className="flex flex-wrap gap-2">
+                  <div
+                    role="radiogroup"
+                    aria-label="Business categories"
+                    className="flex flex-wrap gap-2"
+                  >
                     {businessCategories.map((cat) => {
                       const isSelected = categoryId === cat.id;
                       return (
@@ -379,7 +412,7 @@ export default function EntriesPage() {
                               : 'bg-muted/40 text-foreground border-border hover:bg-muted'
                           }`}
                         >
-                          {cat.name}
+                          {categoryLabel(cat.name, t)}
                         </button>
                       );
                     })}
@@ -392,7 +425,11 @@ export default function EntriesPage() {
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">
                     {t('entries.personalGroup', 'Personal / Family')}
                   </span>
-                  <div role="radiogroup" aria-label="Personal categories" className="flex flex-wrap gap-2">
+                  <div
+                    role="radiogroup"
+                    aria-label="Personal categories"
+                    className="flex flex-wrap gap-2"
+                  >
                     {personalCategories.map((cat) => {
                       const isSelected = categoryId === cat.id;
                       return (
@@ -412,7 +449,7 @@ export default function EntriesPage() {
                               : 'bg-muted/40 text-foreground border-border hover:bg-muted'
                           }`}
                         >
-                          {cat.name}
+                          {categoryLabel(cat.name, t)}
                         </button>
                       );
                     })}
@@ -428,7 +465,6 @@ export default function EntriesPage() {
             </div>
           )}
 
-          {/* Extra field: Funding Type Chips */}
           {activeTab === 'funding' && (
             <div className="bg-card border border-border/40 rounded-xl p-3.5 space-y-2">
               <label className="block text-xs font-semibold text-muted-foreground">
@@ -439,7 +475,10 @@ export default function EntriesPage() {
                   [
                     { value: 'salary_injection', label: t('entries.salaryIn', 'Salary in') },
                     { value: 'borrowed_in', label: t('entries.borrowedIn', 'Borrowed in') },
-                    { value: 'borrowed_repaid', label: t('entries.borrowedRepaid', 'Borrowed repaid') },
+                    {
+                      value: 'borrowed_repaid',
+                      label: t('entries.borrowedRepaid', 'Borrowed repaid'),
+                    },
                   ] as const
                 ).map((ft) => {
                   const isSelected = fundingType === ft.value;
@@ -464,7 +503,6 @@ export default function EntriesPage() {
             </div>
           )}
 
-          {/* Note input row */}
           <div className="bg-card border border-border/40 rounded-xl p-3 flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center shrink-0">
               <FileText className="w-4 h-4" />
@@ -480,7 +518,6 @@ export default function EntriesPage() {
             />
           </div>
 
-          {/* Duplicate conflict banner */}
           {activeConflict && !isEditMode && (
             <div
               role="status"
@@ -488,7 +525,10 @@ export default function EntriesPage() {
             >
               <span>
                 {t('entries.duplicateRecorded', {
-                  date: activeConflict.date === today ? t('common.today', 'Today') : activeConflict.date,
+                  date:
+                    activeConflict.date === today
+                      ? t('common.today', 'Today')
+                      : activeConflict.date,
                   currency: 'ETB',
                   amount: activeConflict.amount,
                   defaultValue: `Already recorded for ${activeConflict.date}: ETB ${activeConflict.amount}.`,
@@ -504,31 +544,31 @@ export default function EntriesPage() {
             </div>
           )}
 
-          {/* Primary pill save button (52px, full width) */}
           <button
             type="submit"
-            disabled={isSaving}
+            disabled={isSaving || isSubmitting || !isOnline}
+            aria-describedby={!isOnline ? 'entry-offline-notice' : undefined}
             className="w-full h-[52px] rounded-full bg-primary text-primary-foreground font-semibold text-base hover:bg-primary/90 flex items-center justify-center gap-2 transition-colors shadow-sm disabled:opacity-50"
           >
-            <Save className="w-5 h-5" />
+            {justSaved ? <Check className="w-5 h-5" /> : <Save className="w-5 h-5" />}
             <span>
-              {isSaving
+              {isSaving || isSubmitting
                 ? t('common.loading', 'Loading...')
                 : isEditMode
-                ? t('entries.updateEntry', 'Update Entry')
-                : t('entries.saveEntry', 'Save Entry')}
+                  ? t('entries.updateEntry', 'Update Entry')
+                  : t('entries.saveEntry', 'Save Entry')}
             </span>
           </button>
+          {!isOnline && <OfflineSaveNotice id="entry-offline-notice" />}
         </form>
+        </div>
 
-        {/* Recent entries section */}
-        <section className="pt-4 space-y-3">
+        <section className="pt-4 space-y-3 lg:pt-0">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-foreground">
               {t('entries.recentEntries', 'Recent Entries')}
             </h2>
 
-            {/* Period dropdown */}
             <div className="relative">
               <button
                 type="button"
@@ -542,10 +582,10 @@ export default function EntriesPage() {
                   {period === 'today'
                     ? t('entries.periodToday', 'Today')
                     : period === 'week'
-                    ? t('entries.periodThisWeek', 'This Week')
-                    : period === 'month'
-                    ? t('entries.periodThisMonth', 'This Month')
-                    : t('entries.periodCustom', 'Custom Range')}
+                      ? t('entries.periodThisWeek', 'This Week')
+                      : period === 'month'
+                        ? t('entries.periodThisMonth', 'This Month')
+                        : t('entries.periodCustom', 'Custom range')}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
@@ -560,7 +600,7 @@ export default function EntriesPage() {
                       { key: 'today', label: t('entries.periodToday', 'Today') },
                       { key: 'week', label: t('entries.periodThisWeek', 'This Week') },
                       { key: 'month', label: t('entries.periodThisMonth', 'This Month') },
-                      { key: 'custom', label: t('entries.periodCustom', 'Custom Range') },
+                      { key: 'custom', label: t('entries.periodCustom', 'Custom range') },
                     ] as const
                   ).map((opt) => (
                     <button
@@ -587,7 +627,6 @@ export default function EntriesPage() {
             </div>
           </div>
 
-          {/* Entry list states */}
           {isLoadingHistory ? (
             <div className="space-y-2">
               <SkeletonRow />
@@ -596,7 +635,7 @@ export default function EntriesPage() {
             </div>
           ) : isHistoryError ? (
             <ErrorState
-              message={t('common.error', 'Failed to load entries')}
+              message={t(toUserError(historyError).messageKey)}
               onRetry={() => refetchHistory()}
             />
           ) : historyData.length === 0 ? (
@@ -611,8 +650,8 @@ export default function EntriesPage() {
                   activeTab === 'income'
                     ? { entryType: 'income', ...(entry as IncomeEntry) }
                     : activeTab === 'expense'
-                    ? { entryType: 'expense', ...(entry as ExpenseWithCategory) }
-                    : { entryType: 'funding', ...(entry as FundingEntry) };
+                      ? { entryType: 'expense', ...(entry as ExpenseWithCategory) }
+                      : { entryType: 'funding', ...(entry as FundingEntry) };
 
                 return (
                   <EntryListCard
@@ -627,14 +666,12 @@ export default function EntriesPage() {
         </section>
       </div>
 
-      {/* Edit Entry BottomSheet */}
       <EditEntrySheet
         entry={selectedEntry}
         open={!!selectedEntry}
         onOpenChange={(open) => !open && setSelectedEntry(null)}
       />
 
-      {/* Custom Range BottomSheet */}
       <CustomRangeSheet
         open={showCustomRangeSheet}
         onOpenChange={setShowCustomRangeSheet}
