@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WifiOff, Wifi } from 'lucide-react';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
@@ -14,20 +14,27 @@ export function OfflineBanner() {
   const isOnline = useOnlineStatus();
   const { t } = useTranslation();
   const [showBackOnline, setShowBackOnline] = useState(false);
-  const wasOffline = useRef(!isOnline);
 
+  // State changes happen in the event handlers, so the note appears only after a real reconnect.
   useEffect(() => {
-    if (!isOnline) {
-      wasOffline.current = true;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const handleOnline = () => {
+      setShowBackOnline(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setShowBackOnline(false), BACK_ONLINE_MS);
+    };
+    const handleOffline = () => {
+      clearTimeout(timer);
       setShowBackOnline(false);
-      return;
-    }
-    if (!wasOffline.current) return;
-    wasOffline.current = false;
-    setShowBackOnline(true);
-    const timer = setTimeout(() => setShowBackOnline(false), BACK_ONLINE_MS);
-    return () => clearTimeout(timer);
-  }, [isOnline]);
+    };
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   if (isOnline && !showBackOnline) return null;
 
